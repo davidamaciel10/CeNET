@@ -1928,6 +1928,42 @@ class GeneradorMoodle(ctk.CTk):
 
         es_inet = (modo == "inet")
 
+        # ── Helper acordeón para inet (debe definirse antes de usarse) ──
+        def _make_acordeon_inet(titulo, descripcion, info_url, ins_url, compacto=False):
+            pad = "6px 0" if not compacto else "4px 0"
+            partes = []
+            if descripcion:
+                partes.append(
+                    f'<p style="font-size:0.8rem;color:#555;line-height:1.5;margin:0 0 8px 0;">'
+                    f'{descripcion}</p>'
+                )
+            if info_url:
+                partes.append(
+                    f'<a href="{info_url}" target="_blank" '
+                    f'style="font-size:0.8rem;font-weight:600;color:#45658d;'
+                    f'text-decoration:none;display:block;margin-bottom:6px;">'
+                    f'Ver detalle del curso →</a>'
+                )
+            if ins_url:
+                partes.append(
+                    f'<a href="{ins_url}" target="_blank" '
+                    f'style="display:block;text-align:center;padding:8px;border-radius:8px;'
+                    f'background:#45658d;color:white;font-size:0.82rem;font-weight:700;'
+                    f'text-decoration:none;">Inscribirse →</a>'
+                )
+            if not partes:
+                return ""
+            contenido = "".join(partes)
+            return (
+                f'<details style="margin-top:4px;">'
+                f'<summary style="cursor:pointer;font-size:0.84rem;font-weight:600;'
+                f'color:#45658d;padding:{pad};border-top:1px solid #eee;'
+                f'list-style:none;user-select:none;">'
+                f'▶ Más información e inscripción</summary>'
+                f'<div style="padding:10px 0 4px 0;">{contenido}</div>'
+                f'</details>'
+            )
+
         # ── Estilos inline ──
         S_F = (
             "cursor:pointer;padding:7px 16px;border-radius:999px;"
@@ -2224,42 +2260,6 @@ class GeneradorMoodle(ctk.CTk):
                 f'📅 Ediciones anteriores</div>'
                 f'{secs_anteriores}'
                 f'</div>\n'
-            )
-
-        # ── Helper acordeón para inet ──
-        def _make_acordeon_inet(titulo, descripcion, info_url, ins_url, compacto=False):
-            pad = "6px 0" if not compacto else "4px 0"
-            partes = []
-            if descripcion:
-                partes.append(
-                    f'<p style="font-size:0.8rem;color:#555;line-height:1.5;margin:0 0 8px 0;">'
-                    f'{descripcion}</p>'
-                )
-            if info_url:
-                partes.append(
-                    f'<a href="{info_url}" target="_blank" '
-                    f'style="font-size:0.8rem;font-weight:600;color:#45658d;'
-                    f'text-decoration:none;display:block;margin-bottom:6px;">'
-                    f'Ver detalle del curso →</a>'
-                )
-            if ins_url:
-                partes.append(
-                    f'<a href="{ins_url}" target="_blank" '
-                    f'style="display:block;text-align:center;padding:8px;border-radius:8px;'
-                    f'background:#45658d;color:white;font-size:0.82rem;font-weight:700;'
-                    f'text-decoration:none;">Inscribirse →</a>'
-                )
-            if not partes:
-                return ""
-            contenido = "".join(partes)
-            return (
-                f'<details style="margin-top:4px;">'
-                f'<summary style="cursor:pointer;font-size:0.84rem;font-weight:600;'
-                f'color:#45658d;padding:{pad};border-top:1px solid #eee;'
-                f'list-style:none;user-select:none;">'
-                f'▶ Más información e inscripción</summary>'
-                f'<div style="padding:10px 0 4px 0;">{contenido}</div>'
-                f'</details>'
             )
 
         # ── Modal de inscripción (solo Moodle/CeNET) ──
