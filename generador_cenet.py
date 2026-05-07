@@ -1717,6 +1717,20 @@ class GeneradorMoodle(ctk.CTk):
 
         es_inet = (modo == "inet")
 
+        # Colores por categoría para INET (franja superior de la card)
+        _CAT_COLORS = {
+            "innovación y entornos digitales":                  "#45658d",
+            "estrategias pedagógicas para la etp":              "#308a3c",
+            "seguridad institucional":                          "#E84118",
+            "diseño, producción y especializaciones técnicas":  "#9B91C8",
+            "programación":                                     "#242c4f",
+            "marketing":                                        "#E84118",
+            "agroalimentos":                                    "#2e7d32",
+        }
+
+        def _cat_color(cat):
+            return _CAT_COLORS.get(cat.lower().strip(), "#45658d")
+
         # ── Helper acordeón para inet (debe definirse antes de usarse) ──
         def _make_acordeon_inet(titulo, descripcion, info_url, ins_url, compacto=False):
             pad = "6px 0" if not compacto else "4px 0"
@@ -1741,7 +1755,9 @@ class GeneradorMoodle(ctk.CTk):
                     f'text-decoration:none;">Inscribirse →</a>'
                 )
             if not partes:
-                return ""
+                partes.append(
+                    '<span style="font-size:0.8rem;color:#9ca3af;">Consultá disponibilidad.</span>'
+                )
             contenido = "".join(partes)
             return (
                 f'<details style="margin-top:4px;">'
@@ -1823,9 +1839,11 @@ class GeneradorMoodle(ctk.CTk):
                 info_url = c.get("info", "") or make_info_uri(c.get("info_texto", ""))
                 ins_url  = c.get("form_externo", "") or coh_link
                 search   = f"{tit.lower()} {c.get('categoria','').lower()} nuevo"
+                cat_n = c.get("categoria", "")
                 if es_inet:
                     accion_html = _make_acordeon_inet(tit, desc_txt, info_url, ins_url)
-                    imagen_html = ""
+                    cc = _cat_color(cat_n)
+                    imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
                 else:
                     info_uri = info_url
                     accion_html = (
@@ -1910,7 +1928,8 @@ class GeneradorMoodle(ctk.CTk):
 
                 if es_inet:
                     accion_html = _make_acordeon_inet(tit, desc_txt, info_url, ins_url)
-                    imagen_html = ""
+                    cc = _cat_color(cat)
+                    imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
                 else:
                     accion_html = (
                         f'<button type="button" '
@@ -1938,11 +1957,12 @@ class GeneradorMoodle(ctk.CTk):
                 )
             n_cat = len(por_cat_activa[cat])
             cat_id = f"cat_{cat_idx}"
+            sec_color = _cat_color(cat) if es_inet else "#45658d"
             secs_activa += (
                 f'\n<div id="{cat_id}" style="margin-bottom:36px;">'
                 f'<div style="display:flex;align-items:center;gap:10px;'
                 f'font-size:1.1rem;font-weight:700;color:#1e2a4a;'
-                f'border-bottom:2px solid #45658d;padding-bottom:8px;margin-bottom:16px;">'
+                f'border-bottom:2px solid {sec_color};padding-bottom:8px;margin-bottom:16px;">'
                 f'{cat}'
                 f'<span style="margin-left:auto;font-size:0.76rem;font-weight:500;'
                 f'color:#6b7280;background:#e5e7eb;padding:2px 10px;border-radius:999px;">'
@@ -2086,6 +2106,26 @@ class GeneradorMoodle(ctk.CTk):
             '</style>\n'
         )
 
+        if es_inet:
+            _hero_sub = '<p style="margin:8px 0 0;font-size:0.85rem;color:#6b7280;">Oferta de cursos — inet.edu.ar</p>'
+            _hero_html = (
+                '<div style="background:#f0f4f8;border-bottom:4px solid #45658d;'
+                'color:#1e2a4a;text-align:center;padding:28px 20px 20px;margin-bottom:24px;">'
+                f'<h2 style="font-size:1.9rem;font-weight:700;color:#1e2a4a;'
+                f'letter-spacing:-0.5px;margin:0;">{titulo}</h2>'
+                f'{_hero_sub}'
+                '</div>\n'
+            )
+        else:
+            _hero_html = (
+                '<div style="background:linear-gradient(135deg,#1e2a4a 0%,#45658d 100%);'
+                'color:white;text-align:center;padding:36px 20px 24px;'
+                'border-radius:0 0 20px 20px;margin-bottom:24px;">'
+                f'<h2 style="font-size:1.9rem;font-weight:700;color:white;'
+                f'letter-spacing:-0.5px;margin:0;">{titulo}</h2>'
+                '</div>\n'
+            )
+
         return (
             f'<div style="font-family:\'Segoe UI\',Arial,sans-serif;color:#333;line-height:1.5;">\n'
 
@@ -2095,13 +2135,8 @@ class GeneradorMoodle(ctk.CTk):
             # Modal de inscripción (overlay fijo, oculto por defecto)
             f'{modal_html}'
 
-            # Hero
-            f'<div style="background:linear-gradient(135deg,#1e2a4a 0%,#45658d 100%);'
-            f'color:white;text-align:center;padding:36px 20px 24px;'
-            f'border-radius:0 0 20px 20px;margin-bottom:24px;">'
-            f'<h2 style="font-size:1.9rem;font-weight:700;color:white;'
-            f'letter-spacing:-0.5px;margin:0;">{titulo}</h2>'
-            f'</div>\n'
+            # Hero (distinto para INET: fondo más claro, sin degradado oscuro)
+            f'{_hero_html}'
 
             # Cohorte
             f'<div id="cnetActiva" style="max-width:1200px;margin:0 auto;padding:0 16px;">\n'
