@@ -2081,7 +2081,7 @@ class GeneradorMoodle(ctk.CTk):
             '  .cnet-grid-compacto { grid-template-columns:repeat(2, 1fr); }\n'
             '}\n'
             '@media (max-width: 640px) {\n'
-            '  .cnet-grid, .cnet-grid-nuevos, .cnet-grid-compacto { grid-template-columns:repeat(2, 1fr); }\n'
+            '  .cnet-grid, .cnet-grid-nuevos, .cnet-grid-compacto { grid-template-columns:1fr; }\n'
             '}\n'
             '</style>\n'
         )
