@@ -2036,9 +2036,8 @@ class GeneradorMoodle(ctk.CTk):
                 f'<div style="max-width:1200px;margin:0 auto 28px;padding:0 16px;">'
                 f'<div style="font-size:1.1rem;font-weight:700;color:#1e2a4a;'
                 f'border-bottom:2px solid #22c55e;padding-bottom:8px;margin-bottom:16px;">'
-                f'Nuevos en esta edición</div>'
-                f'<div id="secNuevos" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));'
-                f'gap:16px;">{nuevos_cards}</div></div>\n'
+                f'🆕 Nuevos en esta edición</div>'
+                f'<div id="secNuevos" class="cnet-grid-nuevos">{nuevos_cards}</div></div>\n'
             )
 
         # Categorías únicas de la cohorte activa
@@ -2128,7 +2127,7 @@ class GeneradorMoodle(ctk.CTk):
                 f'<span style="margin-left:auto;font-size:0.76rem;font-weight:500;'
                 f'color:#6b7280;background:#e5e7eb;padding:2px 10px;border-radius:999px;">'
                 f'{n_cat} curso{"s" if n_cat != 1 else ""}</span></div>'
-                f'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;">'
+                f'<div class="cnet-grid">'
                 f'{cards}</div></div>'
             )
 
@@ -2205,7 +2204,7 @@ class GeneradorMoodle(ctk.CTk):
                     f'{cat} '
                     f'<span style="font-size:0.72rem;font-weight:500;color:#6b7280;">'
                     f'({n_ant} curso{"s" if n_ant != 1 else ""})</span></div>'
-                    f'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;">'
+                    f'<div class="cnet-grid-compacto">'
                     f'{cards_ant}</div></div>'
                 )
 
@@ -2382,8 +2381,27 @@ class GeneradorMoodle(ctk.CTk):
             f'</script>\n'
         )
 
+        # ── Estilos responsive ──
+        responsive_css = (
+            '<style>\n'
+            '.cnet-grid { display:grid; gap:18px; grid-template-columns:repeat(3, 1fr); }\n'
+            '.cnet-grid-compacto { display:grid; gap:12px; grid-template-columns:repeat(3, 1fr); }\n'
+            '.cnet-grid-nuevos { display:grid; gap:16px; grid-template-columns:repeat(3, 1fr); }\n'
+            '@media (max-width: 1024px) {\n'
+            '  .cnet-grid, .cnet-grid-nuevos { grid-template-columns:repeat(2, 1fr); }\n'
+            '  .cnet-grid-compacto { grid-template-columns:repeat(2, 1fr); }\n'
+            '}\n'
+            '@media (max-width: 768px) {\n'
+            '  .cnet-grid, .cnet-grid-nuevos, .cnet-grid-compacto { grid-template-columns:1fr; }\n'
+            '}\n'
+            '</style>\n'
+        )
+
         return (
             f'<div style="font-family:\'Segoe UI\',Arial,sans-serif;color:#333;line-height:1.5;">\n'
+
+            # Estilos responsive
+            f'{responsive_css}'
 
             # Modal de inscripción (overlay fijo, oculto por defecto)
             f'{modal_html}'
