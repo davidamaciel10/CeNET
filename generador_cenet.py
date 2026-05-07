@@ -404,8 +404,13 @@ class GeneradorMoodle(ctk.CTk):
         self.desc_var          = tk.StringVar()
         self.inf_var           = tk.StringVar()
         self.ext_var           = tk.StringVar()
+        self.familia_var       = tk.StringVar()
+        self.nivel_var         = tk.StringVar()
+        self.dest_var          = tk.StringVar()
+        self.conoc_var         = tk.StringVar()
         self._cat_nueva_var    = tk.StringVar()
         self._banco_filtro_var = tk.StringVar()
+        self.sintesis_box      = None  # CTkTextbox; assigned in _build_tab_banco
 
         # Modo de generación HTML
         self._modo_html        = tk.StringVar(value="moodle")
@@ -640,15 +645,51 @@ class GeneradorMoodle(ctk.CTk):
                     placeholder="https://...  (vacío = sin imagen)").pack(
             fill="x", padx=14, pady=(0, 4))
 
-        # Descripción corta (para INET)
-        self._label(card_form, "Descripción corta  (para INET)", muted=True).pack(
+        # Familia profesional
+        self._label(card_form, "Familia profesional", muted=True).pack(
             anchor="w", padx=14, pady=(6, 1))
-        self._entry(card_form, textvariable=self.desc_var, width=0,
-                    placeholder="Breve descripción del curso...").pack(
+        self._entry(card_form, textvariable=self.familia_var, width=0,
+                    placeholder="Ej: Todas las familias profesionales").pack(
             fill="x", padx=14, pady=(0, 4))
 
+        # Nivel
+        self._label(card_form, "Nivel", muted=True).pack(
+            anchor="w", padx=14, pady=(6, 1))
+        self._entry(card_form, textvariable=self.nivel_var, width=0,
+                    placeholder="Ej: Secundario Técnico – Técnico Superior").pack(
+            fill="x", padx=14, pady=(0, 4))
+
+        # Destinatarios
+        self._label(card_form, "Destinatarios", muted=True).pack(
+            anchor="w", padx=14, pady=(6, 1))
+        self._entry(card_form, textvariable=self.dest_var, width=0,
+                    placeholder="Ej: Autoridades y docentes de instituciones técnicas").pack(
+            fill="x", padx=14, pady=(0, 4))
+
+        # Conocimientos previos
+        self._label(card_form, "Conocimientos previos", muted=True).pack(
+            anchor="w", padx=14, pady=(6, 1))
+        self._entry(card_form, textvariable=self.conoc_var, width=0,
+                    placeholder="Ej: No se requieren").pack(
+            fill="x", padx=14, pady=(0, 4))
+
+        # Síntesis (multilinea)
+        self._label(card_form, "Síntesis", muted=True).pack(
+            anchor="w", padx=14, pady=(6, 1))
+        self.sintesis_box = ctk.CTkTextbox(
+            card_form,
+            height=80,
+            fg_color=COLORS["bg_input"],
+            border_color=COLORS["border"],
+            text_color=COLORS["text"],
+            font=ctk.CTkFont(family="Segoe UI", size=12),
+            border_width=1,
+            wrap="word",
+        )
+        self.sintesis_box.pack(fill="x", padx=14, pady=(0, 4))
+
         # URL Más Info
-        self._label(card_form, "URL Más Info", muted=True).pack(
+        self._label(card_form, "URL Más Info  (opcional, si hay página externa)", muted=True).pack(
             anchor="w", padx=14, pady=(6, 1))
         self._entry(card_form, textvariable=self.inf_var, width=0,
                     placeholder="https://...").pack(
@@ -1156,12 +1197,18 @@ class GeneradorMoodle(ctk.CTk):
             return
         ext = self.ext_var.get().strip()
         desc = self.desc_var.get().strip()
+        sintesis_txt = self.sintesis_box.get("1.0", "end-1c").strip() if self.sintesis_box else ""
         curso = {
-            "titulo":    titulo,
-            "categoria": self.cat_var.get().strip() or "Sin categoría",
-            "img":       self.img_var.get().strip(),
-            "descripcion": desc,
-            "info":      self.inf_var.get().strip(),
+            "titulo":         titulo,
+            "categoria":      self.cat_var.get().strip() or "Sin categoría",
+            "img":            self.img_var.get().strip(),
+            "descripcion":    desc,
+            "info":           self.inf_var.get().strip(),
+            "familia_prof":   self.familia_var.get().strip(),
+            "nivel":          self.nivel_var.get().strip(),
+            "destinatarios":  self.dest_var.get().strip(),
+            "conocimientos":  self.conoc_var.get().strip(),
+            "sintesis":       sintesis_txt,
         }
         if ext:
             curso["form_externo"] = ext
@@ -1195,6 +1242,15 @@ class GeneradorMoodle(ctk.CTk):
         self.desc_var.set(c.get("descripcion", ""))
         self.inf_var.set(c.get("info", ""))
         self.ext_var.set(c.get("form_externo", ""))
+        self.familia_var.set(c.get("familia_prof", ""))
+        self.nivel_var.set(c.get("nivel", ""))
+        self.dest_var.set(c.get("destinatarios", ""))
+        self.conoc_var.set(c.get("conocimientos", ""))
+        if self.sintesis_box:
+            self.sintesis_box.delete("1.0", "end")
+            sintesis = c.get("sintesis", "")
+            if sintesis:
+                self.sintesis_box.insert("1.0", sintesis)
         self._banco_edit_idx = idx
         titulo_corto = c["titulo"][:28] + ("…" if len(c["titulo"]) > 28 else "")
         self.lbl_banco_form_title.configure(text=f"Editando: {titulo_corto}")
@@ -1326,8 +1382,12 @@ class GeneradorMoodle(ctk.CTk):
 
     def _banco_limpiar_form(self):
         """Limpia los campos del formulario del banco."""
-        for v in (self.tit_var, self.cat_var, self.img_var, self.desc_var, self.inf_var, self.ext_var):
+        for v in (self.tit_var, self.cat_var, self.img_var, self.desc_var,
+                  self.inf_var, self.ext_var, self.familia_var, self.nivel_var,
+                  self.dest_var, self.conoc_var):
             v.set("")
+        if self.sintesis_box:
+            self.sintesis_box.delete("1.0", "end")
 
     # ─────────────────────────────────────────
     # MÉTODOS DE COHORTE (Tab 2)
@@ -1731,26 +1791,80 @@ class GeneradorMoodle(ctk.CTk):
         def _cat_color(cat):
             return _CAT_COLORS.get(cat.lower().strip(), "#45658d")
 
-        # ── Helper acordeón para inet (debe definirse antes de usarse) ──
-        def _make_acordeon_inet(titulo, descripcion, info_url, ins_url, compacto=False):
+        # ── Helpers de contenido ──
+
+        def _make_info_page_html(titulo, familia, nivel, destinatarios, conocimientos, sintesis, ins_url):
+            """Genera HTML completo para el iframe del modal CeNET."""
+            rows = ""
+            _S_TH = "text-align:left;padding:7px 12px;font-size:0.82rem;font-weight:600;color:#4b5563;white-space:nowrap;vertical-align:top;width:38%;"
+            _S_TD = "padding:7px 12px;font-size:0.82rem;color:#1e2a4a;vertical-align:top;"
+            for label, val in (
+                ("Familia profesional", familia),
+                ("Nivel", nivel),
+                ("Destinatarios", destinatarios),
+                ("Conocimientos previos", conocimientos),
+            ):
+                if val:
+                    rows += f'<tr><th style="{_S_TH}">{label}</th><td style="{_S_TD}">{val}</td></tr>'
+            tabla = (
+                f'<table style="width:100%;border-collapse:collapse;'
+                f'background:#f8fafc;border-radius:8px;overflow:hidden;'
+                f'border:1px solid #e5e7eb;margin-bottom:14px;">{rows}</table>'
+            ) if rows else ""
+            sintesis_html = (
+                f'<p style="font-size:0.88rem;color:#374151;line-height:1.65;margin:0 0 14px;">{sintesis}</p>'
+            ) if sintesis else ""
+            btn_ins = (
+                f'<a href="{ins_url}" target="_blank" '
+                f'style="display:inline-block;padding:10px 24px;border-radius:8px;'
+                f'background:#45658d;color:white;text-decoration:none;'
+                f'font-size:0.88rem;font-weight:700;">Inscribirse →</a>'
+            ) if ins_url else ""
+            return (
+                '<!DOCTYPE html><html><head><meta charset="utf-8">'
+                '<meta name="viewport" content="width=device-width,initial-scale=1">'
+                '<style>body{font-family:"Segoe UI",Arial,sans-serif;margin:0;padding:16px;color:#1e2a4a;}</style>'
+                '</head><body>'
+                f'<h3 style="font-size:1rem;font-weight:700;color:#1e2a4a;'
+                f'border-bottom:2px solid #45658d;padding-bottom:8px;margin:0 0 14px;">{titulo}</h3>'
+                f'{tabla}{sintesis_html}'
+                f'<div style="margin-top:8px;">{btn_ins}</div>'
+                '</body></html>'
+            )
+
+        def _make_acordeon_inet(titulo, sintesis, info_url, ins_url,
+                                familia="", nivel="", destinatarios="", conocimientos="",
+                                compacto=False):
             pad = "6px 0" if not compacto else "4px 0"
             partes = []
-            if descripcion:
+            _S_LBL = "font-size:0.75rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;"
+            _S_VAL = "font-size:0.82rem;color:#1e2a4a;margin:0 0 8px 0;"
+            for label, val in (
+                ("Familia profesional", familia),
+                ("Nivel", nivel),
+                ("Destinatarios", destinatarios),
+                ("Conocimientos previos", conocimientos),
+            ):
+                if val:
+                    partes.append(
+                        f'<p style="{_S_LBL}">{label}</p>'
+                        f'<p style="{_S_VAL}">{val}</p>'
+                    )
+            if sintesis:
                 partes.append(
-                    f'<p style="font-size:0.8rem;color:#555;line-height:1.5;margin:0 0 8px 0;">'
-                    f'{descripcion}</p>'
+                    f'<p style="font-size:0.8rem;color:#374151;line-height:1.6;margin:0 0 10px 0;">{sintesis}</p>'
                 )
             if info_url:
                 partes.append(
                     f'<a href="{info_url}" target="_blank" '
                     f'style="font-size:0.8rem;font-weight:600;color:#45658d;'
-                    f'text-decoration:none;display:block;margin-bottom:6px;">'
+                    f'text-decoration:none;display:block;margin-bottom:8px;">'
                     f'Ver detalle del curso →</a>'
                 )
             if ins_url:
                 partes.append(
                     f'<a href="{ins_url}" target="_blank" '
-                    f'style="display:block;text-align:center;padding:8px;border-radius:8px;'
+                    f'style="display:block;text-align:center;padding:9px;border-radius:8px;'
                     f'background:#45658d;color:white;font-size:0.82rem;font-weight:700;'
                     f'text-decoration:none;">Inscribirse →</a>'
                 )
@@ -1833,22 +1947,37 @@ class GeneradorMoodle(ctk.CTk):
         if nuevos:
             nuevos_cards = ""
             for c in nuevos:
-                tit      = c.get("titulo", "")
-                img_url  = c.get("img", "")
-                desc_txt = c.get("descripcion", "")
-                info_url = c.get("info", "") or make_info_uri(c.get("info_texto", ""))
-                ins_url  = c.get("form_externo", "") or coh_link
-                search   = f"{tit.lower()} {c.get('categoria','').lower()} nuevo"
-                cat_n = c.get("categoria", "")
+                tit           = c.get("titulo", "")
+                img_url       = c.get("img", "")
+                ins_url       = c.get("form_externo", "") or coh_link
+                cat_n         = c.get("categoria", "")
+                familia       = c.get("familia_prof", "")
+                nivel         = c.get("nivel", "")
+                destinatarios = c.get("destinatarios", "")
+                conocimientos = c.get("conocimientos", "")
+                sintesis      = c.get("sintesis", "")
+                search        = f"{tit.lower()} {cat_n.lower()} nuevo"
+                # info_url: URL externa si existe; si no, construimos la página desde los campos
+                ext_info = c.get("info", "")
+                if ext_info:
+                    info_url = ext_info
+                elif any((familia, nivel, destinatarios, conocimientos, sintesis)):
+                    info_url = make_info_uri(
+                        _make_info_page_html(tit, familia, nivel, destinatarios, conocimientos, sintesis, ins_url)
+                    )
+                else:
+                    info_url = ""
                 if es_inet:
-                    accion_html = _make_acordeon_inet(tit, desc_txt, info_url, ins_url)
+                    accion_html = _make_acordeon_inet(
+                        tit, sintesis, "" if not ext_info else info_url, ins_url,
+                        familia, nivel, destinatarios, conocimientos
+                    )
                     cc = _cat_color(cat_n)
                     imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
                 else:
-                    info_uri = info_url
                     accion_html = (
                         f'<button type="button" '
-                        f'onclick="cnetOpenModal(\'{js_str(tit)}\',\'{js_str(img_url)}\',\'{js_str(info_uri)}\',\'{js_str(ins_url)}\')" '
+                        f'onclick="cnetOpenModal(\'{js_str(tit)}\',\'{js_str(img_url)}\',\'{js_str(info_url)}\',\'{js_str(ins_url)}\')" '
                         f'style="{S_MAS_INFO_INS}">Más información e inscripción</button>'
                     ) if (info_url or ins_url) else ""
                     imagen_html = (
@@ -1904,13 +2033,26 @@ class GeneradorMoodle(ctk.CTk):
         for cat_idx, cat in enumerate(cats_activa_orden):
             cards = ""
             for c in por_cat_activa[cat]:
-                tit      = c.get("titulo", "")
-                img_url  = c.get("img", "")
-                desc_txt = c.get("descripcion", "")
-                info_url = c.get("info", "") or make_info_uri(c.get("info_texto", ""))
-                ins_url  = c.get("form_externo", "") or coh_link
-                etiqueta = c.get("etiqueta", "")
-                search   = f"{tit.lower()} {cat.lower()} {etiqueta.lower()}"
+                tit           = c.get("titulo", "")
+                img_url       = c.get("img", "")
+                ins_url       = c.get("form_externo", "") or coh_link
+                etiqueta      = c.get("etiqueta", "")
+                familia       = c.get("familia_prof", "")
+                nivel         = c.get("nivel", "")
+                destinatarios = c.get("destinatarios", "")
+                conocimientos = c.get("conocimientos", "")
+                sintesis      = c.get("sintesis", "")
+                search        = f"{tit.lower()} {cat.lower()} {etiqueta.lower()}"
+                ext_info = c.get("info", "")
+                if ext_info:
+                    info_url = ext_info
+                elif any((familia, nivel, destinatarios, conocimientos, sintesis)):
+                    info_url = make_info_uri(
+                        _make_info_page_html(tit, familia, nivel, destinatarios, conocimientos, sintesis, ins_url)
+                    )
+                else:
+                    info_url = ""
+
                 if etiqueta == "Destacado":
                     badge_html = (
                         '<span style="background:#d4a843;color:white;font-size:0.7rem;'
@@ -1927,7 +2069,10 @@ class GeneradorMoodle(ctk.CTk):
                     badge_html = ""
 
                 if es_inet:
-                    accion_html = _make_acordeon_inet(tit, desc_txt, info_url, ins_url)
+                    accion_html = _make_acordeon_inet(
+                        tit, sintesis, "" if not ext_info else info_url, ins_url,
+                        familia, nivel, destinatarios, conocimientos
+                    )
                     cc = _cat_color(cat)
                     imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
                 else:
