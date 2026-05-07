@@ -374,8 +374,7 @@ class GeneradorMoodle(ctk.CTk):
 
         # Estado interno
         self._current_theme      = "dark"
-        self._banco_edit_idx     = None   # None = agregar, int = editar
-        self._coh_edit_idx       = 0
+        self._banco_edit_idx     = None
         self._hay_cambios        = False
         self._preview_html_cache = ""
         self._use_htmlframe      = False
@@ -392,23 +391,11 @@ class GeneradorMoodle(ctk.CTk):
         # Variables generales
         self.titulo_oferta_var = tk.StringVar(value="Oferta Formativa CeNET 2026")
 
-        # Cohortes config (incluyen lista de cursos)
-        self.cohortes_config = [
-            {"nombre": "1° cohorte", "link": "https://forms.office.com/r/KxVhywjCKV",
-             "estado": "Inscripción ABIERTA", "visible": True, "cursos": []},
-            {"nombre": "2° cohorte", "link": "", "estado": "Próximamente", "visible": False, "cursos": []},
-            {"nombre": "3° cohorte", "link": "", "estado": "Próximamente", "visible": False, "cursos": []},
-            {"nombre": "4° cohorte", "link": "", "estado": "Próximamente", "visible": False, "cursos": []},
-            {"nombre": "5° cohorte", "link": "", "estado": "Próximamente", "visible": False, "cursos": []},
-            {"nombre": "6° cohorte", "link": "", "estado": "Próximamente", "visible": False, "cursos": []},
-        ]
-
-        # Variables editor de cohorte
-        coh0 = self.cohortes_config[0]
-        self.coh_nombre_var  = tk.StringVar(value=coh0["nombre"])
-        self.coh_estado_var  = tk.StringVar(value=coh0["estado"])
-        self.coh_link_var    = tk.StringVar(value=coh0["link"])
-        self.coh_visible_var = tk.BooleanVar(value=coh0["visible"])
+        # Cohorte única
+        self.cohorte = {"nombre": "2° cohorte", "link": "", "estado": "Inscripción ABIERTA", "cursos": []}
+        self.coh_nombre_var = tk.StringVar(value=self.cohorte["nombre"])
+        self.coh_estado_var = tk.StringVar(value=self.cohorte["estado"])
+        self.coh_link_var   = tk.StringVar(value=self.cohorte["link"])
 
         # Variables formulario banco
         self.tit_var           = tk.StringVar()
@@ -427,10 +414,9 @@ class GeneradorMoodle(ctk.CTk):
         self._build_ui()
 
         # Auto-guardar cambios del editor de cohorte
-        self.coh_nombre_var.trace_add("write",  self._save_coh_edit)
-        self.coh_estado_var.trace_add("write",  self._save_coh_edit)
-        self.coh_link_var.trace_add("write",    self._save_coh_edit)
-        self.coh_visible_var.trace_add("write", self._save_coh_edit)
+        self.coh_nombre_var.trace_add("write", self._save_coh_edit)
+        self.coh_estado_var.trace_add("write", self._save_coh_edit)
+        self.coh_link_var.trace_add("write",   self._save_coh_edit)
 
     # ─────────────────────────────────────────
     # INDICADOR DE CAMBIOS
@@ -816,55 +802,17 @@ class GeneradorMoodle(ctk.CTk):
         ctk.CTkFrame(card_cfg, height=1, fg_color=COLORS["border"]).pack(
             fill="x", padx=14, pady=(0, 6))
 
-        self._label(card_cfg, "Seleccionar cohorte:", muted=True).pack(
-            anchor="w", padx=14, pady=(0, 4))
-
-        coh_sel_frame = ctk.CTkFrame(card_cfg, fg_color="transparent")
-        coh_sel_frame.pack(fill="x", padx=14, pady=(0, 6))
-        self._coh_btns = []
-        for i in range(len(self.cohortes_config)):
-            btn = ctk.CTkButton(
-                coh_sel_frame, text=f"{i+1}°",
-                width=36, height=28, corner_radius=8,
-                fg_color=COLORS["accent"] if i == 0 else COLORS["bg_hover"],
-                hover_color=COLORS["accent_hover"],
-                text_color=COLORS["white"],
-                font=ctk.CTkFont(family="Segoe UI", size=11, weight="bold"),
-                command=lambda idx=i: self._select_coh_edit(idx)
-            )
-            btn.pack(side="left", padx=(0, 3))
-            self._coh_btns.append(btn)
-
-        self.lbl_coh_nombre = self._label(
-            card_cfg, f"— {self.cohortes_config[0]['nombre']} —",
-            size=11, bold=True)
-        self.lbl_coh_nombre.pack(anchor="w", padx=14, pady=(4, 2))
-
-        self._label(card_cfg, "Nombre de la cohorte", muted=True).pack(
-            anchor="w", padx=14, pady=(4, 1))
-        self._entry(card_cfg, textvariable=self.coh_nombre_var, width=0,
-                    placeholder="Ej: 1° cohorte").pack(fill="x", padx=14, pady=(0, 2))
-
         for lbl, var, ph in [
-            ("Estado",           self.coh_estado_var, "Ej: Inscripción ABIERTA"),
-            ("Link Inscripción", self.coh_link_var,   "https://forms.office.com/..."),
+            ("Nombre de la cohorte", self.coh_nombre_var, "Ej: 2° cohorte"),
+            ("Estado",               self.coh_estado_var, "Ej: Inscripción ABIERTA"),
+            ("Link Inscripción",     self.coh_link_var,   "https://forms.office.com/..."),
         ]:
             self._label(card_cfg, lbl, muted=True).pack(
                 anchor="w", padx=14, pady=(4, 1))
             self._entry(card_cfg, textvariable=var, width=0,
                         placeholder=ph).pack(fill="x", padx=14, pady=(0, 2))
 
-        vis_frame = ctk.CTkFrame(card_cfg, fg_color="transparent")
-        vis_frame.pack(fill="x", padx=14, pady=(8, 10))
-        self.toggle_visible = ctk.CTkSwitch(
-            vis_frame, text="Visible en HTML",
-            variable=self.coh_visible_var,
-            font=ctk.CTkFont(family="Segoe UI", size=12),
-            fg_color=COLORS["border"],
-            progress_color=COLORS["success"],
-            text_color=COLORS["text"],
-        )
-        self.toggle_visible.pack(side="left")
+        ctk.CTkFrame(card_cfg, height=8, fg_color="transparent").pack()
 
         # Panel derecho: grid con 2 rows
         right = ctk.CTkFrame(parent, fg_color="transparent")
@@ -1282,18 +1230,16 @@ class GeneradorMoodle(ctk.CTk):
                 "Se eliminará también de las cohortes donde esté asignado.", parent=self):
             return
         del self.banco_cursos[idx]
-        # Reasignar índices en cohortes: eliminar referencias y ajustar índices
-        for coh in self.cohortes_config:
-            nuevos = []
-            for entry in coh.get("cursos", []):
-                bidx = entry.get("banco_idx", -1)
-                if bidx == idx:
-                    continue  # eliminar esta referencia
-                if bidx > idx:
-                    entry = dict(entry)
-                    entry["banco_idx"] = bidx - 1
-                nuevos.append(entry)
-            coh["cursos"] = nuevos
+        nuevos = []
+        for entry in self.cohorte.get("cursos", []):
+            bidx = entry.get("banco_idx", -1)
+            if bidx == idx:
+                continue
+            if bidx > idx:
+                entry = dict(entry)
+                entry["banco_idx"] = bidx - 1
+            nuevos.append(entry)
+        self.cohorte["cursos"] = nuevos
         if self._banco_edit_idx == idx:
             self._banco_cancelar()
         self._refresh_banco_tree()
@@ -1309,11 +1255,9 @@ class GeneradorMoodle(ctk.CTk):
         nuevo = copy.deepcopy(self.banco_cursos[idx])
         nuevo["titulo"] += " (copia)"
         self.banco_cursos.insert(idx + 1, nuevo)
-        # Ajustar índices en cohortes: los que apuntaban a >= idx+1 deben incrementarse
-        for coh in self.cohortes_config:
-            for entry in coh.get("cursos", []):
-                if entry.get("banco_idx", -1) > idx:
-                    entry["banco_idx"] += 1
+        for entry in self.cohorte.get("cursos", []):
+            if entry.get("banco_idx", -1) > idx:
+                entry["banco_idx"] += 1
         self._refresh_banco_tree()
         self._marcar_cambio()
         # Seleccionar la copia
@@ -1338,14 +1282,12 @@ class GeneradorMoodle(ctk.CTk):
         prev_idx = int(self.banco_tree.item(children[pos - 1], "tags")[0])
         self.banco_cursos[idx], self.banco_cursos[prev_idx] = \
             self.banco_cursos[prev_idx], self.banco_cursos[idx]
-        # Actualizar referencias en cohortes
-        for coh in self.cohortes_config:
-            for entry in coh.get("cursos", []):
-                bidx = entry.get("banco_idx", -1)
-                if bidx == idx:
-                    entry["banco_idx"] = prev_idx
-                elif bidx == prev_idx:
-                    entry["banco_idx"] = idx
+        for entry in self.cohorte.get("cursos", []):
+            bidx = entry.get("banco_idx", -1)
+            if bidx == idx:
+                entry["banco_idx"] = prev_idx
+            elif bidx == prev_idx:
+                entry["banco_idx"] = idx
         self._refresh_banco_tree()
         self._marcar_cambio()
         for child in self.banco_tree.get_children():
@@ -1369,14 +1311,12 @@ class GeneradorMoodle(ctk.CTk):
         next_idx = int(self.banco_tree.item(children[pos + 1], "tags")[0])
         self.banco_cursos[idx], self.banco_cursos[next_idx] = \
             self.banco_cursos[next_idx], self.banco_cursos[idx]
-        # Actualizar referencias en cohortes
-        for coh in self.cohortes_config:
-            for entry in coh.get("cursos", []):
-                bidx = entry.get("banco_idx", -1)
-                if bidx == idx:
-                    entry["banco_idx"] = next_idx
-                elif bidx == next_idx:
-                    entry["banco_idx"] = idx
+        for entry in self.cohorte.get("cursos", []):
+            bidx = entry.get("banco_idx", -1)
+            if bidx == idx:
+                entry["banco_idx"] = next_idx
+            elif bidx == next_idx:
+                entry["banco_idx"] = idx
         self._refresh_banco_tree()
         self._marcar_cambio()
         for child in self.banco_tree.get_children():
@@ -1390,45 +1330,22 @@ class GeneradorMoodle(ctk.CTk):
             v.set("")
 
     # ─────────────────────────────────────────
-    # MÉTODOS DE COHORTES (Tab 2)
+    # MÉTODOS DE COHORTE (Tab 2)
     # ─────────────────────────────────────────
-    def _select_coh_edit(self, idx):
-        """Cambia cohorte activa en editor."""
-        self._save_coh_edit()
-        self._coh_edit_idx = idx
-        coh = self.cohortes_config[idx]
-        self.coh_nombre_var.set(coh.get("nombre", ""))
-        self.coh_estado_var.set(coh.get("estado", ""))
-        self.coh_link_var.set(coh.get("link", ""))
-        self.coh_visible_var.set(coh.get("visible", False))
-        self.lbl_coh_nombre.configure(text=f"— {coh['nombre']} —")
-        for i, btn in enumerate(self._coh_btns):
-            btn.configure(
-                fg_color=COLORS["accent"] if i == idx else COLORS["bg_hover"])
-        self._refresh_cohorte_panel()
-
     def _save_coh_edit(self, *_):
-        """Guarda estado/link/visible/nombre en cohortes_config."""
-        coh = self.cohortes_config[self._coh_edit_idx]
-        coh["nombre"]  = self.coh_nombre_var.get().strip() or coh["nombre"]
-        coh["estado"]  = self.coh_estado_var.get()
-        coh["link"]    = self.coh_link_var.get()
-        coh["visible"] = self.coh_visible_var.get()
-        self.lbl_coh_nombre.configure(text=f"— {coh['nombre']} —")
+        self.cohorte["nombre"] = self.coh_nombre_var.get().strip() or self.cohorte["nombre"]
+        self.cohorte["estado"] = self.coh_estado_var.get()
+        self.cohorte["link"]   = self.coh_link_var.get()
 
     def _refresh_cohorte_panel(self):
-        """Llama a _refresh_coh_tree + _refresh_banco_disponible."""
         self._refresh_coh_tree()
         self._refresh_banco_disponible()
 
     def _refresh_coh_tree(self):
-        """Refresca self.coh_tree con cursos de la cohorte actual."""
         for item in self.coh_tree.get_children():
             self.coh_tree.delete(item)
-        coh = self.cohortes_config[self._coh_edit_idx]
-        cursos_list = coh.get("cursos", [])
         n = 0
-        for i, entry in enumerate(cursos_list):
+        for i, entry in enumerate(self.cohorte.get("cursos", [])):
             bidx = entry.get("banco_idx", -1)
             etiqueta = entry.get("etiqueta", "")
             if 0 <= bidx < len(self.banco_cursos):
@@ -1439,73 +1356,50 @@ class GeneradorMoodle(ctk.CTk):
                     etiqueta if etiqueta else "—",
                 ))
                 n += 1
-        self.lbl_coh_count.configure(
-            text=f"{n} curso{'s' if n != 1 else ''}")
+        self.lbl_coh_count.configure(text=f"{n} curso{'s' if n != 1 else ''}")
 
     def _refresh_banco_disponible(self):
-        """Refresca checkboxes en self._banco_disp_frame."""
-        # Destruir todos los hijos
         for w in self._banco_disp_frame.winfo_children():
             w.destroy()
-
-        coh = self.cohortes_config[self._coh_edit_idx]
-        ya_en_coh = {entry.get("banco_idx") for entry in coh.get("cursos", [])}
-
-        disponibles = [
-            (bidx, c) for bidx, c in enumerate(self.banco_cursos)
-            if bidx not in ya_en_coh
-        ]
-
+        ya_en_coh = {entry.get("banco_idx") for entry in self.cohorte.get("cursos", [])}
+        disponibles = [(bidx, c) for bidx, c in enumerate(self.banco_cursos) if bidx not in ya_en_coh]
         self.lbl_banco_disp_count.configure(
             text=f"{len(disponibles)} disponible{'s' if len(disponibles) != 1 else ''}")
-
         for bidx, c in disponibles:
-            titulo = c.get("titulo", "")
-            cat    = c.get("categoria", "")
-            texto  = f"{titulo}  [{cat}]"
+            texto = f"{c.get('titulo','')}  [{c.get('categoria','')}]"
             cb = ctk.CTkCheckBox(
-                self._banco_disp_frame,
-                text=texto,
+                self._banco_disp_frame, text=texto,
                 command=lambda b=bidx: self._banco_toggle_add(b),
-                fg_color=COLORS["accent"],
-                hover_color=COLORS["accent_hover"],
-                border_color=COLORS["border"],
-                text_color=COLORS["text"],
+                fg_color=COLORS["accent"], hover_color=COLORS["accent_hover"],
+                border_color=COLORS["border"], text_color=COLORS["text"],
                 font=ctk.CTkFont(family="Segoe UI", size=12),
                 checkmark_color=COLORS["white"],
             )
             cb.pack(anchor="w", padx=8, pady=2)
 
     def _banco_toggle_add(self, banco_idx):
-        """Agrega curso del banco a cohorte actual y refresca."""
-        coh = self.cohortes_config[self._coh_edit_idx]
-        ya_en_coh = {entry.get("banco_idx") for entry in coh.get("cursos", [])}
+        ya_en_coh = {entry.get("banco_idx") for entry in self.cohorte.get("cursos", [])}
         if banco_idx not in ya_en_coh:
-            coh["cursos"].append({"banco_idx": banco_idx, "etiqueta": ""})
+            self.cohorte["cursos"].append({"banco_idx": banco_idx, "etiqueta": ""})
         self._refresh_cohorte_panel()
         self._marcar_cambio()
 
     def _coh_quitar_curso(self):
-        """Quita curso seleccionado de la cohorte actual."""
         pos = self._coh_sel_idx()
         if pos is None:
             messagebox.showinfo("Info", "Seleccioná un curso para quitar.", parent=self)
             return
-        coh = self.cohortes_config[self._coh_edit_idx]
-        del coh["cursos"][pos]
+        del self.cohorte["cursos"][pos]
         self._refresh_cohorte_panel()
 
     def _coh_set_etiqueta(self, etiqueta):
-        """Cambia etiqueta del curso seleccionado en coh_tree."""
         pos = self._coh_sel_idx()
         if pos is None:
             return
-        coh = self.cohortes_config[self._coh_edit_idx]
-        coh["cursos"][pos]["etiqueta"] = etiqueta
+        self.cohorte["cursos"][pos]["etiqueta"] = etiqueta
         self._refresh_coh_tree()
 
     def _coh_sel_idx(self):
-        """Índice seleccionado en coh_tree como posición en cohortes_config[i]['cursos'], o None."""
         sel = self.coh_tree.selection()
         if not sel:
             return None
@@ -1513,34 +1407,27 @@ class GeneradorMoodle(ctk.CTk):
         return int(tags[0]) if tags else None
 
     def _coh_subir(self):
-        """Sube curso en coh_tree."""
         pos = self._coh_sel_idx()
         if pos is None or pos == 0:
             return
-        coh = self.cohortes_config[self._coh_edit_idx]
-        cursos = coh["cursos"]
+        cursos = self.cohorte["cursos"]
         cursos[pos], cursos[pos - 1] = cursos[pos - 1], cursos[pos]
         self._refresh_coh_tree()
-        # Re-seleccionar
-        children = self.coh_tree.get_children()
-        for ch in children:
+        for ch in self.coh_tree.get_children():
             if self.coh_tree.item(ch, "tags") == (str(pos - 1),):
                 self.coh_tree.selection_set(ch)
                 break
 
     def _coh_bajar(self):
-        """Baja curso en coh_tree."""
         pos = self._coh_sel_idx()
         if pos is None:
             return
-        coh = self.cohortes_config[self._coh_edit_idx]
-        cursos = coh["cursos"]
+        cursos = self.cohorte["cursos"]
         if pos >= len(cursos) - 1:
             return
         cursos[pos], cursos[pos + 1] = cursos[pos + 1], cursos[pos]
         self._refresh_coh_tree()
-        children = self.coh_tree.get_children()
-        for ch in children:
+        for ch in self.coh_tree.get_children():
             if self.coh_tree.item(ch, "tags") == (str(pos + 1),):
                 self.coh_tree.selection_set(ch)
                 break
@@ -1576,25 +1463,20 @@ class GeneradorMoodle(ctk.CTk):
         )
 
     def _copiar_banco_a_cohorte(self):
-        """Agrega todos los cursos del banco a la cohorte activa (sin duplicar)."""
+        """Agrega todos los cursos del banco a la cohorte (sin duplicar)."""
         if not self.banco_cursos:
             messagebox.showwarning(
                 "Atención", "El banco está vacío. Primero agregá cursos al banco.",
                 parent=self)
             return
-        coh = self.cohortes_config[self._coh_edit_idx]
-        ya_en_coh = {entry.get("banco_idx") for entry in coh.get("cursos", [])}
+        ya_en_coh = {entry.get("banco_idx") for entry in self.cohorte.get("cursos", [])}
         agregados = 0
         for bidx in range(len(self.banco_cursos)):
             if bidx not in ya_en_coh:
-                coh["cursos"].append({"banco_idx": bidx, "etiqueta": ""})
+                self.cohorte["cursos"].append({"banco_idx": bidx, "etiqueta": ""})
                 agregados += 1
         self._refresh_cohorte_panel()
-        messagebox.showinfo(
-            "Listo",
-            f"Se agregaron {agregados} curso(s) a {coh['nombre']}.",
-            parent=self
-        )
+        messagebox.showinfo("Listo", f"Se agregaron {agregados} curso(s).", parent=self)
 
     # ─────────────────────────────────────────
     # PERSISTENCIA JSON
@@ -1612,7 +1494,7 @@ class GeneradorMoodle(ctk.CTk):
         data = {
             "titulo_oferta":        self.titulo_oferta_var.get(),
             "banco_cursos":         self.banco_cursos,
-            "cohortes_config":      self.cohortes_config,
+            "cohorte":              self.cohorte,
             "categorias_sugeridas": self.categorias_sugeridas,
         }
         with open(archivo, "w", encoding="utf-8") as f:
@@ -1634,73 +1516,26 @@ class GeneradorMoodle(ctk.CTk):
             self.titulo_oferta_var.set(
                 data.get("titulo_oferta", data.get("cohorte", "")))
 
-            # ── MIGRACIÓN BACKWARD COMPAT ──
-            # Formato antiguo: "cursos" es lista plana con campo "cohorte"
-            if "banco_cursos" in data:
-                # Formato nuevo
-                self.banco_cursos = data.get("banco_cursos", [])
-                loaded_cohs = data.get("cohortes_config", [])
-                if loaded_cohs:
-                    self.cohortes_config = loaded_cohs
-                    for c in self.cohortes_config:
-                        c.setdefault("visible", True)
-                        c.setdefault("estado", "")
-                        c.setdefault("link", "")
-                        c.setdefault("cursos", [])
-            elif "cursos" in data:
-                # Formato antiguo: migrar
-                cursos_old = data.get("cursos", [])
-                # Construir banco_cursos con cursos únicos (sin campo cohorte)
-                banco_titulos = {}
-                self.banco_cursos = []
-                for c in cursos_old:
-                    tit = c.get("titulo", "")
-                    if tit not in banco_titulos:
-                        banco_titulos[tit] = len(self.banco_cursos)
-                        self.banco_cursos.append({
-                            "titulo":    tit,
-                            "categoria": c.get("categoria", ""),
-                            "img":       c.get("img", ""),
-                            "info":      c.get("info", ""),
-                        })
-                # Cargar cohortes_config del antiguo
-                loaded_cohs = data.get("cohortes_config")
-                if loaded_cohs:
-                    self.cohortes_config = loaded_cohs
-                    for coh in self.cohortes_config:
-                        coh.setdefault("visible", True)
-                        coh.setdefault("estado", "")
-                        coh.setdefault("link", "")
-                        coh.setdefault("cursos", [])
-                else:
-                    # Resetear cursos de cohortes
-                    for coh in self.cohortes_config:
-                        coh["cursos"] = []
-                # Asignar cursos del antiguo a cohortes por nombre
-                for c in cursos_old:
-                    coh_nombre = c.get("cohorte", "").strip()
-                    tit = c.get("titulo", "")
-                    bidx = banco_titulos.get(tit)
-                    if bidx is None:
-                        continue
-                    etiqueta = c.get("etiqueta", "")
-                    if etiqueta == "Sin etiqueta":
-                        etiqueta = ""
-                    # Buscar la cohorte correspondiente
-                    for coh in self.cohortes_config:
-                        if coh["nombre"] == coh_nombre:
-                            # Verificar que no esté ya
-                            ya = any(e.get("banco_idx") == bidx for e in coh.get("cursos", []))
-                            if not ya:
-                                coh["cursos"].append({"banco_idx": bidx, "etiqueta": etiqueta})
-                            break
+            self.banco_cursos = data.get("banco_cursos", [])
+            loaded_coh = data.get("cohorte")
+            if loaded_coh:
+                self.cohorte = loaded_coh
+                self.cohorte.setdefault("cursos", [])
+                self.cohorte.setdefault("nombre", "")
+                self.cohorte.setdefault("estado", "")
+                self.cohorte.setdefault("link", "")
+            else:
+                self.cohorte = {"nombre": "", "link": "", "estado": "", "cursos": []}
+            self.coh_nombre_var.set(self.cohorte["nombre"])
+            self.coh_estado_var.set(self.cohorte["estado"])
+            self.coh_link_var.set(self.cohorte["link"])
 
             loaded_cats = data.get("categorias_sugeridas")
             if loaded_cats and isinstance(loaded_cats, list):
                 self.categorias_sugeridas = loaded_cats
                 self._refresh_cats_panel()
 
-            self._select_coh_edit(0)
+            self._refresh_cohorte_panel()
             self._refresh_banco_tree()
             n = len(self.banco_cursos)
             messagebox.showinfo(
@@ -1715,48 +1550,21 @@ class GeneradorMoodle(ctk.CTk):
     # GENERACIÓN HTML
     # ─────────────────────────────────────────
     def exportar_html(self, modo="moodle"):
-        """Verifica que banco_cursos tenga cursos y cohortes tengan cursos asignados."""
+        self._save_coh_edit()
         if not self.banco_cursos:
-            messagebox.showerror("Error", "No hay cursos en el banco.",
-                                 parent=self)
+            messagebox.showerror("Error", "No hay cursos en el banco.", parent=self)
             return
-        # Verificar que al menos una cohorte visible tiene cursos
-        cohortes_vis = [c for c in self.cohortes_config if c.get("visible", False)]
-        if not cohortes_vis:
+        if not self.cohorte.get("cursos"):
             messagebox.showwarning(
                 "Atención",
-                "Ninguna cohorte está marcada como visible.\n"
-                "Activá al menos una con el toggle del panel de Cohortes.",
+                "La cohorte no tiene cursos asignados.\n"
+                "Usá 'Copiar banco → cohorte' o tildá cursos en el banco disponible.",
                 parent=self)
             return
-        tiene_cursos = any(len(c.get("cursos", [])) > 0 for c in cohortes_vis)
-        if not tiene_cursos:
-            messagebox.showwarning(
-                "Atención",
-                "Las cohortes visibles no tienen cursos asignados.\n"
-                "Usá 'Copiar banco → cohorte' o tildar cursos en el banco disponible.",
-                parent=self)
-            return
-        # Determinar cohorte activa y validar link de inscripción
-        activa_prev = None
-        for coh in reversed(cohortes_vis):
-            if "abierta" in coh.get("estado", "").lower():
-                activa_prev = coh
-                break
-        if activa_prev is None:
-            activa_prev = cohortes_vis[-1]
-        if not activa_prev.get("cursos"):
-            messagebox.showwarning(
-                "Atención",
-                f"La cohorte activa '{activa_prev['nombre']}' no tiene cursos asignados.\n"
-                "Asignale cursos en la tab Cohortes.",
-                parent=self)
-            return
-        if not activa_prev.get("link", "").strip():
+        if not self.cohorte.get("link", "").strip():
             if not messagebox.askyesno(
                 "Atención",
-                f"La cohorte activa '{activa_prev['nombre']}' no tiene link de inscripción.\n"
-                "¿Generar el HTML de todas formas?",
+                "La cohorte no tiene link de inscripción. ¿Generar el HTML de todas formas?",
                 parent=self):
                 return
         html = self._generar_html(modo=modo)
@@ -1891,33 +1699,14 @@ class GeneradorMoodle(ctk.CTk):
 
     def _generar_html(self, modo="moodle"):
         self._save_coh_edit()
-        titulo = self.titulo_oferta_var.get()
+        titulo    = self.titulo_oferta_var.get()
+        coh_link  = self.cohorte.get("link", "")
+        coh_estado = self.cohorte.get("estado", "")
+        ec        = self._color_estado(coh_estado)
 
-        # Solo cohortes visibles
-        cohortes_vis = [c for c in self.cohortes_config if c.get("visible", False)]
-        if not cohortes_vis:
-            messagebox.showwarning(
-                "Atención",
-                "Ninguna cohorte está marcada como visible.\n"
-                "Activá al menos una con el toggle del panel de Cohortes.",
-                parent=self)
-            return ""
-
-        # Determinar cohorte activa (más reciente con "abierta" en estado)
-        activa = None
-        for coh in reversed(cohortes_vis):
-            if "abierta" in coh.get("estado", "").lower():
-                activa = coh
-                break
-        if activa is None:
-            activa = cohortes_vis[-1]
-
-        anteriores = [c for c in cohortes_vis if c is not activa]
-
-        # Helper para obtener cursos completos de una cohorte
-        def get_cursos_coh(coh):
+        def get_cursos_coh():
             result = []
-            for entry in coh.get("cursos", []):
+            for entry in self.cohorte.get("cursos", []):
                 bidx = entry.get("banco_idx", -1)
                 etiqueta = entry.get("etiqueta", "")
                 if 0 <= bidx < len(self.banco_cursos):
@@ -2000,11 +1789,6 @@ class GeneradorMoodle(ctk.CTk):
             b64 = base64.b64encode(texto_html.encode("utf-8")).decode("ascii")
             return f"data:text/html;base64,{b64}"
 
-        # ── Construir sección cohorte ACTIVA ──
-        coh_link   = activa.get("link", "")
-        coh_estado = activa.get("estado", "")
-        ec         = self._color_estado(coh_estado)
-
         btn_ins_coh = (
             f'<a href="{coh_link}" target="_blank" style="'
             f'display:inline-block;padding:9px 22px;border-radius:8px;'
@@ -2013,11 +1797,11 @@ class GeneradorMoodle(ctk.CTk):
             if coh_link else ""
         )
 
-        coh_header_activa = (
+        coh_header = (
             f'<div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;'
             f'background:linear-gradient(135deg,#1e2a4a 0%,#45658d 100%);'
             f'color:white;padding:18px 24px;border-radius:12px;margin-bottom:22px;">'
-            f'<span style="font-size:1.25rem;font-weight:700;">{activa["nombre"]}</span>'
+            f'<span style="font-size:1.25rem;font-weight:700;">{self.cohorte["nombre"]}</span>'
             f'<span style="display:inline-block;background:{ec};color:white;'
             f'font-size:0.82rem;font-weight:600;padding:4px 14px;border-radius:999px;">'
             f'{coh_estado}</span>'
@@ -2025,7 +1809,7 @@ class GeneradorMoodle(ctk.CTk):
             f'</div>'
         )
 
-        cursos_activa = get_cursos_coh(activa)
+        cursos_activa = get_cursos_coh()
 
         # Sección "Nuevos en esta edición"
         nuevos = [c for c in cursos_activa if c.get("etiqueta") == "Nuevo"]
@@ -2167,101 +1951,6 @@ class GeneradorMoodle(ctk.CTk):
                 f'{cards}</div></div>'
             )
 
-        # ── Secciones de cohortes ANTERIORES (sin buscador, sin filtros, cards compactas) ──
-        secs_anteriores = ""
-        for ant in anteriores:
-            ant_nombre = ant["nombre"]
-            ant_estado = ant.get("estado", "")
-            ant_ec     = self._color_estado(ant_estado)
-            cursos_ant = get_cursos_coh(ant)
-
-            if not cursos_ant:
-                continue
-
-            ant_header = (
-                f'<div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;'
-                f'background:linear-gradient(135deg,#3a3a4a 0%,#5a6a7d 100%);'
-                f'color:white;padding:14px 20px;border-radius:12px;margin-bottom:18px;">'
-                f'<span style="font-size:1.1rem;font-weight:700;">{ant_nombre}</span>'
-                f'<span style="display:inline-block;background:{ant_ec};color:white;'
-                f'font-size:0.78rem;font-weight:600;padding:3px 12px;border-radius:999px;">'
-                f'{ant_estado}</span>'
-                f'</div>'
-            )
-
-            # Agrupar por categoría
-            cats_ant_orden = []
-            cats_ant_vistas = set()
-            por_cat_ant = {}
-            for c in cursos_ant:
-                cat = c.get("categoria", "Sin categoría")
-                if cat not in cats_ant_vistas:
-                    cats_ant_orden.append(cat)
-                    cats_ant_vistas.add(cat)
-                    por_cat_ant[cat] = []
-                por_cat_ant[cat].append(c)
-
-            secs_ant_cat = ""
-            for cat in cats_ant_orden:
-                cards_ant = ""
-                for c in por_cat_ant[cat]:
-                    tit      = c.get("titulo", "")
-                    img_url  = c.get("img", "")
-                    desc_txt = c.get("descripcion", "")
-                    info_url = c.get("info", "") or make_info_uri(c.get("info_texto", ""))
-                    ins_url  = c.get("form_externo", "") or ant.get("link", "")
-                    if es_inet:
-                        bi = _make_acordeon_inet(tit, desc_txt, info_url, ins_url, compacto=True)
-                        imagen_ant = ""
-                    else:
-                        bi = (f'<a href="{info_url}" target="_blank" style="{S_INFO_SM}">Más info</a>'
-                              if info_url else "")
-                        imagen_ant = (
-                            f'<div style="width:100%;height:110px;background:#eef2f7;overflow:hidden;">'
-                            f'<img src="{img_url}" alt="{tit}" loading="lazy" '
-                            f'style="width:100%;height:100%;object-fit:cover;display:block;"></div>'
-                        ) if img_url else ""
-                    cards_ant += (
-                        f'<div style="background:white;border-radius:10px;'
-                        f'border:1px solid #e5e7eb;overflow:hidden;'
-                        f'display:flex;flex-direction:column;">'
-                        f'{imagen_ant}'
-                        f'<div style="padding:10px;flex:1;display:flex;flex-direction:column;gap:6px;">'
-                        f'<p style="font-size:0.82rem;font-weight:600;color:#1e2a4a;'
-                        f'line-height:1.3;margin:0;">{tit}</p>'
-                        f'<div style="margin-top:auto;">{bi}</div>'
-                        f'</div></div>'
-                    )
-                n_ant = len(por_cat_ant[cat])
-                secs_ant_cat += (
-                    f'<div style="margin-bottom:24px;">'
-                    f'<div style="font-size:0.95rem;font-weight:700;color:#1e2a4a;'
-                    f'border-bottom:1.5px solid #45658d;padding-bottom:6px;margin-bottom:12px;">'
-                    f'{cat} '
-                    f'<span style="font-size:0.72rem;font-weight:500;color:#6b7280;">'
-                    f'({n_ant} curso{"s" if n_ant != 1 else ""})</span></div>'
-                    f'<div class="cnet-grid-compacto">'
-                    f'{cards_ant}</div></div>'
-                )
-
-            secs_anteriores += (
-                f'<div style="margin-bottom:36px;opacity:0.88;">'
-                f'{ant_header}'
-                f'{secs_ant_cat}'
-                f'</div>'
-            )
-
-        bloque_anteriores = ""
-        if secs_anteriores:
-            bloque_anteriores = (
-                f'<div style="max-width:1200px;margin:40px auto 0;padding:0 16px 40px;">'
-                f'<div style="font-size:1.2rem;font-weight:700;color:#1e2a4a;'
-                f'border-bottom:2px solid #9ca3af;padding-bottom:8px;margin-bottom:24px;">'
-                f'📅 Ediciones anteriores</div>'
-                f'{secs_anteriores}'
-                f'</div>\n'
-            )
-
         # ── Modal de inscripción (solo Moodle/CeNET) ──
         modal_html = "" if es_inet else (
             # Overlay
@@ -2391,8 +2080,8 @@ class GeneradorMoodle(ctk.CTk):
             '  .cnet-grid, .cnet-grid-nuevos { grid-template-columns:repeat(2, 1fr); }\n'
             '  .cnet-grid-compacto { grid-template-columns:repeat(2, 1fr); }\n'
             '}\n'
-            '@media (max-width: 768px) {\n'
-            '  .cnet-grid, .cnet-grid-nuevos, .cnet-grid-compacto { grid-template-columns:1fr; }\n'
+            '@media (max-width: 640px) {\n'
+            '  .cnet-grid, .cnet-grid-nuevos, .cnet-grid-compacto { grid-template-columns:repeat(2, 1fr); }\n'
             '}\n'
             '</style>\n'
         )
@@ -2414,9 +2103,9 @@ class GeneradorMoodle(ctk.CTk):
             f'letter-spacing:-0.5px;margin:0;">{titulo}</h2>'
             f'</div>\n'
 
-            # Sección cohorte activa
+            # Cohorte
             f'<div id="cnetActiva" style="max-width:1200px;margin:0 auto;padding:0 16px;">\n'
-            f'{coh_header_activa}'
+            f'{coh_header}'
 
             # Buscador
             f'<div style="max-width:620px;margin:0 auto 18px;padding:0;">'
@@ -2442,9 +2131,6 @@ class GeneradorMoodle(ctk.CTk):
             f'padding:48px;color:#9ca3af;font-size:1rem;">'
             f'No se encontraron cursos que coincidan con la búsqueda.</p>'
             f'</div>\n'
-
-            # Ediciones anteriores
-            f'{bloque_anteriores}'
 
             # Script
             f'{script}'
