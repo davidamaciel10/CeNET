@@ -1369,30 +1369,6 @@ class GeneradorMoodle(ctk.CTk):
             "border:1.5px solid #45658d;background:#45658d;color:white;"
             "margin:4px;font-size:0.84rem;font-weight:500;font-family:inherit;"
         )
-        # Moodle: botón único "Más información e inscripción"
-        S_MAS_INFO_INS = (
-            "display:block;width:100%;text-align:center;padding:9px 10px;"
-            "border-radius:8px;font-size:0.85rem;font-weight:700;cursor:pointer;"
-            "background:#45658d;color:white;border:none;font-family:inherit;"
-            "box-sizing:border-box;"
-        )
-        S_INFO_SM = (
-            "text-align:center;padding:5px 8px;border-radius:8px;"
-            "text-decoration:none;font-size:0.78rem;font-weight:600;"
-            "background:#f0f4ff;color:#45658d;border:1px solid #c7d2e8;"
-            "display:inline-block;box-sizing:border-box;"
-        )
-
-        def js_str(s):
-            """Escapa una cadena para uso en onclick JS con comillas simples."""
-            return (s or "").replace("\\", "\\\\").replace("'", "\\'")
-
-        def make_info_uri(texto_html):
-            """Convierte HTML estático en un data URI para iframe."""
-            if not texto_html:
-                return ""
-            b64 = base64.b64encode(texto_html.encode("utf-8")).decode("ascii")
-            return f"data:text/html;base64,{b64}"
 
         coh_header = (
             f'<div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;'
@@ -1423,34 +1399,19 @@ class GeneradorMoodle(ctk.CTk):
                 conocimientos = c.get("conocimientos", "")
                 sintesis      = c.get("sintesis", "")
                 search        = f"{tit.lower()} {cat_n.lower()} nuevo"
-                # info_url: URL externa si existe; si no, construimos la página desde los campos
-                ext_info = c.get("info", "")
-                if ext_info:
-                    info_url = ext_info
-                elif any((familia, nivel, destinatarios, conocimientos, sintesis)):
-                    info_url = make_info_uri(
-                        _make_info_page_html(tit, familia, nivel, destinatarios, conocimientos, sintesis, ins_url)
-                    )
-                else:
-                    info_url = ""
-                if es_inet:
-                    accion_html = _make_acordeon_inet(
-                        tit, sintesis, "" if not ext_info else info_url, ins_url,
-                        familia, nivel, destinatarios, conocimientos
-                    )
-                    cc = _cat_color(cat_n)
-                    imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
-                else:
-                    accion_html = (
-                        f'<button type="button" '
-                        f'onclick="cnetOpenModal(\'{js_str(tit)}\',\'{js_str(img_url)}\',\'{js_str(info_url)}\',\'{js_str(ins_url)}\')" '
-                        f'style="{S_MAS_INFO_INS}">Más información e inscripción</button>'
-                    ) if (info_url or ins_url) else ""
+                accion_html = _make_acordeon_inet(
+                    tit, sintesis, "", ins_url,
+                    familia, nivel, destinatarios, conocimientos
+                )
+                cc = _cat_color(cat_n)
+                if img_url and not es_inet:
                     imagen_html = (
                         f'<div style="width:100%;height:130px;background:#eef2f7;overflow:hidden;">'
                         f'<img src="{img_url}" alt="{tit}" loading="lazy" '
                         f'style="width:100%;height:100%;object-fit:cover;display:block;"></div>'
-                    ) if img_url else ""
+                    )
+                else:
+                    imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
                 nuevos_cards += (
                     f'<div data-search="{search}" style="background:white;border-radius:12px;'
                     f'border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.05);'
@@ -1470,7 +1431,7 @@ class GeneradorMoodle(ctk.CTk):
                 f'<div style="font-size:1.1rem;font-weight:700;color:#1e2a4a;'
                 f'border-bottom:2px solid #22c55e;padding-bottom:8px;margin-bottom:16px;">'
                 f'🆕 Nuevos en esta edición</div>'
-                f'<div id="secNuevos" class="cnet-grid-nuevos">{nuevos_cards}</div></div>\n'
+                f'<div id="secNuevos" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">{nuevos_cards}</div></div>\n'
             )
 
         # Categorías únicas de la cohorte activa
@@ -1509,16 +1470,6 @@ class GeneradorMoodle(ctk.CTk):
                 conocimientos = c.get("conocimientos", "")
                 sintesis      = c.get("sintesis", "")
                 search        = f"{tit.lower()} {cat.lower()} {etiqueta.lower()}"
-                ext_info = c.get("info", "")
-                if ext_info:
-                    info_url = ext_info
-                elif any((familia, nivel, destinatarios, conocimientos, sintesis)):
-                    info_url = make_info_uri(
-                        _make_info_page_html(tit, familia, nivel, destinatarios, conocimientos, sintesis, ins_url)
-                    )
-                else:
-                    info_url = ""
-
                 if etiqueta == "Destacado":
                     badge_html = (
                         '<span style="background:#d4a843;color:white;font-size:0.7rem;'
@@ -1534,24 +1485,19 @@ class GeneradorMoodle(ctk.CTk):
                 else:
                     badge_html = ""
 
-                if es_inet:
-                    accion_html = _make_acordeon_inet(
-                        tit, sintesis, "" if not ext_info else info_url, ins_url,
-                        familia, nivel, destinatarios, conocimientos
-                    )
-                    cc = _cat_color(cat)
-                    imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
-                else:
-                    accion_html = (
-                        f'<button type="button" '
-                        f'onclick="cnetOpenModal(\'{js_str(tit)}\',\'{js_str(img_url)}\',\'{js_str(info_url)}\',\'{js_str(ins_url)}\')" '
-                        f'style="{S_MAS_INFO_INS}">Más información e inscripción</button>'
-                    ) if (info_url or ins_url) else ""
+                accion_html = _make_acordeon_inet(
+                    tit, sintesis, "", ins_url,
+                    familia, nivel, destinatarios, conocimientos
+                )
+                cc = _cat_color(cat)
+                if img_url and not es_inet:
                     imagen_html = (
                         f'<div style="width:100%;height:148px;background:#eef2f7;overflow:hidden;">'
                         f'<img src="{img_url}" alt="{tit}" loading="lazy" '
                         f'style="width:100%;height:100%;object-fit:cover;display:block;"></div>'
-                    ) if img_url else ""
+                    )
+                else:
+                    imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
 
                 cards += (
                     f'\n<div data-search="{search}" style="'
@@ -1578,87 +1524,12 @@ class GeneradorMoodle(ctk.CTk):
                 f'<span style="margin-left:auto;font-size:0.76rem;font-weight:500;'
                 f'color:#6b7280;background:#e5e7eb;padding:2px 10px;border-radius:999px;">'
                 f'{n_cat} curso{"s" if n_cat != 1 else ""}</span></div>'
-                f'<div class="cnet-grid">'
+                f'<div style="display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">'
                 f'{cards}</div></div>'
             )
 
-        # ── Modal de inscripción (solo Moodle/CeNET) ──
-        modal_html = "" if es_inet else (
-            # Overlay
-            '<div id="cnetModal" onclick="if(event.target===this)cnetCloseModal()" '
-            'style="display:none;position:fixed;inset:0;z-index:9999;'
-            'background:rgba(0,0,0,0.72);align-items:center;justify-content:center;padding:12px;">'
-            # Contenedor principal (grande para el iframe)
-            '<div style="background:white;border-radius:14px;width:min(920px,95vw);'
-            'height:min(680px,90vh);overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.4);'
-            'display:flex;flex-direction:column;">'
-            # ── Barra superior ──
-            '<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;'
-            'background:linear-gradient(135deg,#1e2a4a 0%,#45658d 100%);flex-shrink:0;">'
-            '<span id="cnetModalTitulo" style="flex:1;font-size:0.95rem;font-weight:700;'
-            'color:white;line-height:1.3;"></span>'
-            '<button type="button" onclick="cnetCloseModal()" '
-            'style="background:rgba(255,255,255,0.15);color:white;border:none;border-radius:8px;'
-            'padding:5px 12px;cursor:pointer;font-size:0.85rem;font-family:inherit;">✕ Cerrar</button>'
-            '</div>'
-            # ── Área del iframe ──
-            '<div style="flex:1;position:relative;background:#f3f4f6;overflow:hidden;">'
-            # Indicador de carga
-            '<div id="cnetModalLoader" '
-            'style="position:absolute;inset:0;display:flex;flex-direction:column;'
-            'align-items:center;justify-content:center;gap:12px;background:#f3f4f6;z-index:1;">'
-            '<div style="width:36px;height:36px;border:3px solid #e5e7eb;'
-            'border-top-color:#45658d;border-radius:50%;'
-            'animation:cnetSpin 0.8s linear infinite;"></div>'
-            '<span style="font-size:0.85rem;color:#6b7280;">Cargando página del curso...</span>'
-            '</div>'
-            # iframe (src vacío hasta que se abra el modal)
-            '<iframe id="cnetModalFrame" src="" '
-            'style="width:100%;height:100%;border:none;display:block;" '
-            'onload="document.getElementById(\'cnetModalLoader\').style.display=\'none\';">'
-            '</iframe>'
-            '</div>'
-            # ── Barra inferior ──
-            '<div style="display:flex;align-items:center;gap:10px;'
-            'padding:12px 16px;background:white;border-top:1px solid #e5e7eb;flex-shrink:0;">'
-            '<span style="flex:1;font-size:0.8rem;color:#92400e;font-style:italic;">'
-            'Leé atentamente los requisitos antes de inscribirte.</span>'
-            '<button type="button" onclick="cnetCloseModal()" '
-            'style="padding:8px 18px;border-radius:8px;background:transparent;'
-            'border:1px solid #e5e7eb;color:#6b7280;font-size:0.85rem;'
-            'cursor:pointer;font-family:inherit;">Cancelar</button>'
-            '<a id="cnetModalIns" href="#" target="_blank" '
-            'style="padding:8px 22px;border-radius:8px;text-decoration:none;'
-            'font-size:0.85rem;font-weight:700;background:#45658d;color:white;'
-            'display:inline-flex;align-items:center;gap:6px;">Inscribirme</a>'
-            '</div>'
-            '</div></div>'
-            # Animación del spinner (CSS)
-            '<style>'
-            '@keyframes cnetSpin{to{transform:rotate(360deg)}}'
-            '</style>\n'
-        )
-
-        # ── Script JS: búsqueda + filtro categoría solo para cohorte activa ──
-        modal_js = "" if es_inet else (
-            f'function cnetOpenModal(titulo,img,info,ins){{\n'
-            f'  document.getElementById("cnetModalTitulo").textContent=titulo;\n'
-            f'  document.getElementById("cnetModalIns").href=ins||"#";\n'
-            f'  var loader=document.getElementById("cnetModalLoader");\n'
-            f'  if(loader)loader.style.display="flex";\n'
-            f'  var fr=document.getElementById("cnetModalFrame");\n'
-            f'  if(fr)fr.src=info||"";\n'
-            f'  document.getElementById("cnetModal").style.display="flex";\n'
-            f'}}\n'
-            f'function cnetCloseModal(){{\n'
-            f'  var fr=document.getElementById("cnetModalFrame");\n'
-            f'  if(fr)fr.src="";\n'
-            f'  document.getElementById("cnetModal").style.display="none";\n'
-            f'}}\n'
-        )
         script = (
             f'<script>\n'
-            f'{modal_js}'
             f'function cnetFiltro(val){{\n'
             f'  var inp=document.getElementById("cnetSearch");\n'
             f'  if(inp)inp.value=val;\n'
@@ -1701,22 +1572,6 @@ class GeneradorMoodle(ctk.CTk):
             f'</script>\n'
         )
 
-        # ── Estilos responsive ──
-        responsive_css = (
-            '<style>\n'
-            '.cnet-grid { display:grid; gap:18px; grid-template-columns:repeat(3, 1fr); }\n'
-            '.cnet-grid-compacto { display:grid; gap:12px; grid-template-columns:repeat(3, 1fr); }\n'
-            '.cnet-grid-nuevos { display:grid; gap:16px; grid-template-columns:repeat(3, 1fr); }\n'
-            '@media (max-width: 1024px) {\n'
-            '  .cnet-grid, .cnet-grid-nuevos { grid-template-columns:repeat(2, 1fr); }\n'
-            '  .cnet-grid-compacto { grid-template-columns:repeat(2, 1fr); }\n'
-            '}\n'
-            '@media (max-width: 640px) {\n'
-            '  .cnet-grid, .cnet-grid-nuevos, .cnet-grid-compacto { grid-template-columns:1fr; }\n'
-            '}\n'
-            '</style>\n'
-        )
-
         if not es_inet:
             _hero_html = (
                 '<div style="background:linear-gradient(135deg,#1e2a4a 0%,#45658d 100%);'
@@ -1733,12 +1588,6 @@ class GeneradorMoodle(ctk.CTk):
 
         return (
             f'<div style="font-family:\'Segoe UI\',Arial,sans-serif;color:#333;line-height:1.5;">\n'
-
-            # Estilos responsive
-            f'{responsive_css}'
-
-            # Modal de inscripción (overlay fijo, oculto por defecto — solo CeNET)
-            f'{modal_html}'
 
             # Hero y header de cohorte (solo CeNET; INET los omite, WordPress ya tiene su propio header)
             f'{_hero_html}'
