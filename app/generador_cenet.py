@@ -1147,6 +1147,7 @@ class GeneradorMoodle(ctk.CTk):
             self.banco_cursos = data
             self._save_banco_json()
             self._refresh_banco_tree()
+            self._refresh_cohorte_panel()
             n = len(self.banco_cursos)
             messagebox.showinfo(
                 "Éxito",
