@@ -17,6 +17,8 @@ if getattr(sys, 'frozen', False):
 else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+BANCO_FILE = os.path.join(BASE_DIR, "cursos_banco.json")
+
 ASSETS_DIR = os.path.join(BASE_DIR, "assets")
 LOGO_APP_PATH = os.path.join(ASSETS_DIR, "logo_app.png")
 ICON_PATH = os.path.join(ASSETS_DIR, "icon.ico")
@@ -379,7 +381,7 @@ class GeneradorMoodle(ctk.CTk):
         self._preview_html_cache = ""
         self._use_htmlframe      = False
 
-        self.banco_cursos = []
+        self.banco_cursos = self._load_banco_json()
 
         self.categorias_sugeridas = [
             "Innovación y entornos digitales",
@@ -1227,6 +1229,7 @@ class GeneradorMoodle(ctk.CTk):
             self.banco_cursos.append(curso)
         self._banco_limpiar_form()
         self._refresh_banco_tree()
+        self._save_banco_json()
         self._marcar_cambio()
 
     def _banco_editar(self):
@@ -1300,6 +1303,7 @@ class GeneradorMoodle(ctk.CTk):
             self._banco_cancelar()
         self._refresh_banco_tree()
         self._refresh_cohorte_panel()
+        self._save_banco_json()
         self._marcar_cambio()
 
     def _banco_duplicar(self):
@@ -1315,6 +1319,7 @@ class GeneradorMoodle(ctk.CTk):
             if entry.get("banco_idx", -1) > idx:
                 entry["banco_idx"] += 1
         self._refresh_banco_tree()
+        self._save_banco_json()
         self._marcar_cambio()
         # Seleccionar la copia
         for child in self.banco_tree.get_children():
@@ -1345,6 +1350,7 @@ class GeneradorMoodle(ctk.CTk):
             elif bidx == prev_idx:
                 entry["banco_idx"] = idx
         self._refresh_banco_tree()
+        self._save_banco_json()
         self._marcar_cambio()
         for child in self.banco_tree.get_children():
             if self.banco_tree.item(child, "tags") == (str(prev_idx),):
@@ -1374,11 +1380,33 @@ class GeneradorMoodle(ctk.CTk):
             elif bidx == next_idx:
                 entry["banco_idx"] = idx
         self._refresh_banco_tree()
+        self._save_banco_json()
         self._marcar_cambio()
         for child in self.banco_tree.get_children():
             if self.banco_tree.item(child, "tags") == (str(next_idx),):
                 self.banco_tree.selection_set(child)
                 break
+
+    @staticmethod
+    def _load_banco_json():
+        """Carga cursos_banco.json si existe; devuelve lista vacía si no."""
+        if os.path.isfile(BANCO_FILE):
+            try:
+                with open(BANCO_FILE, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                if isinstance(data, list):
+                    return data
+            except Exception:
+                pass
+        return []
+
+    def _save_banco_json(self):
+        """Guarda banco_cursos en cursos_banco.json (junto al .py/.exe)."""
+        try:
+            with open(BANCO_FILE, "w", encoding="utf-8") as f:
+                json.dump(self.banco_cursos, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            messagebox.showwarning("Aviso", f"No se pudo guardar cursos_banco.json:\n{e}", parent=self)
 
     def _banco_limpiar_form(self):
         """Limpia los campos del formulario del banco."""
@@ -1854,13 +1882,6 @@ class GeneradorMoodle(ctk.CTk):
                 partes.append(
                     f'<p style="font-size:0.8rem;color:#374151;line-height:1.6;margin:0 0 10px 0;">{sintesis}</p>'
                 )
-            if info_url:
-                partes.append(
-                    f'<a href="{info_url}" target="_blank" '
-                    f'style="font-size:0.8rem;font-weight:600;color:#45658d;'
-                    f'text-decoration:none;display:block;margin-bottom:8px;">'
-                    f'Ver detalle del curso →</a>'
-                )
             if ins_url:
                 partes.append(
                     f'<a href="{ins_url}" target="_blank" '
@@ -2251,17 +2272,7 @@ class GeneradorMoodle(ctk.CTk):
             '</style>\n'
         )
 
-        if es_inet:
-            _hero_sub = '<p style="margin:8px 0 0;font-size:0.85rem;color:#6b7280;">Oferta de cursos — inet.edu.ar</p>'
-            _hero_html = (
-                '<div style="background:#f0f4f8;border-bottom:4px solid #45658d;'
-                'color:#1e2a4a;text-align:center;padding:28px 20px 20px;margin-bottom:24px;">'
-                f'<h2 style="font-size:1.9rem;font-weight:700;color:#1e2a4a;'
-                f'letter-spacing:-0.5px;margin:0;">{titulo}</h2>'
-                f'{_hero_sub}'
-                '</div>\n'
-            )
-        else:
+        if not es_inet:
             _hero_html = (
                 '<div style="background:linear-gradient(135deg,#1e2a4a 0%,#45658d 100%);'
                 'color:white;text-align:center;padding:36px 20px 24px;'
@@ -2270,6 +2281,10 @@ class GeneradorMoodle(ctk.CTk):
                 f'letter-spacing:-0.5px;margin:0;">{titulo}</h2>'
                 '</div>\n'
             )
+        else:
+            _hero_html = ""
+
+        _coh_header = "" if es_inet else coh_header
 
         return (
             f'<div style="font-family:\'Segoe UI\',Arial,sans-serif;color:#333;line-height:1.5;">\n'
@@ -2277,15 +2292,15 @@ class GeneradorMoodle(ctk.CTk):
             # Estilos responsive
             f'{responsive_css}'
 
-            # Modal de inscripción (overlay fijo, oculto por defecto)
+            # Modal de inscripción (overlay fijo, oculto por defecto — solo CeNET)
             f'{modal_html}'
 
-            # Hero (distinto para INET: fondo más claro, sin degradado oscuro)
+            # Hero y header de cohorte (solo CeNET; INET los omite, WordPress ya tiene su propio header)
             f'{_hero_html}'
 
-            # Cohorte
+            # Contenedor principal
             f'<div id="cnetActiva" style="max-width:1200px;margin:0 auto;padding:0 16px;">\n'
-            f'{coh_header}'
+            f'{_coh_header}'
 
             # Buscador
             f'<div style="max-width:620px;margin:0 auto 18px;padding:0;">'

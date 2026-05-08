@@ -1,0 +1,373 @@
+[
+  {
+    "titulo": "Buenas Prácticas en el uso de la información",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Secundario Técnico – Técnico Superior",
+    "destinatarios": "Autoridades y docentes de instituciones técnicas",
+    "conocimientos": "No se requiere",
+    "sintesis": "Explorar y analizar buenas prácticas en torno al uso de la información desde la alfabetización informacional, incluyendo identificación, búsqueda, validación de información y evaluación crítica de tecnologías generativas con IA."
+  },
+  {
+    "titulo": "Ciudadanía Digital",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Acercamiento reflexivo a entornos digitales con propósito pedagógico para fortalecer derechos de adolescentes y ciudadanos digitales, abordando oportunidades, desafíos y responsabilidades."
+  },
+  {
+    "titulo": "Creación de Aulas Virtuales y Aplicación de Simuladores en la Enseñanza Técnica",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Autoridades y docentes de instituciones técnicas",
+    "conocimientos": "No se requieren",
+    "sintesis": "Capacitación en creación y gestión de aulas virtuales en Google Classroom integrando simuladores técnicos, abarcando diseño de entornos virtuales, organización de contenidos y planificación de actividades en disciplinas como electricidad y mecánica."
+  },
+  {
+    "titulo": "Formación emprendedora en la ETP",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Autoridades y docentes de instituciones técnicas",
+    "conocimientos": "No se requieren",
+    "sintesis": "Proporciona herramientas pedagógicas para complementar la enseñanza técnica con competencias emprendedoras, potenciando la capacidad estudiantil para identificar oportunidades, diseñar proyectos innovadores y generar impacto socioeconómico."
+  },
+  {
+    "titulo": "Introducción al análisis y la visualización de datos en la Educación Técnico Profesional",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "Conocimientos básicos de informática: manejo de hojas de cálculo y familiaridad con conceptos técnicos.",
+    "sintesis": "Integración del análisis de datos como herramienta pedagógica, abarcando desde el manejo básico hasta la creación de actividades didácticas con datasets reales, incluyendo identificación, organización, exploración y visualización de información."
+  },
+  {
+    "titulo": "Introducción a la programación con Python",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Capacitación en el lenguaje de programación Python para su integración en prácticas educativas, abordando fundamentos de programación, estrategias didácticas y actividades prácticas de aula."
+  },
+  {
+    "titulo": "Inteligencia artificial generativa y educación",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Secundario Técnico – Técnico Superior",
+    "destinatarios": "Autoridades y docentes de instituciones técnicas",
+    "conocimientos": "No se requiere",
+    "sintesis": "Proporciona herramientas para atender la diversidad, mejorar la retroalimentación y ampliar el acceso educativo en el contexto de la Inteligencia Artificial Generativa (IAG), entendida como sistemas capaces de generar contenido original incluyendo texto, imágenes, audio y video."
+  },
+  {
+    "titulo": "Bases para el desarrollo de proyectos de Machine Learning en la escuela",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Establece bases de conocimiento para proyectos con machine learning e inteligencia artificial mediante un acercamiento teórico y práctico utilizando plataformas escolares. (Asociación Chicos.Net)"
+  },
+  {
+    "titulo": "Aprender a comunicarse con la IA. Guía básica para la escritura de prompts",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Secundario – Formación Superior no universitario de ETP",
+    "destinatarios": "Profesores del área de informática, computación, tecnología y TIC",
+    "conocimientos": "Saber sobre inteligencia artificial",
+    "sintesis": "Domina la escritura de prompts como habilidad clave en la interacción con IA generativa, promoviendo creatividad, pensamiento crítico y resolución de problemas con enfoque ético y pedagógico. (Asociación Chicos.Net)"
+  },
+  {
+    "titulo": "Educar en tiempos de IA. Alfabetización y ciudadanía digital",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Proporciona herramientas conceptuales y pedagógicas para comprender, reflexionar y actuar frente a los desafíos educativos, éticos y sociales de la inteligencia artificial, fortaleciendo la ciudadanía digital. (Asociación Chicos.Net)"
+  },
+  {
+    "titulo": "Fundamentos técnicos funcionales de los sistemas embebidos aplicados a internet de las cosas (IoT)",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Electrónica, Electromecánica, Automatización, Informática",
+    "nivel": "Secundario Técnico – Técnico Superior",
+    "destinatarios": "Docentes de las especialidades Electrónica, Electromecánica, Automatización e Informática; docentes de nivel superior",
+    "conocimientos": "No se requiere",
+    "sintesis": "Introduce el análisis conceptual y procedimental de sistemas embebidos, permitiendo a los docentes comprender la tecnología, sus funcionalidades hardware-software e implementar soluciones típicas básicas con enfoque ecológico."
+  },
+  {
+    "titulo": "STEM y Robótica en la ETP",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Secundario Técnico – Técnico Superior",
+    "destinatarios": "Autoridades y docentes de instituciones ETP",
+    "conocimientos": "No se requiere",
+    "sintesis": "Introduce el enfoque STEM y su aplicación mediante la robótica como herramienta pedagógica, explorando estrategias didácticas interdisciplinarias que integran pensamiento computacional, diseño y programación."
+  },
+  {
+    "titulo": "Inclusión educativa de estudiantes con discapacidad en la ETP",
+    "categoria": "Estrategias pedagógicas para la ETP",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Desarrolla capacidades críticas para aceptar las diferencias como diversidad y colaborar en la construcción de prácticas inclusivas desde un enfoque de derechos humanos en discapacidad."
+  },
+  {
+    "titulo": "Convivencia en las instituciones educativas de la Educación Técnico Profesional",
+    "categoria": "Estrategias pedagógicas para la ETP",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Secundario, Formación Profesional, Superior no universitario ETP",
+    "conocimientos": "No se requieren",
+    "sintesis": "Aborda la intervención pedagógica ante conflictos y situaciones de violencia, promoviendo vínculos respetuosos, fortaleciendo el rol docente y la participación estudiantil bajo la normativa CFE vigente."
+  },
+  {
+    "titulo": "La comunicación de proyectos en las Escuelas Técnicas",
+    "categoria": "Estrategias pedagógicas para la ETP",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Secundarios de la ETP",
+    "destinatarios": "Autoridades y docentes de instituciones técnicas",
+    "conocimientos": "No se requieren",
+    "sintesis": "Invita a planificar y desarrollar estrategias de comunicación para proyectos escolares, fortaleciendo el vínculo escuela-comunidad y potenciando la difusión de producciones estudiantiles."
+  },
+  {
+    "titulo": "El Proyecto Tecnológico",
+    "categoria": "Estrategias pedagógicas para la ETP",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Propone el proyecto tecnológico como modelo didáctico para la enseñanza de tecnología en todas sus fases, desde la concepción de la idea hasta la evaluación final."
+  },
+  {
+    "titulo": "Herramientas metodológicas para la formación emprendedora en la ETP",
+    "categoria": "Estrategias pedagógicas para la ETP",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Secundario Técnico – Técnico Superior",
+    "destinatarios": "Autoridades y docentes de instituciones ETP",
+    "conocimientos": "No se requiere",
+    "sintesis": "Proporciona herramientas metodológicas (Lean Startup, Design Thinking, Prototipado, Canvas de Modelos de Negocio) para su integración en la formación técnica, transformando el aprendizaje en experiencias significativas conectadas con las demandas socioeconómicas regionales."
+  },
+  {
+    "titulo": "Modelo 5S para la gestión de prevención, higiene y salud en la ETP",
+    "categoria": "Seguridad institucional",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "",
+    "sintesis": "Aporta herramientas para implementar el Modelo 5S en escuelas técnicas, fortaleciendo la cultura de la prevención y el orden en aulas-taller e instituciones."
+  },
+  {
+    "titulo": "Prevención, higiene y salud laboral en instituciones de ETP",
+    "categoria": "Seguridad institucional",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Brinda herramientas para identificar riesgos laborales y promover acciones preventivas considerando el impacto en la salud física y mental."
+  },
+  {
+    "titulo": "Gestión de riesgos y su prevención en las instituciones de ETP",
+    "categoria": "Seguridad institucional",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "",
+    "sintesis": "Curso avanzado orientado al diseño e implementación de estrategias de gestión de riesgos físicos y psicosociales, fortaleciendo las capacidades de liderazgo institucional."
+  },
+  {
+    "titulo": "Cultivos bajo cubierta: diversas alternativas de protección",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Agropecuaria",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Brinda conceptos de protección de cultivos, integrando teoría actualizada y práctica real aplicada, con actividades ajustadas al nivel del grupo."
+  },
+  {
+    "titulo": "Diseño y modelado 3D con software paramétrico (SOLIDEDGE)",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Metalmecánica",
+    "nivel": "Secundario Técnico – Técnico Superior",
+    "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
+    "conocimientos": "Lectura de planos metalmecánicos",
+    "sintesis": "Capacita en diseño tridimensional, modelado, ensambles y generación de planos de fabricación, incluyendo prototipado mediante impresión 3D."
+  },
+  {
+    "titulo": "Herramientas digitales aplicadas al dibujo técnico (CAD-2D)",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Fabricación digital",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Autoridades y docentes de instituciones técnicas",
+    "conocimientos": "No requiere",
+    "sintesis": "Introduce herramientas CAD para optimizar los procesos de diseño y dibujo técnico, aumentando la productividad en las etapas de diseño e impresión."
+  },
+  {
+    "titulo": "Técnicas sustentables en impresión 3D",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Formación en diseño e impresión 3D con enfoque en sustentabilidad y reciclaje de materiales."
+  },
+  {
+    "titulo": "Introducción al modelado con metodología BIM de Archicad",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Introducción a la metodología BIM y al uso de Archicad para el modelado de información de construcción, optimizando tiempos y documentación."
+  },
+  {
+    "titulo": "Construcciones sustentables",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Construcciones",
+    "nivel": "Secundario – Formación profesional – Superior Técnico",
+    "destinatarios": "Docentes e instructores de la modalidad ETP",
+    "conocimientos": "",
+    "sintesis": "Desarrollo de prácticas y tecnologías para proyectos de construcción sustentables y eficientes."
+  },
+  {
+    "titulo": "Introducción a la automatización industrial",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Introducción a la automatización industrial, tipos de señales y control mediante lógica cableada y programada."
+  },
+  {
+    "titulo": "CADe SIMU: Diseño y Simulación de Circuitos Eléctricos para la Enseñanza Técnica",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Electricidad, electrónica",
+    "nivel": "Secundario – Formación profesional – Técnica Superior",
+    "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
+    "conocimientos": "Conocimientos técnicos de electricidad, electrónica y automatización",
+    "sintesis": "Uso del software CADeSIMU como herramienta pedagógica para el diseño y simulación de circuitos eléctricos."
+  },
+  {
+    "titulo": "Principios de la hidráulica para la formación técnica",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Mecánica, electromecánica, mecatrónica",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
+    "conocimientos": "Física, mecanismos y electricidad",
+    "sintesis": "Fortalece los conocimientos en hidráulica industrial y las estrategias didácticas para su enseñanza."
+  },
+  {
+    "titulo": "Tecnología neumática",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Mecánica – Electromecánica – Mecatrónica",
+    "nivel": "Secundario – Formación profesional – Técnica Superior",
+    "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
+    "conocimientos": "",
+    "sintesis": "Introducción a la técnica del mando neumático y ejecución de circuitos de baja y mediana complejidad."
+  },
+  {
+    "titulo": "Electroneumática I: Estructura y componentes de circuitos electroneumáticos",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Mecánica – Electromecánica – Mecatrónica",
+    "nivel": "Secundario – Formación Profesional – Técnica Superior",
+    "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
+    "conocimientos": "",
+    "sintesis": "Reconocimiento de componentes y resolución de problemas de automatización electroneumática."
+  },
+  {
+    "titulo": "Electroneumática II: Diseño, análisis y resolución de circuitos electroneumáticos",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "Haber aprobado Electroneumática I",
+    "sintesis": "Profundiza en el análisis, diseño y resolución de circuitos electroneumáticos avanzados, abordando secuencias de varios actuadores y métodos de resolución (intuitivo, cascada, paso a paso)."
+  },
+  {
+    "titulo": "Eficiencia energética en el dominio Industrial y Domiciliario",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "No requiere",
+    "sintesis": "Introducción a los conceptos de eficiencia energética y los avances tecnológicos del área."
+  },
+  {
+    "titulo": "Introducción al diseño 3D con sólidos paramétricos (Autodesk Inventor)",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Metalmecánica",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
+    "conocimientos": "Manejo de software de dibujo bidimensional y normas IRAM e ISO",
+    "sintesis": "Introductorio al modelado 3D para la creación y fabricación de productos con tecnologías digitales."
+  },
+  {
+    "titulo": "Introducción a la programación CNC para torno en 2 ejes",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Eléctrica / Electrónica / Mecánica / Electromecánica / Mecatrónica",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "Lectura de planos de fabricación, familia metalmecánica y diseño tecnológico",
+    "sintesis": "Proporciona comprensión profunda y práctica de la programación de tornos CNC, combinando teoría con ejercicios prácticos y simulaciones para su aplicación en entorno real."
+  },
+  {
+    "titulo": "Instalaciones de Paneles Solares",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Eléctrica / Electrónica / Mecánica / Electromecánica / Mecatrónica",
+    "nivel": "Todos los niveles y ámbitos de la ETP",
+    "destinatarios": "Docentes de Educación Técnico Profesional",
+    "conocimientos": "Conocimientos básicos en electricidad e interpretación de esquemas eléctricos",
+    "sintesis": "Introducción a la producción de electricidad mediante paneles solares, adquiriendo conocimientos teóricos y desarrollando los principios de funcionamiento y dimensionamiento de instalaciones."
+  },
+  {
+    "titulo": "Monitoreo ambiental de Agroecosistemas",
+    "categoria": "Diseño, Producción y Especializaciones Técnicas",
+    "img": "",
+    "familia_prof": "Agropecuaria",
+    "nivel": "Secundario",
+    "destinatarios": "Docentes de nivel secundario de escuelas técnicas agropecuarias, ciclo básico",
+    "conocimientos": "",
+    "sintesis": "Aborda la introducción al monitoreo ambiental en agroecosistemas desde un enfoque sistémico, brindando herramientas para el desarrollo de un plan de monitoreo ambiental, incluyendo beneficios de la biodiversidad e indicadores ambientales.",
+    "form_externo": "https://formacion.inta.gob.ar/cenet2026-monitoreo/"
+  }
+]
