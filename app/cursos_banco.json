@@ -10,7 +10,7 @@
     "sintesis": "Explorar y analizar buenas prácticas en torno al uso de la información desde la alfabetización informacional, incluyendo identificación, búsqueda, validación de información y evaluación crítica de tecnologías generativas con IA."
   },
   {
-    "titulo": "Ciudadanía Digital",
+    "titulo": "Ciudadanía digital: de las redes al aula, del aula a las redes",
     "categoria": "Innovación y entornos digitales",
     "img": "",
     "familia_prof": "Todas las familias profesionales",
@@ -20,7 +20,7 @@
     "sintesis": "Acercamiento reflexivo a entornos digitales con propósito pedagógico para fortalecer derechos de adolescentes y ciudadanos digitales, abordando oportunidades, desafíos y responsabilidades."
   },
   {
-    "titulo": "Creación de Aulas Virtuales y Aplicación de Simuladores en la Enseñanza Técnica",
+    "titulo": "Creación de Aulas Virtuales y Aplicación de Software en la Enseñanza Técnica",
     "categoria": "Innovación y entornos digitales",
     "img": "",
     "familia_prof": "Todas las familias profesionales",
@@ -90,7 +90,7 @@
     "sintesis": "Domina la escritura de prompts como habilidad clave en la interacción con IA generativa, promoviendo creatividad, pensamiento crítico y resolución de problemas con enfoque ético y pedagógico. (Asociación Chicos.Net)"
   },
   {
-    "titulo": "Educar en tiempos de IA. Alfabetización y ciudadanía digital",
+    "titulo": "Educar en tiempos de IA. Alfabetización y ciudadanía digital en la escuela",
     "categoria": "Innovación y entornos digitales",
     "img": "",
     "familia_prof": "Todas las familias profesionales",
@@ -98,6 +98,26 @@
     "destinatarios": "Docentes de Educación Técnico Profesional",
     "conocimientos": "No requiere",
     "sintesis": "Proporciona herramientas conceptuales y pedagógicas para comprender, reflexionar y actuar frente a los desafíos educativos, éticos y sociales de la inteligencia artificial, fortaleciendo la ciudadanía digital. (Asociación Chicos.Net)"
+  },
+  {
+    "titulo": "Desafíos de la IA en el mundo actual",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "",
+    "destinatarios": "",
+    "conocimientos": "",
+    "sintesis": ""
+  },
+  {
+    "titulo": "Inteligencia artificial generativa como apoyo a la tarea docente",
+    "categoria": "Innovación y entornos digitales",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "",
+    "destinatarios": "",
+    "conocimientos": "",
+    "sintesis": ""
   },
   {
     "titulo": "Fundamentos técnicos funcionales de los sistemas embebidos aplicados a internet de las cosas (IoT)",
@@ -108,16 +128,6 @@
     "destinatarios": "Docentes de las especialidades Electrónica, Electromecánica, Automatización e Informática; docentes de nivel superior",
     "conocimientos": "No se requiere",
     "sintesis": "Introduce el análisis conceptual y procedimental de sistemas embebidos, permitiendo a los docentes comprender la tecnología, sus funcionalidades hardware-software e implementar soluciones típicas básicas con enfoque ecológico."
-  },
-  {
-    "titulo": "STEM y Robótica en la ETP",
-    "categoria": "Innovación y entornos digitales",
-    "img": "",
-    "familia_prof": "Todas las familias profesionales",
-    "nivel": "Secundario Técnico – Técnico Superior",
-    "destinatarios": "Autoridades y docentes de instituciones ETP",
-    "conocimientos": "No se requiere",
-    "sintesis": "Introduce el enfoque STEM y su aplicación mediante la robótica como herramienta pedagógica, explorando estrategias didácticas interdisciplinarias que integran pensamiento computacional, diseño y programación."
   },
   {
     "titulo": "Inclusión educativa de estudiantes con discapacidad en la ETP",
@@ -168,6 +178,26 @@
     "destinatarios": "Autoridades y docentes de instituciones ETP",
     "conocimientos": "No se requiere",
     "sintesis": "Proporciona herramientas metodológicas (Lean Startup, Design Thinking, Prototipado, Canvas de Modelos de Negocio) para su integración en la formación técnica, transformando el aprendizaje en experiencias significativas conectadas con las demandas socioeconómicas regionales."
+  },
+  {
+    "titulo": "STEM y Robótica en la ETP",
+    "categoria": "Estrategias pedagógicas para la ETP",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "Secundario Técnico – Técnico Superior",
+    "destinatarios": "Autoridades y docentes de instituciones ETP",
+    "conocimientos": "No se requiere",
+    "sintesis": "Introduce el enfoque STEM y su aplicación mediante la robótica como herramienta pedagógica, explorando estrategias didácticas interdisciplinarias que integran pensamiento computacional, diseño y programación."
+  },
+  {
+    "titulo": "Lengua",
+    "categoria": "Estrategias pedagógicas para la ETP",
+    "img": "",
+    "familia_prof": "Todas las familias profesionales",
+    "nivel": "",
+    "destinatarios": "",
+    "conocimientos": "",
+    "sintesis": ""
   },
   {
     "titulo": "Modelo 5S para la gestión de prevención, higiene y salud en la ETP",
@@ -300,26 +330,6 @@
     "sintesis": "Introducción a la técnica del mando neumático y ejecución de circuitos de baja y mediana complejidad."
   },
   {
-    "titulo": "Electroneumática I: Estructura y componentes de circuitos electroneumáticos",
-    "categoria": "Diseño, Producción y Especializaciones Técnicas",
-    "img": "",
-    "familia_prof": "Mecánica – Electromecánica – Mecatrónica",
-    "nivel": "Secundario – Formación Profesional – Técnica Superior",
-    "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
-    "conocimientos": "",
-    "sintesis": "Reconocimiento de componentes y resolución de problemas de automatización electroneumática."
-  },
-  {
-    "titulo": "Electroneumática II: Diseño, análisis y resolución de circuitos electroneumáticos",
-    "categoria": "Diseño, Producción y Especializaciones Técnicas",
-    "img": "",
-    "familia_prof": "Todas las familias profesionales",
-    "nivel": "Todos los niveles y ámbitos de la ETP",
-    "destinatarios": "Docentes de Educación Técnico Profesional",
-    "conocimientos": "Haber aprobado Electroneumática I",
-    "sintesis": "Profundiza en el análisis, diseño y resolución de circuitos electroneumáticos avanzados, abordando secuencias de varios actuadores y métodos de resolución (intuitivo, cascada, paso a paso)."
-  },
-  {
     "titulo": "Eficiencia energética en el dominio Industrial y Domiciliario",
     "categoria": "Diseño, Producción y Especializaciones Técnicas",
     "img": "",
@@ -330,24 +340,24 @@
     "sintesis": "Introducción a los conceptos de eficiencia energética y los avances tecnológicos del área."
   },
   {
-    "titulo": "Introducción al diseño 3D con sólidos paramétricos (Autodesk Inventor)",
+    "titulo": "Avanzado - Diseño avanzado 3D con sólidos paramétricos (Autodesk Inventor)",
     "categoria": "Diseño, Producción y Especializaciones Técnicas",
     "img": "",
     "familia_prof": "Metalmecánica",
     "nivel": "Todos los niveles y ámbitos de la ETP",
     "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
     "conocimientos": "Manejo de software de dibujo bidimensional y normas IRAM e ISO",
-    "sintesis": "Introductorio al modelado 3D para la creación y fabricación de productos con tecnologías digitales."
+    "sintesis": "Nivel avanzado de modelado 3D para la creación y fabricación de productos con tecnologías digitales mediante Autodesk Inventor."
   },
   {
-    "titulo": "Introducción a la programación CNC para torno en 2 ejes",
+    "titulo": "Avanzado - Programación CNC para torno en 2 ejes",
     "categoria": "Diseño, Producción y Especializaciones Técnicas",
     "img": "",
     "familia_prof": "Eléctrica / Electrónica / Mecánica / Electromecánica / Mecatrónica",
     "nivel": "Todos los niveles y ámbitos de la ETP",
     "destinatarios": "Docentes de Educación Técnico Profesional",
     "conocimientos": "Lectura de planos de fabricación, familia metalmecánica y diseño tecnológico",
-    "sintesis": "Proporciona comprensión profunda y práctica de la programación de tornos CNC, combinando teoría con ejercicios prácticos y simulaciones para su aplicación en entorno real."
+    "sintesis": "Nivel avanzado de programación de tornos CNC, combinando teoría con ejercicios prácticos y simulaciones para su aplicación en entorno real."
   },
   {
     "titulo": "Instalaciones de Paneles Solares",
@@ -360,7 +370,7 @@
     "sintesis": "Introducción a la producción de electricidad mediante paneles solares, adquiriendo conocimientos teóricos y desarrollando los principios de funcionamiento y dimensionamiento de instalaciones."
   },
   {
-    "titulo": "Monitoreo ambiental de Agroecosistemas",
+    "titulo": "Monitoreo ambiental de Agroecosistemas (INTA)",
     "categoria": "Diseño, Producción y Especializaciones Técnicas",
     "img": "",
     "familia_prof": "Agropecuaria",
