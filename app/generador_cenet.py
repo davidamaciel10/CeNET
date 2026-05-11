@@ -1319,8 +1319,8 @@ class GeneradorMoodle(ctk.CTk):
                                 compacto=False):
             pad = "6px 0" if not compacto else "4px 0"
             partes = []
-            _S_LBL = "font-size:0.75rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;"
-            _S_VAL = "font-size:0.82rem;color:#1e2a4a;margin:0 0 8px 0;"
+            _S_LBL = "font-size:0.82rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;"
+            _S_VAL = "font-size:0.9rem;color:#1e2a4a;margin:0 0 8px 0;"
             for label, val in (
                 ("Familia profesional", familia),
                 ("Nivel", nivel),
@@ -1334,23 +1334,23 @@ class GeneradorMoodle(ctk.CTk):
                     )
             if sintesis:
                 partes.append(
-                    f'<p style="font-size:0.8rem;color:#374151;line-height:1.6;margin:0 0 10px 0;">{sintesis}</p>'
+                    f'<p style="font-size:0.9rem;color:#374151;line-height:1.6;margin:0 0 10px 0;">{sintesis}</p>'
                 )
             if ins_url:
                 partes.append(
                     f'<a href="{ins_url}" target="_blank" '
                     f'style="display:block;text-align:center;padding:9px;border-radius:8px;'
-                    f'background:#45658d;color:white;font-size:0.82rem;font-weight:700;'
+                    f'background:#45658d;color:white;font-size:0.92rem;font-weight:700;'
                     f'text-decoration:none;">Inscribirse →</a>'
                 )
             if not partes:
                 partes.append(
-                    '<span style="font-size:0.8rem;color:#9ca3af;">Consultá disponibilidad.</span>'
+                    '<span style="font-size:0.9rem;color:#9ca3af;">Consultá disponibilidad.</span>'
                 )
             contenido = "".join(partes)
             return (
                 f'<details style="margin-top:4px;">'
-                f'<summary style="cursor:pointer;font-size:0.84rem;font-weight:600;'
+                f'<summary style="cursor:pointer;font-size:0.92rem;font-weight:600;'
                 f'color:#45658d;padding:{pad};border-top:1px solid #eee;'
                 f'list-style:none;user-select:none;">'
                 f'▶ Más información e inscripción</summary>'
@@ -1362,12 +1362,12 @@ class GeneradorMoodle(ctk.CTk):
         S_F = (
             "cursor:pointer;padding:7px 16px;border-radius:999px;"
             "border:1.5px solid #45658d;background:white;color:#45658d;"
-            "margin:4px;font-size:0.84rem;font-weight:500;font-family:inherit;"
+            "margin:4px;font-size:0.92rem;font-weight:500;font-family:inherit;"
         )
         S_FA = (
             "cursor:pointer;padding:7px 16px;border-radius:999px;"
             "border:1.5px solid #45658d;background:#45658d;color:white;"
-            "margin:4px;font-size:0.84rem;font-weight:500;font-family:inherit;"
+            "margin:4px;font-size:0.92rem;font-weight:500;font-family:inherit;"
         )
 
         coh_header = (
@@ -1418,10 +1418,10 @@ class GeneradorMoodle(ctk.CTk):
                     f'overflow:hidden;display:flex;flex-direction:column;">'
                     f'{imagen_html}'
                     f'<div style="padding:12px;flex:1;display:flex;flex-direction:column;gap:6px;">'
-                    f'<span style="background:#22c55e;color:white;font-size:0.7rem;'
+                    f'<span style="background:#22c55e;color:white;font-size:0.8rem;'
                     f'font-weight:700;padding:2px 9px;border-radius:999px;'
                     f'display:inline-block;margin-bottom:4px;">🆕 Nuevo</span>'
-                    f'<p style="font-size:0.88rem;font-weight:600;color:#1e2a4a;'
+                    f'<p style="font-size:1rem;font-weight:600;color:#1e2a4a;'
                     f'line-height:1.4;margin:0;">{tit}</p>'
                     f'<div style="margin-top:auto;">{accion_html}</div>'
                     f'</div></div>'
@@ -1472,13 +1472,13 @@ class GeneradorMoodle(ctk.CTk):
                 search        = f"{tit.lower()} {cat.lower()} {etiqueta.lower()}"
                 if etiqueta == "Destacado":
                     badge_html = (
-                        '<span style="background:#d4a843;color:white;font-size:0.7rem;'
+                        '<span style="background:#d4a843;color:white;font-size:0.8rem;'
                         'font-weight:700;padding:2px 9px;border-radius:999px;'
                         'display:inline-block;margin-bottom:4px;">⭐ Destacado</span>'
                     )
                 elif etiqueta == "Nuevo":
                     badge_html = (
-                        '<span style="background:#22c55e;color:white;font-size:0.7rem;'
+                        '<span style="background:#22c55e;color:white;font-size:0.8rem;'
                         'font-weight:700;padding:2px 9px;border-radius:999px;'
                         'display:inline-block;margin-bottom:4px;">🆕 Nuevo</span>'
                     )
@@ -1507,7 +1507,7 @@ class GeneradorMoodle(ctk.CTk):
                     f'{imagen_html}'
                     f'<div style="padding:14px;flex:1;display:flex;flex-direction:column;gap:8px;">'
                     f'{badge_html}'
-                    f'<p style="font-size:0.9rem;font-weight:600;color:#1e2a4a;'
+                    f'<p style="font-size:1rem;font-weight:600;color:#1e2a4a;'
                     f'line-height:1.4;margin:0;min-height:38px;">{tit}</p>'
                     f'<div style="margin-top:auto;">{accion_html}</div>'
                     f'</div></div>'
@@ -1521,7 +1521,7 @@ class GeneradorMoodle(ctk.CTk):
                 f'font-size:1.1rem;font-weight:700;color:#1e2a4a;'
                 f'border-bottom:2px solid {sec_color};padding-bottom:8px;margin-bottom:16px;">'
                 f'{cat}'
-                f'<span style="margin-left:auto;font-size:0.76rem;font-weight:500;'
+                f'<span style="margin-left:auto;font-size:0.85rem;font-weight:500;'
                 f'color:#6b7280;background:#e5e7eb;padding:2px 10px;border-radius:999px;">'
                 f'{n_cat} curso{"s" if n_cat != 1 else ""}</span></div>'
                 f'<div style="display:grid;gap:18px;grid-template-columns:repeat(3,1fr);">'
