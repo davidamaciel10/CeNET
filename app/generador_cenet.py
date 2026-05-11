@@ -80,276 +80,6 @@ ctk.set_default_color_theme("blue")
 # =========================
 # INFO ESTÁTICA INTA
 # =========================
-_INTA_INFO_HTML = """\
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<style>
-body{font-family:Segoe UI,Arial,sans-serif;margin:0;padding:24px 28px;
-     color:#1e2a4a;line-height:1.7;font-size:0.95rem;}
-h2{font-size:1.05rem;color:#1e2a4a;border-bottom:2px solid #45658d;
-   padding-bottom:8px;margin-bottom:20px;}
-dt{font-weight:700;color:#45658d;margin-top:14px;}
-dd{margin:4px 0 0 0;color:#374151;}
-</style>
-</head>
-<body>
-<h2>Monitoreo ambiental de Agroecosistemas</h2>
-<dl>
-<dt>Opci\u00f3n pedag\u00f3gica</dt>
-<dd>Virtual por la plataforma de INTA</dd>
-<dt>Destinatarios</dt>
-<dd>Docentes de nivel secundario de escuelas secundarias t\u00e9cnicas agropecuarias del ciclo b\u00e1sico.</dd>
-<dt>Carga horaria</dt>
-<dd>60 horas reloj distribuidas en 6 semanas. Durante el transcurso de estas semanas se realizar\u00e1n
-actividades asincr\u00f3nicas y encuentros sincr\u00f3nicos.</dd>
-<dt>S\u00edntesis</dt>
-<dd>En este curso abordaremos una introducci\u00f3n al monitoreo ambiental en agroecosistemas desde un
-enfoque sist\u00e9mico. Se brindar\u00e1n herramientas para acompa\u00f1ar a los docentes en el desarrollo de un
-plan de monitoreo ambiental para la formaci\u00f3n de los t\u00e9cnicos agropecuarios del futuro. Abordaremos
-los beneficios que ofrece la biodiversidad a la producci\u00f3n de alimentos y los distintos indicadores
-ambientales que se pueden monitorear describiendo t\u00e9cnicas simples de relevamiento de invertebrados
-ben\u00e9ficos, anfibios, aves y mam\u00edferos.</dd>
-</dl>
-</body>
-</html>
-"""
-
-# =========================
-# PRECARGA 2026
-# =========================
-CURSOS_2026 = [
-    # ── Innovación y entornos digitales ──
-    {
-        "titulo":    "Buenas Prácticas en el uso de la información",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/BUENAS%20PR%C3%81CTICAS.jpeg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=4063",
-    },
-    {
-        "titulo":    "Ciudadanía Digital",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/CIUDADAN%C3%8DA.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=6121",
-    },
-    {
-        "titulo":    "Creación de Aulas Virtuales y Aplicación de Simuladores en la Enseñanza Técnica",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/creaci%C3%B3n%20de%20aulas%20virtuales.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=19374",
-    },
-    {
-        "titulo":    "Formación Emprendedora en la ETP",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Formaci%C3%B3n%20emprendedora%20en%20la%20ETP%20%283%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=3816",
-    },
-    {
-        "titulo":    "Introducción a la programación con Python",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Introducci%C3%B3n%20a%20la%20programaci%C3%B3n%20con%20Python.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=19071",
-    },
-    {
-        "titulo":    "Análisis de datos en la educación técnica profesional: Herramientas y actividades",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51558/mod_page/content/140/An%C3%A1lisis%20de%20datos%20en%20la%20educaci%C3%B3n%20t%C3%A9cnica%C2%A0%20profesional%20Herramientas%20y%20actividades.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=19069",
-    },
-    {
-        "titulo":    "Inteligencia artificial generativa y educación",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Inteligencia%20Artificial%20Generativa%20y%20educaci%C3%B3n%20%282%29.png",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=4102",
-    },
-    {
-        "titulo":    "Proyectos de Machine Learning en la escuela Asociación Chicos.Net",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/MACHINE.jpeg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=6127",
-    },
-    {
-        "titulo":    "Educar en tiempos de IA. Alfabetización y ciudadanía digital en la escuela",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/thumbnail_chicosnet%20%281%29%20%281%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=11974",
-    },
-    {
-        "titulo":    "Aprender a comunicarse con la IA. Guía básica para la escritura de prompts",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/IA.png",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=15579",
-    },
-    {
-        "titulo":    "Fundamentos técnicos funcionales de los sistemas embebidos aplicados a internet de las cosas (IoT)",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=28613",
-    },
-    {
-        "titulo":    "STEM y Robótica en la ETP",
-        "categoria": "Innovación y entornos digitales",
-        "img":       "",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=30494",
-    },
-    # ── Estrategias pedagógicas para la ETP ──
-    {
-        "titulo":    "Inclusión educativa de estudiantes con discapacidad en la ETP",
-        "categoria": "Estrategias pedagógicas para la ETP",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/INCLUSI%C3%93N%20%282%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=1217",
-    },
-    {
-        "titulo":    "Convivencia en las instituciones educativas de la ETP",
-        "categoria": "Estrategias pedagógicas para la ETP",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Convivencia%20en%20las%20instituciones%20educativas%20de%20la%20ETP.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=19065",
-    },
-    {
-        "titulo":    "La comunicación de proyectos en las Escuelas Técnicas",
-        "categoria": "Estrategias pedagógicas para la ETP",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/La%20comunicaci%C3%B3n%20de%20proyectos%20en%20las%20Escuelas%20T%C3%A9cnicas%20%281%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=19066",
-    },
-    {
-        "titulo":    "El Proyecto Tecnológico",
-        "categoria": "Estrategias pedagógicas para la ETP",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/EL%20PROYECTO.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=6123",
-    },
-    {
-        "titulo":    "Herramientas metodológicas para la formación emprendedora en la ETP",
-        "categoria": "Estrategias pedagógicas para la ETP",
-        "img":       "",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=29113",
-    },
-    # ── Seguridad institucional ──
-    {
-        "titulo":    "Modelo 5S para la gestión de prevención, higiene y salud en la ETP",
-        "categoria": "Seguridad institucional",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/5S%20%283%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=2422",
-    },
-    {
-        "titulo":    "Prevención, higiene y salud laboral en instituciones educativas de la ETP",
-        "categoria": "Seguridad institucional",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Prevenci%C3%B3n%2C%20higiene%20y%20salud%20laboral%20en%20instituciones%20de%20ETP%20%283%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=1220",
-    },
-    {
-        "titulo":    "Gestión de riesgos y su prevención en las instituciones de ETP",
-        "categoria": "Seguridad institucional",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Gesti%C3%B3n%20de%20riesgos%20y%20su%20prevenci%C3%B3n%20en%20las%20instituciones%20de%20ETP%20%282%29.png",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=19068",
-    },
-    # ── Diseño, Producción y Especializaciones Técnicas ──
-    {
-        "titulo":    "Cultivos bajo cubierta: Diversas alternativas de protección",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Cultivos%20bajo%20cubierta%20Diversas%20alternativas%20de%20protecci%C3%B3n%20%282%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=19067",
-    },
-    {
-        "titulo":    "Diseño y modelado 3D con software paramétrico (SOLIDEDGE)",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/SolidEdge%20%284%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=4120",
-    },
-    {
-        "titulo":    "Herramientas digitales aplicadas al dibujo técnico (CAD-2D)",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Herramientas%20digitales%20aplicadas%20al%20dibujo%20t%C3%A9cnico%20%28CAD%20-%202D%29%20%283%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=4064",
-    },
-    {
-        "titulo":    "Técnicas sustentables en impresión 3D",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/3D%20a%20%282%29.jpeg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=6128",
-    },
-    {
-        "titulo":    "Introducción a la metodología BIM",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/23423/mod_page/content/140/INTRO%20A%20BIM%20%282%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=6125",
-    },
-    {
-        "titulo":    "Construcciones sustentables",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/23423/mod_page/content/140/WhatsApp%20Image%202025-04-28%20at%2015.29.37.jpeg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=9344",
-    },
-    {
-        "titulo":    "Introducción a la automatización industrial",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/INTRO%20A%20LA%20AUTOMATIZACION%20%282%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=6124",
-    },
-    {
-        "titulo":    "CADe SIMU: Diseño y Simulación de Circuitos Eléctricos para la Enseñanza Técnica",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/CADe%20SIMU%20Dise%C3%B1o%20y%20Simulaci%C3%B3n%20de%20Circuitos%20El%C3%A9ctricos%20para%20la%20Ense%C3%B1anza%20T%C3%A9cnica%20%281%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=19070",
-    },
-    {
-        "titulo":    "Principios de la hidráulica para la formación técnica",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Principios%20de%20la%20hidr%C3%A1ulica%20para%20la%20formaci%C3%B3n%20t%C3%A9cnica.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=8496",
-    },
-    {
-        "titulo":    "Tecnología neumática",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Tecnolog%C3%ADa%20Neum%C3%A1tica%20%283%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=4121",
-    },
-    {
-        "titulo":    "Electroneumática I. Estructura y componentes de circuitos electrónicos",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/23423/mod_page/content/140/Electroneum%C3%A1tica.png",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=15578",
-    },
-    {
-        "titulo":    "Electroneumática II. Diseño, análisis y resolución de circuitos electroneumáticos",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=28614",
-    },
-    {
-        "titulo":    "Eficiencia energética en el dominio Industrial y Domiciliario",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Eficiencia%20energ%C3%A9tica%20%282%29.png",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=6122",
-    },
-    {
-        "titulo":    "Diseño avanzado 3D con sólidos paramétricos (Autodesk Inventor)",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51556/mod_page/content/140/Dise%C3%B1o%20avanzado%203D%20con%20solidos%20parametricos%20%28autodesk%20inventor%29%20%281%29.jpg",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=8263",
-    },
-    {
-        "titulo":    "Introducción a la programación CNC para torno en 2 ejes",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/23423/mod_page/content/140/Programaci%C3%B3n%20de%20tornos.png",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=15580",
-    },
-    {
-        "titulo":    "Instalaciones de paneles solares",
-        "categoria": "Diseño, Producción y Especializaciones Técnicas",
-        "img":       "https://cenet.inet.edu.ar/pluginfile.php/51558/mod_page/content/153/paneles%20solares.png",
-        "info":      "https://cenet.inet.edu.ar/mod/page/view.php?id=24928",
-    },
-    {
-        "titulo":       "Monitoreo ambiental de Agroecosistemas",
-        "categoria":    "Diseño, Producción y Especializaciones Técnicas",
-        "img":          "",
-        "info":         "",
-        "info_texto":   _INTA_INFO_HTML,
-        "form_externo": "https://formacion.inta.gob.ar/cenet2026-monitoreo/",
-    },
-]
-
 
 # =========================
 # APLICACIÓN PRINCIPAL
@@ -378,8 +108,6 @@ class GeneradorMoodle(ctk.CTk):
         self._current_theme      = "dark"
         self._banco_edit_idx     = None
         self._hay_cambios        = False
-        self._preview_html_cache = ""
-        self._use_htmlframe      = False
 
         self.banco_cursos = self._load_banco_json()
 
@@ -415,7 +143,6 @@ class GeneradorMoodle(ctk.CTk):
         self.sintesis_box      = None  # CTkTextbox; assigned in _build_tab_banco
 
         # Modo de generación HTML
-        self._modo_html        = tk.StringVar(value="moodle")
 
         self._setup_ttk_theme()
         self._build_ui()
@@ -581,14 +308,10 @@ class GeneradorMoodle(ctk.CTk):
         self.tabview.grid(row=0, column=0, sticky="nsew")
 
         self.tabview.add("📚  Banco de Cursos")
-        self.tabview.add("🗓  Cohortes")
-        self.tabview.add("🌐  Vista Previa")
-        self.tabview.add("✏️  Editor HTML")
+        self.tabview.add("🗓  Cohorte")
 
         self._build_tab_banco(self.tabview.tab("📚  Banco de Cursos"))
-        self._build_tab_cohortes(self.tabview.tab("🗓  Cohortes"))
-        self._build_tab_preview(self.tabview.tab("🌐  Vista Previa"))
-        self._build_tab_editor(self.tabview.tab("✏️  Editor HTML"))
+        self._build_tab_cohortes(self.tabview.tab("🗓  Cohorte"))
 
     # ─────────────────────────────────────────
     # TAB 1: BANCO DE CURSOS
@@ -641,7 +364,7 @@ class GeneradorMoodle(ctk.CTk):
         self.cat_combo.pack(fill="x", padx=14, pady=(0, 4))
 
         # URL Imagen
-        self._label(card_form, "URL Imagen  (solo Moodle/CeNET)", muted=True).pack(
+        self._label(card_form, "URL Imagen", muted=True).pack(
             anchor="w", padx=14, pady=(6, 1))
         self._entry(card_form, textvariable=self.img_var, width=0,
                     placeholder="https://...  (vacío = sin imagen)").pack(
@@ -951,122 +674,6 @@ class GeneradorMoodle(ctk.CTk):
     # ─────────────────────────────────────────
     # TAB 3: VISTA PREVIA HTML
     # ─────────────────────────────────────────
-    def _build_tab_preview(self, parent):
-        parent.grid_columnconfigure(0, weight=1)
-        parent.grid_rowconfigure(1, weight=1)
-
-        # Barra de herramientas
-        toolbar = ctk.CTkFrame(parent, fg_color="transparent", height=52)
-        toolbar.grid(row=0, column=0, sticky="ew", padx=8, pady=(8, 4))
-        toolbar.grid_propagate(False)
-
-        self._btn(toolbar, "🔄  Actualizar vista", self._preview_actualizar,
-                  color="accent", height=36).pack(side="left", padx=(0, 8))
-        self._btn(toolbar, "🌐  Abrir en navegador", self._preview_abrir_navegador,
-                  color="ghost", height=36).pack(side="left", padx=(0, 8))
-
-        ctk.CTkFrame(toolbar, width=2, height=28, fg_color=COLORS["border"]).pack(
-            side="left", padx=10)
-        self._label(toolbar, "Modo:", muted=True).pack(side="left", padx=(0, 4))
-        ctk.CTkRadioButton(
-            toolbar, text="CeNET (Moodle)", variable=self._modo_html, value="moodle",
-            fg_color=COLORS["accent"], hover_color=COLORS["accent_hover"],
-            text_color=COLORS["text"], font=ctk.CTkFont(family="Segoe UI", size=12),
-        ).pack(side="left", padx=(0, 8))
-        ctk.CTkRadioButton(
-            toolbar, text="INET", variable=self._modo_html, value="inet",
-            fg_color=COLORS["accent"], hover_color=COLORS["accent_hover"],
-            text_color=COLORS["text"], font=ctk.CTkFont(family="Segoe UI", size=12),
-        ).pack(side="left", padx=(0, 8))
-
-        self.lbl_preview_status = self._label(
-            toolbar, "Presioná «Actualizar vista» para generar la vista previa.", muted=True)
-        self.lbl_preview_status.pack(side="left", padx=8)
-
-        # Área de previsualización
-        preview_container = ctk.CTkFrame(
-            parent, corner_radius=10, border_width=1,
-            border_color=COLORS["border"], fg_color=COLORS["bg_card"]
-        )
-        preview_container.grid(row=1, column=0, sticky="nsew", padx=8, pady=(0, 8))
-        preview_container.grid_columnconfigure(0, weight=1)
-        preview_container.grid_rowconfigure(0, weight=1)
-
-        try:
-            from tkinterweb import HtmlFrame
-            self._html_frame = HtmlFrame(preview_container, messages_enabled=False)
-            self._html_frame.grid(row=0, column=0, sticky="nsew", padx=2, pady=2)
-            self._use_htmlframe = True
-        except ImportError:
-            self._use_htmlframe = False
-            ctk.CTkLabel(
-                preview_container,
-                text=(
-                    "Para previsualización integrada instalá:\n"
-                    "pip install tkinterweb\n\n"
-                    "O usá «Abrir en navegador» para ver el HTML en tu browser."
-                ),
-                font=ctk.CTkFont(family="Segoe UI", size=13),
-                text_color=COLORS["text_muted"],
-                justify="center",
-            ).grid(row=0, column=0)
-
-    # ─────────────────────────────────────────
-    # TAB 4: EDITOR DE CÓDIGO HTML
-    # ─────────────────────────────────────────
-    def _build_tab_editor(self, parent):
-        parent.grid_columnconfigure(0, weight=1)
-        parent.grid_rowconfigure(1, weight=1)
-
-        # Barra de herramientas
-        toolbar = ctk.CTkFrame(parent, fg_color="transparent", height=52)
-        toolbar.grid(row=0, column=0, sticky="ew", padx=8, pady=(8, 4))
-        toolbar.grid_propagate(False)
-
-        self._btn(toolbar, "🔄  Regenerar", self._editor_regenerar,
-                  color="accent", height=36).pack(side="left", padx=(0, 8))
-        self._btn(toolbar, "📋  Copiar", self._editor_copiar,
-                  color="ghost", height=36).pack(side="left", padx=(0, 8))
-        self._btn(toolbar, "💾  Guardar", self._editor_guardar,
-                  color="ghost", height=36).pack(side="left", padx=(0, 8))
-
-        self.lbl_editor_status = self._label(
-            toolbar, "Presioná «Regenerar» para cargar el HTML generado.", muted=True)
-        self.lbl_editor_status.pack(side="left", padx=8)
-
-        # Marco del editor
-        editor_frame = ctk.CTkFrame(
-            parent, corner_radius=10, border_width=1,
-            border_color=COLORS["border"], fg_color=COLORS["bg_card"]
-        )
-        editor_frame.grid(row=1, column=0, sticky="nsew", padx=8, pady=(0, 8))
-        editor_frame.grid_columnconfigure(0, weight=1)
-        editor_frame.grid_rowconfigure(0, weight=1)
-
-        self.editor_text = tk.Text(
-            editor_frame,
-            wrap="none",
-            bg=_c("bg_card"),
-            fg=_c("text"),
-            insertbackground=_c("text"),
-            selectbackground=_c("accent"),
-            font=("Consolas", 11),
-            borderwidth=0,
-            relief="flat",
-            padx=12,
-            pady=8,
-            undo=True,
-        )
-        vsb = ttk.Scrollbar(editor_frame, orient="vertical",
-                            command=self.editor_text.yview)
-        hsb = ttk.Scrollbar(editor_frame, orient="horizontal",
-                            command=self.editor_text.xview)
-        self.editor_text.configure(
-            yscrollcommand=vsb.set, xscrollcommand=hsb.set)
-        self.editor_text.grid(row=0, column=0, sticky="nsew")
-        vsb.grid(row=0, column=1, sticky="ns")
-        hsb.grid(row=1, column=0, sticky="ew")
-
     def _build_footer(self):
         footer = ctk.CTkFrame(
             self, height=64, corner_radius=0,
@@ -1079,43 +686,31 @@ class GeneradorMoodle(ctk.CTk):
         inner = ctk.CTkFrame(footer, fg_color="transparent")
         inner.pack(expand=True, pady=12)
 
-        self._btn(inner, "⚡  Precargar banco 2026",
-                  self._precargar_2026, color="navy", height=38).pack(
+        self._btn(inner, "💾  Guardar banco",
+                  self._guardar_banco, color="ghost", height=38).pack(
             side="left", padx=6)
-        self._btn(inner, "📋  Copiar banco → cohorte",
-                  self._copiar_banco_a_cohorte, color="ghost", height=38).pack(
-            side="left", padx=4)
-
-        sep0 = ctk.CTkFrame(inner, width=2, height=36,
-                            fg_color=COLORS["border"])
-        sep0.pack(side="left", padx=14)
-
-        self._btn(inner, "💾  Guardar Proyecto",
-                  self._guardar_proyecto, color="ghost", height=38).pack(
-            side="left", padx=6)
-        self._btn(inner, "📂  Cargar Proyecto",
-                  self._cargar_proyecto, color="ghost", height=38).pack(
+        self._btn(inner, "📂  Cargar banco",
+                  self._cargar_banco, color="ghost", height=38).pack(
             side="left", padx=6)
 
-        sep1 = ctk.CTkFrame(inner, width=2, height=36,
-                            fg_color=COLORS["border"])
+        sep1 = ctk.CTkFrame(inner, width=2, height=36, fg_color=COLORS["border"])
         sep1.pack(side="left", padx=14)
 
-        self._btn(inner, "🌐  Moodle/CeNET",
-                  lambda: self.exportar_html("moodle"), color="success", height=38).pack(
+        self._btn(inner, "🌐  Abrir Moodle",
+                  lambda: self._abrir_en_navegador("moodle"), color="accent", height=38).pack(
             side="left", padx=6)
-        self._btn(inner, "📋  Copiar CeNET",
-                  lambda: self._copiar_html_clipboard("moodle"), color="ghost", height=38).pack(
+        self._btn(inner, "💾  HTML Moodle",
+                  lambda: self.exportar_html("moodle"), color="success", height=38).pack(
             side="left", padx=4)
 
         sep2 = ctk.CTkFrame(inner, width=2, height=36, fg_color=COLORS["border"])
         sep2.pack(side="left", padx=14)
 
-        self._btn(inner, "🏛️  INET",
-                  lambda: self.exportar_html("inet"), color="info", height=38).pack(
+        self._btn(inner, "🌐  Abrir INET",
+                  lambda: self._abrir_en_navegador("inet"), color="accent", height=38).pack(
             side="left", padx=6)
-        self._btn(inner, "📋  Copiar INET",
-                  lambda: self._copiar_html_clipboard("inet"), color="ghost", height=38).pack(
+        self._btn(inner, "💾  HTML INET",
+                  lambda: self.exportar_html("inet"), color="info", height=38).pack(
             side="left", padx=4)
 
     # ─────────────────────────────────────────
@@ -1521,78 +1116,25 @@ class GeneradorMoodle(ctk.CTk):
                 break
 
     # ─────────────────────────────────────────
-    # PRECARGA Y COPIA
-    # ─────────────────────────────────────────
-    def _precargar_2026(self):
-        """Pregunta si hay cursos en banco y carga CURSOS_2026 al banco."""
-        if self.banco_cursos:
-            if not messagebox.askyesno(
-                "Precarga 2026",
-                f"Ya hay {len(self.banco_cursos)} curso(s) en el banco.\n"
-                "¿Reemplazar con los 32 cursos de la oferta 2026?",
-                parent=self
-            ):
-                return
-        self.banco_cursos = [
-            {
-                "titulo":    c["titulo"],
-                "categoria": c["categoria"],
-                "img":       c["img"],
-                "info":      c["info"],
-            }
-            for c in CURSOS_2026
-        ]
-        self._refresh_banco_tree()
-        self._refresh_cohorte_panel()
-        messagebox.showinfo(
-            "Listo",
-            f"32 cursos cargados al banco.",
-            parent=self
-        )
-
-    def _copiar_banco_a_cohorte(self):
-        """Agrega todos los cursos del banco a la cohorte (sin duplicar)."""
-        if not self.banco_cursos:
-            messagebox.showwarning(
-                "Atención", "El banco está vacío. Primero agregá cursos al banco.",
-                parent=self)
-            return
-        ya_en_coh = {entry.get("banco_idx") for entry in self.cohorte.get("cursos", [])}
-        agregados = 0
-        for bidx in range(len(self.banco_cursos)):
-            if bidx not in ya_en_coh:
-                self.cohorte["cursos"].append({"banco_idx": bidx, "etiqueta": ""})
-                agregados += 1
-        self._refresh_cohorte_panel()
-        messagebox.showinfo("Listo", f"Se agregaron {agregados} curso(s).", parent=self)
-
-    # ─────────────────────────────────────────
     # PERSISTENCIA JSON
     # ─────────────────────────────────────────
-    def _guardar_proyecto(self):
+    def _guardar_banco(self):
         archivo = filedialog.asksaveasfilename(
             defaultextension=".json",
             filetypes=[("JSON", "*.json")],
-            title="Guardar Proyecto CeNET",
+            title="Guardar banco de cursos",
             parent=self
         )
         if not archivo:
             return
-        self._save_coh_edit()
-        data = {
-            "titulo_oferta":        self.titulo_oferta_var.get(),
-            "banco_cursos":         self.banco_cursos,
-            "cohorte":              self.cohorte,
-            "categorias_sugeridas": self.categorias_sugeridas,
-        }
         with open(archivo, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
-        messagebox.showinfo("Éxito", "Proyecto guardado.", parent=self)
+            json.dump(self.banco_cursos, f, ensure_ascii=False, indent=2)
+        messagebox.showinfo("Éxito", "Banco guardado.", parent=self)
 
-    def _cargar_proyecto(self):
+    def _cargar_banco(self):
         archivo = filedialog.askopenfilename(
             filetypes=[("JSON", "*.json")],
-            title="Cargar Proyecto CeNET",
+            title="Cargar banco de cursos",
             parent=self
         )
         if not archivo:
@@ -1600,39 +1142,20 @@ class GeneradorMoodle(ctk.CTk):
         try:
             with open(archivo, "r", encoding="utf-8") as f:
                 data = json.load(f)
-
-            self.titulo_oferta_var.set(
-                data.get("titulo_oferta", data.get("cohorte", "")))
-
-            self.banco_cursos = data.get("banco_cursos", [])
-            loaded_coh = data.get("cohorte")
-            if loaded_coh:
-                self.cohorte = loaded_coh
-                self.cohorte.setdefault("cursos", [])
-                self.cohorte.setdefault("nombre", "")
-                self.cohorte.setdefault("estado", "")
-                self.cohorte.setdefault("link", "")
-            else:
-                self.cohorte = {"nombre": "", "link": "", "estado": "", "cursos": []}
-            self.coh_nombre_var.set(self.cohorte["nombre"])
-            self.coh_estado_var.set(self.cohorte["estado"])
-            self.coh_link_var.set(self.cohorte["link"])
-
-            loaded_cats = data.get("categorias_sugeridas")
-            if loaded_cats and isinstance(loaded_cats, list):
-                self.categorias_sugeridas = loaded_cats
-                self._refresh_cats_panel()
-
-            self._refresh_cohorte_panel()
+            if not isinstance(data, list):
+                raise ValueError("El archivo debe contener un array de cursos.")
+            self.banco_cursos = data
+            self._save_banco_json()
             self._refresh_banco_tree()
+            self._refresh_cohorte_panel()
             n = len(self.banco_cursos)
             messagebox.showinfo(
                 "Éxito",
-                f"Proyecto cargado: {n} curso{'s' if n!=1 else ''} en el banco.",
+                f"Banco cargado: {n} curso{'s' if n!=1 else ''}.",
                 parent=self)
         except Exception as e:
             messagebox.showerror(
-                "Error", f"No se pudo cargar el proyecto:\n{e}", parent=self)
+                "Error", f"No se pudo cargar el banco:\n{e}", parent=self)
 
     # ─────────────────────────────────────────
     # GENERACIÓN HTML
@@ -1685,41 +1208,17 @@ class GeneradorMoodle(ctk.CTk):
         )
 
     # ─────────────────────────────────────────
-    # MÉTODOS VISTA PREVIA (Tab 3)
+    # ABRIR EN NAVEGADOR
     # ─────────────────────────────────────────
-    def _preview_actualizar(self):
-        """Genera el HTML y lo muestra en la pestaña Vista Previa."""
-        html = self._generar_html(modo=self._modo_html.get())
+    def _abrir_en_navegador(self, modo="moodle"):
+        html = self._generar_html(modo=modo)
         if not html:
             return
-        self._preview_html_cache = html
-        if self._use_htmlframe:
-            full = (
-                "<!DOCTYPE html><html><head>"
-                "<meta charset='utf-8'>"
-                "<style>body{margin:0;padding:0;}</style>"
-                "</head><body>"
-                f"{html}"
-                "</body></html>"
-            )
-            self._html_frame.load_html(full)
-            self.lbl_preview_status.configure(text="Vista actualizada.")
-        else:
-            self.lbl_preview_status.configure(
-                text=f"HTML generado ({len(html):,} chars). Usá «Abrir en navegador» para previsualizar.")
-
-    def _preview_abrir_navegador(self):
-        """Abre el HTML generado en el navegador predeterminado."""
-        if not self._preview_html_cache:
-            html = self._generar_html(modo=self._modo_html.get())
-            if not html:
-                return
-            self._preview_html_cache = html
         full = (
             "<!DOCTYPE html><html><head>"
             "<meta charset='utf-8'>"
             "</head><body style='margin:0;padding:0;'>"
-            f"{self._preview_html_cache}"
+            f"{html}"
             "</body></html>"
         )
         with tempfile.NamedTemporaryFile(
@@ -1728,51 +1227,6 @@ class GeneradorMoodle(ctk.CTk):
             f.write(full)
             tmppath = f.name
         webbrowser.open(f"file:///{tmppath.replace(chr(92), '/')}")
-        self.lbl_preview_status.configure(text="Abierto en el navegador.")
-
-    # ─────────────────────────────────────────
-    # MÉTODOS EDITOR HTML (Tab 4)
-    # ─────────────────────────────────────────
-    def _editor_regenerar(self):
-        """Genera el HTML y lo carga en el editor de código."""
-        html = self._generar_html(modo=self._modo_html.get())
-        if not html:
-            return
-        self.editor_text.delete("1.0", "end")
-        self.editor_text.insert("1.0", html)
-        self.lbl_editor_status.configure(
-            text=f"HTML generado — {len(html):,} caracteres.")
-
-    def _editor_copiar(self):
-        """Copia el contenido actual del editor al portapapeles."""
-        html = self.editor_text.get("1.0", "end-1c")
-        if not html.strip():
-            messagebox.showinfo(
-                "Info", "El editor está vacío. Presioná «Regenerar» primero.", parent=self)
-            return
-        self.clipboard_clear()
-        self.clipboard_append(html)
-        self.lbl_editor_status.configure(text="Copiado al portapapeles.")
-
-    def _editor_guardar(self):
-        """Guarda el contenido actual del editor como archivo HTML."""
-        html = self.editor_text.get("1.0", "end-1c")
-        if not html.strip():
-            messagebox.showinfo(
-                "Info", "El editor está vacío. Presioná «Regenerar» primero.", parent=self)
-            return
-        archivo = filedialog.asksaveasfilename(
-            defaultextension=".html",
-            filetypes=[("HTML", "*.html")],
-            title="Guardar HTML editado",
-            parent=self
-        )
-        if not archivo:
-            return
-        with open(archivo, "w", encoding="utf-8") as f:
-            f.write(html)
-        messagebox.showinfo("Éxito", "HTML guardado correctamente.", parent=self)
-        self.lbl_editor_status.configure(text="Guardado correctamente.")
 
     @staticmethod
     def _color_estado(estado: str) -> str:
@@ -1915,38 +1369,6 @@ class GeneradorMoodle(ctk.CTk):
             "border:1.5px solid #45658d;background:#45658d;color:white;"
             "margin:4px;font-size:0.84rem;font-weight:500;font-family:inherit;"
         )
-        # Moodle: botón único "Más información e inscripción"
-        S_MAS_INFO_INS = (
-            "display:block;width:100%;text-align:center;padding:9px 10px;"
-            "border-radius:8px;font-size:0.85rem;font-weight:700;cursor:pointer;"
-            "background:#45658d;color:white;border:none;font-family:inherit;"
-            "box-sizing:border-box;"
-        )
-        S_INFO_SM = (
-            "text-align:center;padding:5px 8px;border-radius:8px;"
-            "text-decoration:none;font-size:0.78rem;font-weight:600;"
-            "background:#f0f4ff;color:#45658d;border:1px solid #c7d2e8;"
-            "display:inline-block;box-sizing:border-box;"
-        )
-
-        def js_str(s):
-            """Escapa una cadena para uso en onclick JS con comillas simples."""
-            return (s or "").replace("\\", "\\\\").replace("'", "\\'")
-
-        def make_info_uri(texto_html):
-            """Convierte HTML estático en un data URI para iframe."""
-            if not texto_html:
-                return ""
-            b64 = base64.b64encode(texto_html.encode("utf-8")).decode("ascii")
-            return f"data:text/html;base64,{b64}"
-
-        btn_ins_coh = (
-            f'<a href="{coh_link}" target="_blank" style="'
-            f'display:inline-block;padding:9px 22px;border-radius:8px;'
-            f'background:#45658d;color:white;text-decoration:none;'
-            f'font-size:0.9rem;font-weight:600;">Inscribirse ahora →</a>'
-            if coh_link else ""
-        )
 
         coh_header = (
             f'<div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;'
@@ -1956,7 +1378,6 @@ class GeneradorMoodle(ctk.CTk):
             f'<span style="display:inline-block;background:{ec};color:white;'
             f'font-size:0.82rem;font-weight:600;padding:4px 14px;border-radius:999px;">'
             f'{coh_estado}</span>'
-            f'<span style="margin-left:auto;">{btn_ins_coh}</span>'
             f'</div>'
         )
 
@@ -1978,34 +1399,19 @@ class GeneradorMoodle(ctk.CTk):
                 conocimientos = c.get("conocimientos", "")
                 sintesis      = c.get("sintesis", "")
                 search        = f"{tit.lower()} {cat_n.lower()} nuevo"
-                # info_url: URL externa si existe; si no, construimos la página desde los campos
-                ext_info = c.get("info", "")
-                if ext_info:
-                    info_url = ext_info
-                elif any((familia, nivel, destinatarios, conocimientos, sintesis)):
-                    info_url = make_info_uri(
-                        _make_info_page_html(tit, familia, nivel, destinatarios, conocimientos, sintesis, ins_url)
-                    )
-                else:
-                    info_url = ""
-                if es_inet:
-                    accion_html = _make_acordeon_inet(
-                        tit, sintesis, "" if not ext_info else info_url, ins_url,
-                        familia, nivel, destinatarios, conocimientos
-                    )
-                    cc = _cat_color(cat_n)
-                    imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
-                else:
-                    accion_html = (
-                        f'<button type="button" '
-                        f'onclick="cnetOpenModal(\'{js_str(tit)}\',\'{js_str(img_url)}\',\'{js_str(info_url)}\',\'{js_str(ins_url)}\')" '
-                        f'style="{S_MAS_INFO_INS}">Más información e inscripción</button>'
-                    ) if (info_url or ins_url) else ""
+                accion_html = _make_acordeon_inet(
+                    tit, sintesis, "", ins_url,
+                    familia, nivel, destinatarios, conocimientos
+                )
+                cc = _cat_color(cat_n)
+                if img_url:
                     imagen_html = (
                         f'<div style="width:100%;height:130px;background:#eef2f7;overflow:hidden;">'
                         f'<img src="{img_url}" alt="{tit}" loading="lazy" '
                         f'style="width:100%;height:100%;object-fit:cover;display:block;"></div>'
-                    ) if img_url else ""
+                    )
+                else:
+                    imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
                 nuevos_cards += (
                     f'<div data-search="{search}" style="background:white;border-radius:12px;'
                     f'border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.05);'
@@ -2025,7 +1431,7 @@ class GeneradorMoodle(ctk.CTk):
                 f'<div style="font-size:1.1rem;font-weight:700;color:#1e2a4a;'
                 f'border-bottom:2px solid #22c55e;padding-bottom:8px;margin-bottom:16px;">'
                 f'🆕 Nuevos en esta edición</div>'
-                f'<div id="secNuevos" class="cnet-grid-nuevos">{nuevos_cards}</div></div>\n'
+                f'<div id="secNuevos" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">{nuevos_cards}</div></div>\n'
             )
 
         # Categorías únicas de la cohorte activa
@@ -2064,16 +1470,6 @@ class GeneradorMoodle(ctk.CTk):
                 conocimientos = c.get("conocimientos", "")
                 sintesis      = c.get("sintesis", "")
                 search        = f"{tit.lower()} {cat.lower()} {etiqueta.lower()}"
-                ext_info = c.get("info", "")
-                if ext_info:
-                    info_url = ext_info
-                elif any((familia, nivel, destinatarios, conocimientos, sintesis)):
-                    info_url = make_info_uri(
-                        _make_info_page_html(tit, familia, nivel, destinatarios, conocimientos, sintesis, ins_url)
-                    )
-                else:
-                    info_url = ""
-
                 if etiqueta == "Destacado":
                     badge_html = (
                         '<span style="background:#d4a843;color:white;font-size:0.7rem;'
@@ -2089,24 +1485,19 @@ class GeneradorMoodle(ctk.CTk):
                 else:
                     badge_html = ""
 
-                if es_inet:
-                    accion_html = _make_acordeon_inet(
-                        tit, sintesis, "" if not ext_info else info_url, ins_url,
-                        familia, nivel, destinatarios, conocimientos
-                    )
-                    cc = _cat_color(cat)
-                    imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
-                else:
-                    accion_html = (
-                        f'<button type="button" '
-                        f'onclick="cnetOpenModal(\'{js_str(tit)}\',\'{js_str(img_url)}\',\'{js_str(info_url)}\',\'{js_str(ins_url)}\')" '
-                        f'style="{S_MAS_INFO_INS}">Más información e inscripción</button>'
-                    ) if (info_url or ins_url) else ""
+                accion_html = _make_acordeon_inet(
+                    tit, sintesis, "", ins_url,
+                    familia, nivel, destinatarios, conocimientos
+                )
+                cc = _cat_color(cat)
+                if img_url:
                     imagen_html = (
                         f'<div style="width:100%;height:148px;background:#eef2f7;overflow:hidden;">'
                         f'<img src="{img_url}" alt="{tit}" loading="lazy" '
                         f'style="width:100%;height:100%;object-fit:cover;display:block;"></div>'
-                    ) if img_url else ""
+                    )
+                else:
+                    imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
 
                 cards += (
                     f'\n<div data-search="{search}" style="'
@@ -2133,87 +1524,12 @@ class GeneradorMoodle(ctk.CTk):
                 f'<span style="margin-left:auto;font-size:0.76rem;font-weight:500;'
                 f'color:#6b7280;background:#e5e7eb;padding:2px 10px;border-radius:999px;">'
                 f'{n_cat} curso{"s" if n_cat != 1 else ""}</span></div>'
-                f'<div class="cnet-grid">'
+                f'<div style="display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">'
                 f'{cards}</div></div>'
             )
 
-        # ── Modal de inscripción (solo Moodle/CeNET) ──
-        modal_html = "" if es_inet else (
-            # Overlay
-            '<div id="cnetModal" onclick="if(event.target===this)cnetCloseModal()" '
-            'style="display:none;position:fixed;inset:0;z-index:9999;'
-            'background:rgba(0,0,0,0.72);align-items:center;justify-content:center;padding:12px;">'
-            # Contenedor principal (grande para el iframe)
-            '<div style="background:white;border-radius:14px;width:min(920px,95vw);'
-            'height:min(680px,90vh);overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.4);'
-            'display:flex;flex-direction:column;">'
-            # ── Barra superior ──
-            '<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;'
-            'background:linear-gradient(135deg,#1e2a4a 0%,#45658d 100%);flex-shrink:0;">'
-            '<span id="cnetModalTitulo" style="flex:1;font-size:0.95rem;font-weight:700;'
-            'color:white;line-height:1.3;"></span>'
-            '<button type="button" onclick="cnetCloseModal()" '
-            'style="background:rgba(255,255,255,0.15);color:white;border:none;border-radius:8px;'
-            'padding:5px 12px;cursor:pointer;font-size:0.85rem;font-family:inherit;">✕ Cerrar</button>'
-            '</div>'
-            # ── Área del iframe ──
-            '<div style="flex:1;position:relative;background:#f3f4f6;overflow:hidden;">'
-            # Indicador de carga
-            '<div id="cnetModalLoader" '
-            'style="position:absolute;inset:0;display:flex;flex-direction:column;'
-            'align-items:center;justify-content:center;gap:12px;background:#f3f4f6;z-index:1;">'
-            '<div style="width:36px;height:36px;border:3px solid #e5e7eb;'
-            'border-top-color:#45658d;border-radius:50%;'
-            'animation:cnetSpin 0.8s linear infinite;"></div>'
-            '<span style="font-size:0.85rem;color:#6b7280;">Cargando página del curso...</span>'
-            '</div>'
-            # iframe (src vacío hasta que se abra el modal)
-            '<iframe id="cnetModalFrame" src="" '
-            'style="width:100%;height:100%;border:none;display:block;" '
-            'onload="document.getElementById(\'cnetModalLoader\').style.display=\'none\';">'
-            '</iframe>'
-            '</div>'
-            # ── Barra inferior ──
-            '<div style="display:flex;align-items:center;gap:10px;'
-            'padding:12px 16px;background:white;border-top:1px solid #e5e7eb;flex-shrink:0;">'
-            '<span style="flex:1;font-size:0.8rem;color:#92400e;font-style:italic;">'
-            'Leé atentamente los requisitos antes de inscribirte.</span>'
-            '<button type="button" onclick="cnetCloseModal()" '
-            'style="padding:8px 18px;border-radius:8px;background:transparent;'
-            'border:1px solid #e5e7eb;color:#6b7280;font-size:0.85rem;'
-            'cursor:pointer;font-family:inherit;">Cancelar</button>'
-            '<a id="cnetModalIns" href="#" target="_blank" '
-            'style="padding:8px 22px;border-radius:8px;text-decoration:none;'
-            'font-size:0.85rem;font-weight:700;background:#45658d;color:white;'
-            'display:inline-flex;align-items:center;gap:6px;">Inscribirme</a>'
-            '</div>'
-            '</div></div>'
-            # Animación del spinner (CSS)
-            '<style>'
-            '@keyframes cnetSpin{to{transform:rotate(360deg)}}'
-            '</style>\n'
-        )
-
-        # ── Script JS: búsqueda + filtro categoría solo para cohorte activa ──
-        modal_js = "" if es_inet else (
-            f'function cnetOpenModal(titulo,img,info,ins){{\n'
-            f'  document.getElementById("cnetModalTitulo").textContent=titulo;\n'
-            f'  document.getElementById("cnetModalIns").href=ins||"#";\n'
-            f'  var loader=document.getElementById("cnetModalLoader");\n'
-            f'  if(loader)loader.style.display="flex";\n'
-            f'  var fr=document.getElementById("cnetModalFrame");\n'
-            f'  if(fr)fr.src=info||"";\n'
-            f'  document.getElementById("cnetModal").style.display="flex";\n'
-            f'}}\n'
-            f'function cnetCloseModal(){{\n'
-            f'  var fr=document.getElementById("cnetModalFrame");\n'
-            f'  if(fr)fr.src="";\n'
-            f'  document.getElementById("cnetModal").style.display="none";\n'
-            f'}}\n'
-        )
         script = (
             f'<script>\n'
-            f'{modal_js}'
             f'function cnetFiltro(val){{\n'
             f'  var inp=document.getElementById("cnetSearch");\n'
             f'  if(inp)inp.value=val;\n'
@@ -2256,22 +1572,6 @@ class GeneradorMoodle(ctk.CTk):
             f'</script>\n'
         )
 
-        # ── Estilos responsive ──
-        responsive_css = (
-            '<style>\n'
-            '.cnet-grid { display:grid; gap:18px; grid-template-columns:repeat(3, 1fr); }\n'
-            '.cnet-grid-compacto { display:grid; gap:12px; grid-template-columns:repeat(3, 1fr); }\n'
-            '.cnet-grid-nuevos { display:grid; gap:16px; grid-template-columns:repeat(3, 1fr); }\n'
-            '@media (max-width: 1024px) {\n'
-            '  .cnet-grid, .cnet-grid-nuevos { grid-template-columns:repeat(2, 1fr); }\n'
-            '  .cnet-grid-compacto { grid-template-columns:repeat(2, 1fr); }\n'
-            '}\n'
-            '@media (max-width: 640px) {\n'
-            '  .cnet-grid, .cnet-grid-nuevos, .cnet-grid-compacto { grid-template-columns:1fr; }\n'
-            '}\n'
-            '</style>\n'
-        )
-
         if not es_inet:
             _hero_html = (
                 '<div style="background:linear-gradient(135deg,#1e2a4a 0%,#45658d 100%);'
@@ -2288,12 +1588,6 @@ class GeneradorMoodle(ctk.CTk):
 
         return (
             f'<div style="font-family:\'Segoe UI\',Arial,sans-serif;color:#333;line-height:1.5;">\n'
-
-            # Estilos responsive
-            f'{responsive_css}'
-
-            # Modal de inscripción (overlay fijo, oculto por defecto — solo CeNET)
-            f'{modal_html}'
 
             # Hero y header de cohorte (solo CeNET; INET los omite, WordPress ya tiene su propio header)
             f'{_hero_html}'
