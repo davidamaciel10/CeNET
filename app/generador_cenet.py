@@ -1404,7 +1404,7 @@ class GeneradorMoodle(ctk.CTk):
                     familia, nivel, destinatarios, conocimientos
                 )
                 cc = _cat_color(cat_n)
-                if img_url and not es_inet:
+                if img_url:
                     imagen_html = (
                         f'<div style="width:100%;height:130px;background:#eef2f7;overflow:hidden;">'
                         f'<img src="{img_url}" alt="{tit}" loading="lazy" '
@@ -1490,7 +1490,7 @@ class GeneradorMoodle(ctk.CTk):
                     familia, nivel, destinatarios, conocimientos
                 )
                 cc = _cat_color(cat)
-                if img_url and not es_inet:
+                if img_url:
                     imagen_html = (
                         f'<div style="width:100%;height:148px;background:#eef2f7;overflow:hidden;">'
                         f'<img src="{img_url}" alt="{tit}" loading="lazy" '
