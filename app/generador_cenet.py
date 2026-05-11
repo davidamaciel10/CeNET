@@ -1431,7 +1431,7 @@ class GeneradorMoodle(ctk.CTk):
                 f'<div style="font-size:1.1rem;font-weight:700;color:#1e2a4a;'
                 f'border-bottom:2px solid #22c55e;padding-bottom:8px;margin-bottom:16px;">'
                 f'🆕 Nuevos en esta edición</div>'
-                f'<div id="secNuevos" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">{nuevos_cards}</div></div>\n'
+                f'<div id="secNuevos" style="display:grid;gap:16px;grid-template-columns:repeat(3,1fr);">{nuevos_cards}</div></div>\n'
             )
 
         # Categorías únicas de la cohorte activa
@@ -1524,7 +1524,7 @@ class GeneradorMoodle(ctk.CTk):
                 f'<span style="margin-left:auto;font-size:0.76rem;font-weight:500;'
                 f'color:#6b7280;background:#e5e7eb;padding:2px 10px;border-radius:999px;">'
                 f'{n_cat} curso{"s" if n_cat != 1 else ""}</span></div>'
-                f'<div style="display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">'
+                f'<div style="display:grid;gap:18px;grid-template-columns:repeat(3,1fr);">'
                 f'{cards}</div></div>'
             )
 
