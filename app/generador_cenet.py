@@ -1314,48 +1314,24 @@ class GeneradorMoodle(ctk.CTk):
                 '</body></html>'
             )
 
-        def _make_acordeon_inet(titulo, sintesis, info_url, ins_url,
-                                familia="", nivel="", destinatarios="", conocimientos="",
-                                compacto=False):
-            pad = "6px 0" if not compacto else "4px 0"
-            partes = []
-            _S_LBL = "font-size:0.82rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;"
-            _S_VAL = "font-size:0.9rem;color:#1e2a4a;margin:0 0 8px 0;"
-            for label, val in (
-                ("Familia profesional", familia),
-                ("Nivel", nivel),
-                ("Destinatarios", destinatarios),
-                ("Conocimientos previos", conocimientos),
-            ):
-                if val:
-                    partes.append(
-                        f'<p style="{_S_LBL}">{label}</p>'
-                        f'<p style="{_S_VAL}">{val}</p>'
-                    )
-            if sintesis:
-                partes.append(
-                    f'<p style="font-size:0.9rem;color:#374151;line-height:1.6;margin:0 0 10px 0;">{sintesis}</p>'
-                )
-            if ins_url:
-                partes.append(
-                    f'<a href="{ins_url}" target="_blank" '
-                    f'style="display:block;text-align:center;padding:9px;border-radius:8px;'
-                    f'background:#45658d;color:white;font-size:0.92rem;font-weight:700;'
-                    f'text-decoration:none;">Inscribirse →</a>'
-                )
-            if not partes:
-                partes.append(
-                    '<span style="font-size:0.9rem;color:#9ca3af;">Consultá disponibilidad.</span>'
-                )
-            contenido = "".join(partes)
+        def _attr(s):
+            return (s or "").replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;").replace(">", "&gt;")
+
+        def _make_popup_btn(titulo, sintesis, ins_url,
+                            familia="", nivel="", destinatarios="", conocimientos=""):
             return (
-                f'<details style="margin-top:4px;">'
-                f'<summary style="cursor:pointer;font-size:0.92rem;font-weight:600;'
-                f'color:#45658d;padding:{pad};border-top:1px solid #eee;'
-                f'list-style:none;user-select:none;">'
-                f'▶ Más información e inscripción</summary>'
-                f'<div style="padding:10px 0 4px 0;">{contenido}</div>'
-                f'</details>'
+                f'<button type="button" onclick="cnetPop(this)" '
+                f'data-t="{_attr(titulo)}" '
+                f'data-f="{_attr(familia)}" '
+                f'data-n="{_attr(nivel)}" '
+                f'data-d="{_attr(destinatarios)}" '
+                f'data-c="{_attr(conocimientos)}" '
+                f'data-s="{_attr(sintesis)}" '
+                f'data-i="{_attr(ins_url)}" '
+                f'style="display:block;width:100%;text-align:center;padding:9px 10px;'
+                f'border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;'
+                f'background:#45658d;color:white;border:none;font-family:inherit;'
+                f'box-sizing:border-box;">Más información e inscripción</button>'
             )
 
         # ── Estilos inline ──
@@ -1399,8 +1375,8 @@ class GeneradorMoodle(ctk.CTk):
                 conocimientos = c.get("conocimientos", "")
                 sintesis      = c.get("sintesis", "")
                 search        = f"{tit.lower()} {cat_n.lower()} nuevo"
-                accion_html = _make_acordeon_inet(
-                    tit, sintesis, "", ins_url,
+                accion_html = _make_popup_btn(
+                    tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos
                 )
                 cc = _cat_color(cat_n)
@@ -1485,8 +1461,8 @@ class GeneradorMoodle(ctk.CTk):
                 else:
                     badge_html = ""
 
-                accion_html = _make_acordeon_inet(
-                    tit, sintesis, "", ins_url,
+                accion_html = _make_popup_btn(
+                    tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos
                 )
                 cc = _cat_color(cat)
@@ -1528,8 +1504,59 @@ class GeneradorMoodle(ctk.CTk):
                 f'{cards}</div></div>'
             )
 
+        popup_html = (
+            '<div id="cnetPop" onclick="if(event.target===this)cnetClose()" '
+            'style="display:none;position:fixed;inset:0;z-index:9999;'
+            'background:rgba(0,0,0,.65);align-items:center;justify-content:center;padding:16px;">'
+            '<div style="background:#fff;border-radius:14px;width:min(580px,95vw);'
+            'max-height:85vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.4);'
+            'display:flex;flex-direction:column;">'
+            # Cabecera
+            '<div style="display:flex;align-items:center;gap:12px;padding:14px 18px;'
+            'background:linear-gradient(135deg,#1e2a4a 0%,#45658d 100%);'
+            'border-radius:14px 14px 0 0;flex-shrink:0;">'
+            '<span id="cnetPopT" style="flex:1;font-size:1rem;font-weight:700;'
+            'color:white;line-height:1.3;"></span>'
+            '<button onclick="cnetClose()" type="button" '
+            'style="background:rgba(255,255,255,.15);color:white;border:none;'
+            'border-radius:8px;padding:5px 12px;cursor:pointer;font-size:0.9rem;'
+            'font-family:inherit;">✕ Cerrar</button>'
+            '</div>'
+            # Cuerpo
+            '<div id="cnetPopB" style="padding:20px 22px;flex:1;"></div>'
+            # Pie
+            '<div id="cnetPopF" style="padding:12px 22px 16px;border-top:1px solid #e5e7eb;'
+            'flex-shrink:0;"></div>'
+            '</div></div>\n'
+        )
+
         script = (
             f'<script>\n'
+            f'function cnetEsc(s){{return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}}\n'
+            f'function cnetPop(b){{\n'
+            f'  var d=b.dataset;\n'
+            f'  document.getElementById("cnetPopT").textContent=d.t||"";\n'
+            f'  var lbl="font-size:0.82rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;margin:0 0 2px;";\n'
+            f'  var val="font-size:0.9rem;color:#1e2a4a;margin:0 0 12px;";\n'
+            f'  var h="";\n'
+            f'  if(d.f)h+=\'<p style="\'+lbl+\'">Familia profesional</p><p style="\'+val+\'">\'+cnetEsc(d.f)+\'</p>\';\n'
+            f'  if(d.n)h+=\'<p style="\'+lbl+\'">Nivel</p><p style="\'+val+\'">\'+cnetEsc(d.n)+\'</p>\';\n'
+            f'  if(d.d)h+=\'<p style="\'+lbl+\'">Destinatarios</p><p style="\'+val+\'">\'+cnetEsc(d.d)+\'</p>\';\n'
+            f'  if(d.c)h+=\'<p style="\'+lbl+\'">Conocimientos previos</p><p style="\'+val+\'">\'+cnetEsc(d.c)+\'</p>\';\n'
+            f'  if(d.s)h+=\'<p style="font-size:0.9rem;color:#374151;line-height:1.65;margin:0;">\'+cnetEsc(d.s)+\'</p>\';\n'
+            f'  if(!h)h=\'<p style="color:#9ca3af;">Sin información adicional.</p>\';\n'
+            f'  document.getElementById("cnetPopB").innerHTML=h;\n'
+            f'  var fp=document.getElementById("cnetPopF");\n'
+            f'  fp.innerHTML=d.i?\'<a href="\'+d.i+\'" target="_blank" style="display:block;text-align:center;padding:10px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;">Inscribirse →</a>\':"";\n'
+            f'  fp.style.display=d.i?"":"none";\n'
+            f'  document.getElementById("cnetPop").style.display="flex";\n'
+            f'  document.body.style.overflow="hidden";\n'
+            f'}}\n'
+            f'function cnetClose(){{\n'
+            f'  document.getElementById("cnetPop").style.display="none";\n'
+            f'  document.body.style.overflow="";\n'
+            f'}}\n'
+            f'document.addEventListener("keydown",function(e){{if(e.key==="Escape")cnetClose();}})\n'
             f'function cnetFiltro(val){{\n'
             f'  var inp=document.getElementById("cnetSearch");\n'
             f'  if(inp)inp.value=val;\n'
@@ -1588,6 +1615,9 @@ class GeneradorMoodle(ctk.CTk):
 
         return (
             f'<div style="font-family:\'Segoe UI\',Arial,sans-serif;color:#333;line-height:1.5;">\n'
+
+            # Popup de información (oculto por defecto, compartido por todas las cards)
+            f'{popup_html}'
 
             # Hero y header de cohorte (solo CeNET; INET los omite, WordPress ya tiene su propio header)
             f'{_hero_html}'
