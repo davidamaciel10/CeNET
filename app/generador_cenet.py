@@ -618,6 +618,8 @@ class GeneradorMoodle(ctk.CTk):
                   color="success", height=28, width=36).pack(side="right", padx=2)
         self._btn(top_bar, "—", lambda: self._coh_set_etiqueta(""),
                   color="ghost", height=28, width=36).pack(side="right", padx=2)
+        self._btn(top_bar, "🔒", self._coh_toggle_insc_cerrada,
+                  color="danger", height=28, width=36).pack(side="right", padx=2)
 
         # Treeview cohorte
         coh_tree_frame = ctk.CTkFrame(top_frame, fg_color="transparent")
@@ -661,8 +663,10 @@ class GeneradorMoodle(ctk.CTk):
             side="left", padx=4)
         self.lbl_banco_disp_count = self._label(bot_header, "0", size=11, muted=True)
         self.lbl_banco_disp_count.pack(side="left", padx=4)
+        self._btn(bot_header, "Agregar todos", self._banco_agregar_todos,
+                  color="accent", height=28, width=120).pack(side="right", padx=8)
         self._label(bot_header, "☑ Tildar para agregar", size=11, muted=True).pack(
-            side="right", padx=8)
+            side="right", padx=4)
 
         self._banco_disp_frame = ctk.CTkScrollableFrame(
             bot_frame, fg_color="transparent",
@@ -1031,12 +1035,17 @@ class GeneradorMoodle(ctk.CTk):
         for i, entry in enumerate(self.cohorte.get("cursos", [])):
             bidx = entry.get("banco_idx", -1)
             etiqueta = entry.get("etiqueta", "")
+            insc_cerrada = entry.get("insc_cerrada", False)
             if 0 <= bidx < len(self.banco_cursos):
                 c = self.banco_cursos[bidx]
+                if insc_cerrada:
+                    etiq_display = f"🔒 {etiqueta}" if etiqueta else "🔒 Cerrada"
+                else:
+                    etiq_display = etiqueta if etiqueta else "—"
                 self.coh_tree.insert("", "end", tags=(str(i),), values=(
                     c.get("titulo", ""),
                     c.get("categoria", ""),
-                    etiqueta if etiqueta else "—",
+                    etiq_display,
                 ))
                 n += 1
         self.lbl_coh_count.configure(text=f"{n} curso{'s' if n != 1 else ''}")
@@ -1114,6 +1123,28 @@ class GeneradorMoodle(ctk.CTk):
             if self.coh_tree.item(ch, "tags") == (str(pos + 1),):
                 self.coh_tree.selection_set(ch)
                 break
+
+    def _coh_toggle_insc_cerrada(self):
+        """Alterna inscripción cerrada/abierta para el curso seleccionado."""
+        pos = self._coh_sel_idx()
+        if pos is None:
+            messagebox.showinfo("Info", "Seleccioná un curso para cambiar su estado de inscripción.", parent=self)
+            return
+        current = self.cohorte["cursos"][pos].get("insc_cerrada", False)
+        self.cohorte["cursos"][pos]["insc_cerrada"] = not current
+        self._refresh_coh_tree()
+        self._marcar_cambio()
+
+    def _banco_agregar_todos(self):
+        """Agrega todos los cursos disponibles del banco a la cohorte."""
+        ya_en_coh = {entry.get("banco_idx") for entry in self.cohorte.get("cursos", [])}
+        disponibles = [bidx for bidx in range(len(self.banco_cursos)) if bidx not in ya_en_coh]
+        if not disponibles:
+            return
+        for bidx in disponibles:
+            self.cohorte["cursos"].append({"banco_idx": bidx, "etiqueta": ""})
+        self._refresh_cohorte_panel()
+        self._marcar_cambio()
 
     # ─────────────────────────────────────────
     # PERSISTENCIA JSON
@@ -1251,9 +1282,11 @@ class GeneradorMoodle(ctk.CTk):
             for entry in self.cohorte.get("cursos", []):
                 bidx = entry.get("banco_idx", -1)
                 etiqueta = entry.get("etiqueta", "")
+                insc_cerrada = entry.get("insc_cerrada", False)
                 if 0 <= bidx < len(self.banco_cursos):
                     c = dict(self.banco_cursos[bidx])
                     c["etiqueta"] = etiqueta
+                    c["insc_cerrada"] = insc_cerrada
                     result.append(c)
             return result
 
@@ -1318,7 +1351,9 @@ class GeneradorMoodle(ctk.CTk):
             return (s or "").replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;").replace(">", "&gt;")
 
         def _make_popup_btn(titulo, sintesis, ins_url,
-                            familia="", nivel="", destinatarios="", conocimientos=""):
+                            familia="", nivel="", destinatarios="", conocimientos="",
+                            insc_cerrada=False):
+            cl_attr = 'data-cl="1" ' if insc_cerrada else ''
             return (
                 f'<button type="button" onclick="cnetPop(this)" '
                 f'data-t="{_attr(titulo)}" '
@@ -1328,6 +1363,7 @@ class GeneradorMoodle(ctk.CTk):
                 f'data-c="{_attr(conocimientos)}" '
                 f'data-s="{_attr(sintesis)}" '
                 f'data-i="{_attr(ins_url)}" '
+                f'{cl_attr}'
                 f'style="display:block;width:100%;text-align:center;padding:9px 10px;'
                 f'border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;'
                 f'background:#45658d;color:white;border:none;font-family:inherit;'
@@ -1367,7 +1403,8 @@ class GeneradorMoodle(ctk.CTk):
             for c in nuevos:
                 tit           = c.get("titulo", "")
                 img_url       = c.get("img", "")
-                ins_url       = c.get("form_externo", "") or coh_link
+                insc_cerrada  = c.get("insc_cerrada", False)
+                ins_url       = "" if insc_cerrada else (c.get("form_externo", "") or coh_link)
                 cat_n         = c.get("categoria", "")
                 familia       = c.get("familia_prof", "")
                 nivel         = c.get("nivel", "")
@@ -1377,7 +1414,8 @@ class GeneradorMoodle(ctk.CTk):
                 search        = f"{tit.lower()} {cat_n.lower()} nuevo"
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
-                    familia, nivel, destinatarios, conocimientos
+                    familia, nivel, destinatarios, conocimientos,
+                    insc_cerrada=insc_cerrada
                 )
                 cc = _cat_color(cat_n)
                 if img_url:
@@ -1388,6 +1426,11 @@ class GeneradorMoodle(ctk.CTk):
                     )
                 else:
                     imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
+                cerrada_badge = (
+                    '<span style="background:#ef4444;color:white;font-size:0.8rem;'
+                    'font-weight:700;padding:2px 9px;border-radius:999px;'
+                    'display:inline-block;margin-bottom:4px;">🔒 Inscripción cerrada</span>'
+                ) if insc_cerrada else ""
                 nuevos_cards += (
                     f'<div data-search="{search}" style="background:white;border-radius:12px;'
                     f'border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.05);'
@@ -1397,6 +1440,7 @@ class GeneradorMoodle(ctk.CTk):
                     f'<span style="background:#22c55e;color:white;font-size:0.8rem;'
                     f'font-weight:700;padding:2px 9px;border-radius:999px;'
                     f'display:inline-block;margin-bottom:4px;">🆕 Nuevo</span>'
+                    f'{cerrada_badge}'
                     f'<p style="font-size:1rem;font-weight:600;color:#1e2a4a;'
                     f'line-height:1.4;margin:0;">{tit}</p>'
                     f'<div style="margin-top:auto;">{accion_html}</div>'
@@ -1438,7 +1482,8 @@ class GeneradorMoodle(ctk.CTk):
             for c in por_cat_activa[cat]:
                 tit           = c.get("titulo", "")
                 img_url       = c.get("img", "")
-                ins_url       = c.get("form_externo", "") or coh_link
+                insc_cerrada  = c.get("insc_cerrada", False)
+                ins_url       = "" if insc_cerrada else (c.get("form_externo", "") or coh_link)
                 etiqueta      = c.get("etiqueta", "")
                 familia       = c.get("familia_prof", "")
                 nivel         = c.get("nivel", "")
@@ -1461,9 +1506,17 @@ class GeneradorMoodle(ctk.CTk):
                 else:
                     badge_html = ""
 
+                if insc_cerrada:
+                    badge_html += (
+                        '<span style="background:#ef4444;color:white;font-size:0.8rem;'
+                        'font-weight:700;padding:2px 9px;border-radius:999px;'
+                        'display:inline-block;margin-bottom:4px;">🔒 Inscripción cerrada</span>'
+                    )
+
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
-                    familia, nivel, destinatarios, conocimientos
+                    familia, nivel, destinatarios, conocimientos,
+                    insc_cerrada=insc_cerrada
                 )
                 cc = _cat_color(cat)
                 if img_url:
@@ -1547,8 +1600,9 @@ class GeneradorMoodle(ctk.CTk):
             f'  if(!h)h=\'<p style="color:#9ca3af;">Sin información adicional.</p>\';\n'
             f'  document.getElementById("cnetPopB").innerHTML=h;\n'
             f'  var fp=document.getElementById("cnetPopF");\n'
-            f'  fp.innerHTML=d.i?\'<a href="\'+d.i+\'" target="_blank" style="display:block;text-align:center;padding:10px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;">Inscribirse →</a>\':"";\n'
-            f'  fp.style.display=d.i?"":"none";\n'
+            f'  if(d.cl){{fp.innerHTML=\'<p style="text-align:center;padding:8px 10px;border-radius:8px;background:#fef2f2;color:#b91c1c;font-size:0.92rem;font-weight:700;margin:0;">🔒 Inscripción cerrada</p>\';fp.style.display="";}}\n'
+            f'  else if(d.i){{fp.innerHTML=\'<a href="\'+d.i+\'" target="_blank" style="display:block;text-align:center;padding:10px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;">Inscribirse →</a>\';fp.style.display="";}}\n'
+            f'  else{{fp.innerHTML="";fp.style.display="none";}}\n'
             f'  document.getElementById("cnetPop").style.display="flex";\n'
             f'  document.body.style.overflow="hidden";\n'
             f'}}\n'
