@@ -146,6 +146,7 @@ class GeneradorMoodle(ctk.CTk):
         self.nivel_var         = tk.StringVar()
         self.dest_var          = tk.StringVar()
         self.conoc_var         = tk.StringVar()
+        self.req_insc_var      = tk.StringVar()
         self._cat_nueva_var    = tk.StringVar()
         self._banco_filtro_var = tk.StringVar()
         self.sintesis_box      = None  # CTkTextbox; assigned in _build_tab_banco
@@ -432,11 +433,25 @@ class GeneradorMoodle(ctk.CTk):
             anchor="w", padx=14, pady=(6, 1))
         self._label(
             card_form,
-            "Si se completa, el botón Inscribirme usa este enlace en vez del de la cohorte.",
+            "Si se completa, el botón Inscribirme usa este enlace en vez del de la cohorte.\n"
+            "Usar mailto:correo@dominio.com para inscripción por mail.",
             size=10, muted=True
         ).pack(anchor="w", padx=14)
         self._entry(card_form, textvariable=self.ext_var, width=0,
-                    placeholder="https://  (dejar vacío si usa el formulario general)").pack(
+                    placeholder="https://  o  mailto:correo@dominio.com").pack(
+            fill="x", padx=14, pady=(2, 4))
+
+        # Requisito de inscripción
+        self._label(card_form, "Requisito de inscripción", muted=True).pack(
+            anchor="w", padx=14, pady=(6, 1))
+        self._label(
+            card_form,
+            "Si existe un requisito previo (ej: haber aprobado otro curso), se muestra\n"
+            "como advertencia en el popup. La card no cambia visualmente.",
+            size=10, muted=True
+        ).pack(anchor="w", padx=14)
+        self._entry(card_form, textvariable=self.req_insc_var, width=0,
+                    placeholder="Ej: Es necesario haber aprobado el curso Tecnología neumática").pack(
             fill="x", padx=14, pady=(2, 4))
 
         btn_row = ctk.CTkFrame(card_form, fg_color="transparent")
@@ -837,6 +852,7 @@ class GeneradorMoodle(ctk.CTk):
             "destinatarios":  self.dest_var.get().strip(),
             "conocimientos":  self.conoc_var.get().strip(),
             "sintesis":       sintesis_txt,
+            "requisito_insc": self.req_insc_var.get().strip(),
         }
         if ext:
             curso["form_externo"] = ext
@@ -875,6 +891,7 @@ class GeneradorMoodle(ctk.CTk):
         self.nivel_var.set(c.get("nivel", ""))
         self.dest_var.set(c.get("destinatarios", ""))
         self.conoc_var.set(c.get("conocimientos", ""))
+        self.req_insc_var.set(c.get("requisito_insc", ""))
         if self.sintesis_box:
             self.sintesis_box.delete("1.0", "end")
             sintesis = c.get("sintesis", "")
@@ -1050,7 +1067,7 @@ class GeneradorMoodle(ctk.CTk):
         """Limpia los campos del formulario del banco."""
         for v in (self.tit_var, self.cat_var, self.img_var, self.desc_var,
                   self.inf_var, self.ext_var, self.familia_var, self.nivel_var,
-                  self.dest_var, self.conoc_var):
+                  self.dest_var, self.conoc_var, self.req_insc_var):
             v.set("")
         if self.sintesis_box:
             self.sintesis_box.delete("1.0", "end")
@@ -1516,7 +1533,7 @@ class GeneradorMoodle(ctk.CTk):
 
         def _make_popup_btn(titulo, sintesis, ins_url,
                             familia="", nivel="", destinatarios="", conocimientos="",
-                            insc_cerrada=False):
+                            insc_cerrada=False, requisito_insc=""):
             cl_attr = 'data-cl="1" ' if insc_cerrada else ''
             return (
                 f'<button type="button" onclick="cnetPop(this)" '
@@ -1527,6 +1544,7 @@ class GeneradorMoodle(ctk.CTk):
                 f'data-c="{_attr(conocimientos)}" '
                 f'data-s="{_attr(sintesis)}" '
                 f'data-i="{_attr(ins_url)}" '
+                f'data-r="{_attr(requisito_insc)}" '
                 f'{cl_attr}'
                 f'style="display:block;width:100%;text-align:center;padding:9px 10px;'
                 f'border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;'
@@ -1573,13 +1591,14 @@ class GeneradorMoodle(ctk.CTk):
                 familia       = c.get("familia_prof", "")
                 nivel         = c.get("nivel", "")
                 destinatarios = c.get("destinatarios", "")
-                conocimientos = c.get("conocimientos", "")
-                sintesis      = c.get("sintesis", "")
-                search        = f"{tit.lower()} {cat_n.lower()} nuevo"
+                conocimientos  = c.get("conocimientos", "")
+                sintesis       = c.get("sintesis", "")
+                requisito_insc = c.get("requisito_insc", "")
+                search         = f"{tit.lower()} {cat_n.lower()} nuevo"
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos,
-                    insc_cerrada=insc_cerrada
+                    insc_cerrada=insc_cerrada, requisito_insc=requisito_insc
                 )
                 cc = _cat_color(cat_n)
                 if img_url:
@@ -1652,9 +1671,10 @@ class GeneradorMoodle(ctk.CTk):
                 familia       = c.get("familia_prof", "")
                 nivel         = c.get("nivel", "")
                 destinatarios = c.get("destinatarios", "")
-                conocimientos = c.get("conocimientos", "")
-                sintesis      = c.get("sintesis", "")
-                search        = f"{tit.lower()} {cat.lower()} {etiqueta.lower()}"
+                conocimientos  = c.get("conocimientos", "")
+                sintesis       = c.get("sintesis", "")
+                requisito_insc = c.get("requisito_insc", "")
+                search         = f"{tit.lower()} {cat.lower()} {etiqueta.lower()}"
                 if etiqueta == "Destacado":
                     badge_html = (
                         '<span style="background:#d4a843;color:white;font-size:0.8rem;'
@@ -1680,7 +1700,7 @@ class GeneradorMoodle(ctk.CTk):
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos,
-                    insc_cerrada=insc_cerrada
+                    insc_cerrada=insc_cerrada, requisito_insc=requisito_insc
                 )
                 cc = _cat_color(cat)
                 if img_url:
@@ -1756,6 +1776,7 @@ class GeneradorMoodle(ctk.CTk):
             f'  var lbl="font-size:0.82rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;margin:0 0 2px;";\n'
             f'  var val="font-size:0.9rem;color:#1e2a4a;margin:0 0 12px;";\n'
             f'  var h="";\n'
+            f'  if(d.r)h+=\'<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;margin-bottom:14px;">\'+\'<p style="font-size:0.8rem;font-weight:700;color:#c2410c;text-transform:uppercase;letter-spacing:.04em;margin:0 0 4px;">⚠ Requisito de inscripción</p>\'+\'<p style="font-size:0.88rem;color:#7c2d12;margin:0;">\'+cnetEsc(d.r)+\'</p></div>\';\n'
             f'  if(d.f)h+=\'<p style="\'+lbl+\'">Familia profesional</p><p style="\'+val+\'">\'+cnetEsc(d.f)+\'</p>\';\n'
             f'  if(d.n)h+=\'<p style="\'+lbl+\'">Nivel</p><p style="\'+val+\'">\'+cnetEsc(d.n)+\'</p>\';\n'
             f'  if(d.d)h+=\'<p style="\'+lbl+\'">Destinatarios</p><p style="\'+val+\'">\'+cnetEsc(d.d)+\'</p>\';\n'
@@ -1765,7 +1786,7 @@ class GeneradorMoodle(ctk.CTk):
             f'  document.getElementById("cnetPopB").innerHTML=h;\n'
             f'  var fp=document.getElementById("cnetPopF");\n'
             f'  if(d.cl){{fp.innerHTML=\'<p style="text-align:center;padding:8px 10px;border-radius:8px;background:#fef2f2;color:#b91c1c;font-size:0.92rem;font-weight:700;margin:0;">🔒 Inscripción cerrada</p>\';fp.style.display="";}}\n'
-            f'  else if(d.i){{fp.innerHTML=\'<a href="\'+d.i+\'" target="_blank" style="display:block;text-align:center;padding:10px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;">Inscribirse →</a>\';fp.style.display="";}}\n'
+            f'  else if(d.i){{var btn_txt=d.i.indexOf("mailto:")===0?"Inscribirse por mail →":"Inscribirse →";fp.innerHTML=\'<a href="\'+d.i+\'" target="_blank" style="display:block;text-align:center;padding:10px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;">\'+btn_txt+\'</a>\';fp.style.display="";}}\n'
             f'  else{{fp.innerHTML="";fp.style.display="none";}}\n'
             f'  document.getElementById("cnetPop").style.display="flex";\n'
             f'  document.body.style.overflow="hidden";\n'
