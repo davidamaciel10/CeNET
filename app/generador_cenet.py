@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import copy
+import csv
 import base64
 import tempfile
 import webbrowser
@@ -108,8 +109,10 @@ class GeneradorMoodle(ctk.CTk):
         self._current_theme      = "dark"
         self._banco_edit_idx     = None
         self._hay_cambios        = False
+        self._sort_state         = {"col": None, "reverse": False}
 
-        self.banco_cursos = self._load_banco_json()
+        _loaded = self._load_banco_json()
+        self.banco_cursos = _loaded.get("cursos", [])
 
         self.categorias_sugeridas = [
             "Innovación y entornos digitales",
@@ -118,14 +121,19 @@ class GeneradorMoodle(ctk.CTk):
             "Diseño, Producción y Especializaciones Técnicas",
         ]
 
-        # Variables generales
-        self.titulo_oferta_var = tk.StringVar(value="Oferta Formativa CeNET 2026")
+        # Variables generales (restauradas desde JSON si existen)
+        _saved_titulo = _loaded.get("titulo_oferta", "Oferta Formativa CeNET 2026")
+        self.titulo_oferta_var = tk.StringVar(value=_saved_titulo)
 
-        # Cohorte única
-        self.cohorte = {"nombre": "2° cohorte", "link": "", "estado": "Inscripción ABIERTA", "cursos": []}
-        self.coh_nombre_var = tk.StringVar(value=self.cohorte["nombre"])
-        self.coh_estado_var = tk.StringVar(value=self.cohorte["estado"])
-        self.coh_link_var   = tk.StringVar(value=self.cohorte["link"])
+        # Cohorte única (restaurada desde JSON si existe)
+        _saved_coh = _loaded.get("cohorte", {})
+        self.cohorte = (
+            _saved_coh if isinstance(_saved_coh, dict) and _saved_coh
+            else {"nombre": "2° cohorte", "link": "", "estado": "Inscripción ABIERTA", "cursos": []}
+        )
+        self.coh_nombre_var = tk.StringVar(value=self.cohorte.get("nombre", "2° cohorte"))
+        self.coh_estado_var = tk.StringVar(value=self.cohorte.get("estado", "Inscripción ABIERTA"))
+        self.coh_link_var   = tk.StringVar(value=self.cohorte.get("link", ""))
 
         # Variables formulario banco
         self.tit_var           = tk.StringVar()
@@ -142,15 +150,14 @@ class GeneradorMoodle(ctk.CTk):
         self._banco_filtro_var = tk.StringVar()
         self.sintesis_box      = None  # CTkTextbox; assigned in _build_tab_banco
 
-        # Modo de generación HTML
-
         self._setup_ttk_theme()
         self._build_ui()
 
-        # Auto-guardar cambios del editor de cohorte
+        # Auto-guardar cambios del editor de cohorte + titulo al JSON
         self.coh_nombre_var.trace_add("write", self._save_coh_edit)
         self.coh_estado_var.trace_add("write", self._save_coh_edit)
         self.coh_link_var.trace_add("write",   self._save_coh_edit)
+        self.titulo_oferta_var.trace_add("write", lambda *_: self._save_banco_json())
 
     # ─────────────────────────────────────────
     # INDICADOR DE CAMBIOS
@@ -492,6 +499,8 @@ class GeneradorMoodle(ctk.CTk):
                   color="ghost", height=32, width=42).pack(side="right", padx=2)
         self._btn(abar, "▲", self._banco_subir,
                   color="ghost", height=32, width=42).pack(side="right", padx=2)
+        self._btn(abar, "📊 CSV", self._banco_importar_csv,
+                  color="info", height=32, width=90).pack(side="left", padx=(8, 2))
 
         # Barra de búsqueda
         filtro_frame = ctk.CTkFrame(right, fg_color="transparent")
@@ -513,18 +522,27 @@ class GeneradorMoodle(ctk.CTk):
         cols = ("Titulo", "Categoria", "Descripcion", "Imagen", "Info", "Externo")
         self.banco_tree = ttk.Treeview(
             tree_frame, columns=cols, show="headings",
-            style="Dark.Treeview", selectmode="browse"
+            style="Dark.Treeview", selectmode="extended"
         )
-        for col, w, lbl in [
-            ("Titulo",      240, "Título"),
-            ("Categoria",   160, "Categoría"),
-            ("Descripcion", 200, "Descripción"),
-            ("Imagen",      140, "URL Imagen"),
-            ("Info",        140, "URL Info"),
-            ("Externo",     120, "Form. externo"),
-        ]:
-            self.banco_tree.heading(col, text=lbl)
-            self.banco_tree.column(col, width=w, minwidth=60)
+        _COL_LABELS = {
+            "Titulo":      "Título",
+            "Categoria":   "Categoría",
+            "Descripcion": "Descripción",
+            "Imagen":      "URL Imagen",
+            "Info":        "URL Info",
+            "Externo":     "Form. externo",
+        }
+        _COL_WIDTHS = {
+            "Titulo": 240, "Categoria": 160, "Descripcion": 200,
+            "Imagen": 140, "Info": 140, "Externo": 120,
+        }
+        self._col_labels = _COL_LABELS
+        for col in cols:
+            self.banco_tree.heading(
+                col, text=_COL_LABELS[col],
+                command=lambda c=col: self._banco_sort(c)
+            )
+            self.banco_tree.column(col, width=_COL_WIDTHS[col], minwidth=60)
 
         vsb = ttk.Scrollbar(tree_frame, orient="vertical",
                             command=self.banco_tree.yview)
@@ -618,6 +636,8 @@ class GeneradorMoodle(ctk.CTk):
                   color="success", height=28, width=36).pack(side="right", padx=2)
         self._btn(top_bar, "—", lambda: self._coh_set_etiqueta(""),
                   color="ghost", height=28, width=36).pack(side="right", padx=2)
+        self._btn(top_bar, "🔒", self._coh_toggle_insc_cerrada,
+                  color="danger", height=28, width=36).pack(side="right", padx=2)
 
         # Treeview cohorte
         coh_tree_frame = ctk.CTkFrame(top_frame, fg_color="transparent")
@@ -661,8 +681,10 @@ class GeneradorMoodle(ctk.CTk):
             side="left", padx=4)
         self.lbl_banco_disp_count = self._label(bot_header, "0", size=11, muted=True)
         self.lbl_banco_disp_count.pack(side="left", padx=4)
+        self._btn(bot_header, "Agregar todos", self._banco_agregar_todos,
+                  color="accent", height=28, width=120).pack(side="right", padx=8)
         self._label(bot_header, "☑ Tildar para agregar", size=11, muted=True).pack(
-            side="right", padx=8)
+            side="right", padx=4)
 
         self._banco_disp_frame = ctk.CTkScrollableFrame(
             bot_frame, fg_color="transparent",
@@ -753,12 +775,21 @@ class GeneradorMoodle(ctk.CTk):
     # MÉTODOS DEL BANCO (Tab 1)
     # ─────────────────────────────────────────
     def _banco_sel_idx(self):
-        """Índice seleccionado en banco_tree, o None."""
+        """Primer índice seleccionado en banco_tree, o None."""
         sel = self.banco_tree.selection()
         if not sel:
             return None
         tags = self.banco_tree.item(sel[0], "tags")
         return int(tags[0]) if tags else None
+
+    def _banco_sel_indices(self):
+        """Lista de todos los índices seleccionados en banco_tree."""
+        indices = []
+        for item in self.banco_tree.selection():
+            tags = self.banco_tree.item(item, "tags")
+            if tags:
+                indices.append(int(tags[0]))
+        return indices
 
     def _refresh_banco_tree(self):
         """Refresca banco_tree y lbl_banco_count."""
@@ -873,54 +904,59 @@ class GeneradorMoodle(ctk.CTk):
         self._banco_limpiar_form()
 
     def _banco_eliminar(self):
-        """Elimina del banco (con confirmación)."""
-        idx = self._banco_sel_idx()
-        if idx is None:
-            messagebox.showinfo("Info", "Seleccioná un curso para eliminar.", parent=self)
+        """Elimina del banco los cursos seleccionados (con confirmación)."""
+        indices = self._banco_sel_indices()
+        if not indices:
+            messagebox.showinfo("Info", "Seleccioná uno o más cursos para eliminar.", parent=self)
             return
-        nombre = self.banco_cursos[idx].get("titulo", "?")
-        if not messagebox.askyesno(
-                "Confirmar", f"¿Eliminar '{nombre}' del banco?\n"
-                "Se eliminará también de las cohortes donde esté asignado.", parent=self):
+        if len(indices) == 1:
+            msg = f"¿Eliminar '{self.banco_cursos[indices[0]].get('titulo','?')}' del banco?\nSe eliminará también de la cohorte."
+        else:
+            msg = f"¿Eliminar {len(indices)} cursos del banco?\nSe eliminarán también de la cohorte."
+        if not messagebox.askyesno("Confirmar", msg, parent=self):
             return
-        del self.banco_cursos[idx]
-        nuevos = []
-        for entry in self.cohorte.get("cursos", []):
-            bidx = entry.get("banco_idx", -1)
-            if bidx == idx:
-                continue
-            if bidx > idx:
-                entry = dict(entry)
-                entry["banco_idx"] = bidx - 1
-            nuevos.append(entry)
-        self.cohorte["cursos"] = nuevos
-        if self._banco_edit_idx == idx:
-            self._banco_cancelar()
+        # Eliminar de mayor a menor para no invalidar índices
+        for idx in sorted(indices, reverse=True):
+            del self.banco_cursos[idx]
+            nuevos = []
+            for entry in self.cohorte.get("cursos", []):
+                bidx = entry.get("banco_idx", -1)
+                if bidx == idx:
+                    continue
+                if bidx > idx:
+                    entry = dict(entry)
+                    entry["banco_idx"] = bidx - 1
+                nuevos.append(entry)
+            self.cohorte["cursos"] = nuevos
+            if self._banco_edit_idx == idx:
+                self._banco_cancelar()
+            elif self._banco_edit_idx is not None and self._banco_edit_idx > idx:
+                self._banco_edit_idx -= 1
         self._refresh_banco_tree()
         self._refresh_cohorte_panel()
         self._save_banco_json()
         self._marcar_cambio()
 
     def _banco_duplicar(self):
-        """Duplica el curso seleccionado."""
-        idx = self._banco_sel_idx()
-        if idx is None:
-            messagebox.showinfo("Info", "Seleccioná un curso para duplicar.", parent=self)
+        """Duplica los cursos seleccionados."""
+        indices = sorted(self._banco_sel_indices())
+        if not indices:
+            messagebox.showinfo("Info", "Seleccioná uno o más cursos para duplicar.", parent=self)
             return
-        nuevo = copy.deepcopy(self.banco_cursos[idx])
-        nuevo["titulo"] += " (copia)"
-        self.banco_cursos.insert(idx + 1, nuevo)
-        for entry in self.cohorte.get("cursos", []):
-            if entry.get("banco_idx", -1) > idx:
-                entry["banco_idx"] += 1
+        # Insertar copias de mayor a menor para preservar posiciones relativas
+        offset = 0
+        for idx in indices:
+            insert_at = idx + 1 + offset
+            nuevo = copy.deepcopy(self.banco_cursos[idx + offset])
+            nuevo["titulo"] += " (copia)"
+            self.banco_cursos.insert(insert_at, nuevo)
+            for entry in self.cohorte.get("cursos", []):
+                if entry.get("banco_idx", -1) >= insert_at:
+                    entry["banco_idx"] += 1
+            offset += 1
         self._refresh_banco_tree()
         self._save_banco_json()
         self._marcar_cambio()
-        # Seleccionar la copia
-        for child in self.banco_tree.get_children():
-            if self.banco_tree.item(child, "tags") == (str(idx + 1),):
-                self.banco_tree.selection_set(child)
-                break
 
     def _banco_subir(self):
         """Sube una posición en el banco."""
@@ -984,22 +1020,29 @@ class GeneradorMoodle(ctk.CTk):
 
     @staticmethod
     def _load_banco_json():
-        """Carga cursos_banco.json si existe; devuelve lista vacía si no."""
+        """Carga cursos_banco.json. Devuelve dict con 'cursos', 'cohorte', 'titulo_oferta'."""
         if os.path.isfile(BANCO_FILE):
             try:
                 with open(BANCO_FILE, "r", encoding="utf-8") as f:
                     data = json.load(f)
                 if isinstance(data, list):
+                    return {"cursos": data}
+                elif isinstance(data, dict) and "cursos" in data:
                     return data
             except Exception:
                 pass
-        return []
+        return {"cursos": []}
 
     def _save_banco_json(self):
-        """Guarda banco_cursos en cursos_banco.json (junto al .py/.exe)."""
+        """Guarda estado completo (cursos + cohorte + título) en cursos_banco.json."""
+        data = {
+            "cursos": self.banco_cursos,
+            "cohorte": self.cohorte,
+            "titulo_oferta": self.titulo_oferta_var.get() if hasattr(self, "titulo_oferta_var") else "Oferta Formativa CeNET 2026",
+        }
         try:
             with open(BANCO_FILE, "w", encoding="utf-8") as f:
-                json.dump(self.banco_cursos, f, ensure_ascii=False, indent=2)
+                json.dump(data, f, ensure_ascii=False, indent=2)
         except Exception as e:
             messagebox.showwarning("Aviso", f"No se pudo guardar cursos_banco.json:\n{e}", parent=self)
 
@@ -1012,13 +1055,122 @@ class GeneradorMoodle(ctk.CTk):
         if self.sintesis_box:
             self.sintesis_box.delete("1.0", "end")
 
+    def _banco_sort(self, col):
+        """Ordena banco_cursos por la columna indicada y remapea índices de cohorte."""
+        field_map = {
+            "Titulo": "titulo", "Categoria": "categoria",
+            "Descripcion": "descripcion", "Imagen": "img",
+            "Info": "info", "Externo": "form_externo",
+        }
+        field = field_map.get(col, col.lower())
+        if self._sort_state["col"] == col:
+            self._sort_state["reverse"] = not self._sort_state["reverse"]
+        else:
+            self._sort_state["col"] = col
+            self._sort_state["reverse"] = False
+        reverse = self._sort_state["reverse"]
+
+        # Guardar posición anterior de cada objeto (por identidad) para remap de cohorte
+        pre_pos = {id(c): i for i, c in enumerate(self.banco_cursos)}
+        self.banco_cursos.sort(key=lambda c: (c.get(field) or "").lower(), reverse=reverse)
+        post_pos = {id(c): i for i, c in enumerate(self.banco_cursos)}
+        # Invertir pre_pos: old_idx -> object id
+        old_idx_to_id = {v: k for k, v in pre_pos.items()}
+        for entry in self.cohorte.get("cursos", []):
+            oidx = entry.get("banco_idx", -1)
+            if oidx >= 0:
+                obj_id = old_idx_to_id.get(oidx)
+                if obj_id is not None and obj_id in post_pos:
+                    entry["banco_idx"] = post_pos[obj_id]
+
+        # Actualizar texto de cabecera con indicador de dirección
+        for c, lbl in self._col_labels.items():
+            indicator = (" ▲" if not reverse else " ▼") if c == col else ""
+            self.banco_tree.heading(c, text=lbl + indicator)
+
+        self._refresh_banco_tree()
+        self._save_banco_json()
+        self._marcar_cambio()
+
+    def _banco_importar_csv(self):
+        """Importa cursos desde un archivo CSV."""
+        archivo = filedialog.askopenfilename(
+            filetypes=[("CSV", "*.csv"), ("Todos", "*.*")],
+            title="Importar cursos desde CSV",
+            parent=self
+        )
+        if not archivo:
+            return
+        try:
+            with open(archivo, "r", encoding="utf-8-sig", newline="") as f:
+                reader = csv.DictReader(f)
+                filas = list(reader)
+        except Exception as e:
+            messagebox.showerror("Error", f"No se pudo leer el CSV:\n{e}", parent=self)
+            return
+        if not filas:
+            messagebox.showwarning("CSV vacío", "El archivo no contiene filas.", parent=self)
+            return
+
+        # Normalizar nombres de columnas (minúsculas, sin espacios)
+        def _norm(k): return k.lower().strip().replace(" ", "_")
+        filas_norm = [{_norm(k): v for k, v in row.items()} for row in filas]
+
+        _CAMPO = {
+            "titulo": "titulo", "title": "titulo",
+            "categoria": "categoria", "category": "categoria",
+            "img": "img", "imagen": "img", "image": "img", "url_imagen": "img",
+            "descripcion": "descripcion", "description": "descripcion",
+            "info": "info", "url_info": "info",
+            "form_externo": "form_externo", "formulario_externo": "form_externo",
+            "familia_prof": "familia_prof", "familia": "familia_prof",
+            "nivel": "nivel",
+            "destinatarios": "destinatarios",
+            "conocimientos": "conocimientos", "conocimientos_previos": "conocimientos",
+            "sintesis": "sintesis", "síntesis": "sintesis",
+        }
+
+        importados = 0
+        omitidos = 0
+        for fila in filas_norm:
+            curso = {}
+            for csv_key, val in fila.items():
+                campo = _CAMPO.get(csv_key)
+                if campo:
+                    curso[campo] = (val or "").strip()
+            if not curso.get("titulo"):
+                omitidos += 1
+                continue
+            if "categoria" not in curso:
+                curso["categoria"] = "Sin categoría"
+            self.banco_cursos.append(curso)
+            importados += 1
+
+        if importados == 0:
+            messagebox.showwarning(
+                "Sin resultados",
+                f"No se importó ningún curso (columna 'titulo' requerida).\n"
+                f"Filas omitidas: {omitidos}",
+                parent=self
+            )
+            return
+
+        self._refresh_banco_tree()
+        self._save_banco_json()
+        self._marcar_cambio()
+        msg = f"Importados: {importados} cursos."
+        if omitidos:
+            msg += f"\nOmitidas {omitidos} filas sin título."
+        messagebox.showinfo("CSV importado", msg, parent=self)
+
     # ─────────────────────────────────────────
     # MÉTODOS DE COHORTE (Tab 2)
     # ─────────────────────────────────────────
     def _save_coh_edit(self, *_):
-        self.cohorte["nombre"] = self.coh_nombre_var.get().strip() or self.cohorte["nombre"]
+        self.cohorte["nombre"] = self.coh_nombre_var.get().strip() or self.cohorte.get("nombre", "2° cohorte")
         self.cohorte["estado"] = self.coh_estado_var.get()
         self.cohorte["link"]   = self.coh_link_var.get()
+        self._save_banco_json()
 
     def _refresh_cohorte_panel(self):
         self._refresh_coh_tree()
@@ -1031,12 +1183,17 @@ class GeneradorMoodle(ctk.CTk):
         for i, entry in enumerate(self.cohorte.get("cursos", [])):
             bidx = entry.get("banco_idx", -1)
             etiqueta = entry.get("etiqueta", "")
+            insc_cerrada = entry.get("insc_cerrada", False)
             if 0 <= bidx < len(self.banco_cursos):
                 c = self.banco_cursos[bidx]
+                if insc_cerrada:
+                    etiq_display = f"🔒 {etiqueta}" if etiqueta else "🔒 Cerrada"
+                else:
+                    etiq_display = etiqueta if etiqueta else "—"
                 self.coh_tree.insert("", "end", tags=(str(i),), values=(
                     c.get("titulo", ""),
                     c.get("categoria", ""),
-                    etiqueta if etiqueta else "—",
+                    etiq_display,
                 ))
                 n += 1
         self.lbl_coh_count.configure(text=f"{n} curso{'s' if n != 1 else ''}")
@@ -1115,6 +1272,28 @@ class GeneradorMoodle(ctk.CTk):
                 self.coh_tree.selection_set(ch)
                 break
 
+    def _coh_toggle_insc_cerrada(self):
+        """Alterna inscripción cerrada/abierta para el curso seleccionado."""
+        pos = self._coh_sel_idx()
+        if pos is None:
+            messagebox.showinfo("Info", "Seleccioná un curso para cambiar su estado de inscripción.", parent=self)
+            return
+        current = self.cohorte["cursos"][pos].get("insc_cerrada", False)
+        self.cohorte["cursos"][pos]["insc_cerrada"] = not current
+        self._refresh_coh_tree()
+        self._marcar_cambio()
+
+    def _banco_agregar_todos(self):
+        """Agrega todos los cursos disponibles del banco a la cohorte."""
+        ya_en_coh = {entry.get("banco_idx") for entry in self.cohorte.get("cursos", [])}
+        disponibles = [bidx for bidx in range(len(self.banco_cursos)) if bidx not in ya_en_coh]
+        if not disponibles:
+            return
+        for bidx in disponibles:
+            self.cohorte["cursos"].append({"banco_idx": bidx, "etiqueta": ""})
+        self._refresh_cohorte_panel()
+        self._marcar_cambio()
+
     # ─────────────────────────────────────────
     # PERSISTENCIA JSON
     # ─────────────────────────────────────────
@@ -1127,8 +1306,14 @@ class GeneradorMoodle(ctk.CTk):
         )
         if not archivo:
             return
+        self._save_coh_edit()
+        data = {
+            "cursos": self.banco_cursos,
+            "cohorte": self.cohorte,
+            "titulo_oferta": self.titulo_oferta_var.get(),
+        }
         with open(archivo, "w", encoding="utf-8") as f:
-            json.dump(self.banco_cursos, f, ensure_ascii=False, indent=2)
+            json.dump(data, f, ensure_ascii=False, indent=2)
         messagebox.showinfo("Éxito", "Banco guardado.", parent=self)
 
     def _cargar_banco(self):
@@ -1141,10 +1326,20 @@ class GeneradorMoodle(ctk.CTk):
             return
         try:
             with open(archivo, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            if not isinstance(data, list):
-                raise ValueError("El archivo debe contener un array de cursos.")
-            self.banco_cursos = data
+                raw = json.load(f)
+            if isinstance(raw, list):
+                self.banco_cursos = raw
+            elif isinstance(raw, dict) and "cursos" in raw:
+                self.banco_cursos = raw["cursos"]
+                if isinstance(raw.get("cohorte"), dict) and raw["cohorte"]:
+                    self.cohorte = raw["cohorte"]
+                    self.coh_nombre_var.set(self.cohorte.get("nombre", ""))
+                    self.coh_estado_var.set(self.cohorte.get("estado", ""))
+                    self.coh_link_var.set(self.cohorte.get("link", ""))
+                if raw.get("titulo_oferta"):
+                    self.titulo_oferta_var.set(raw["titulo_oferta"])
+            else:
+                raise ValueError("Formato de archivo no reconocido.")
             self._save_banco_json()
             self._refresh_banco_tree()
             self._refresh_cohorte_panel()
@@ -1251,9 +1446,11 @@ class GeneradorMoodle(ctk.CTk):
             for entry in self.cohorte.get("cursos", []):
                 bidx = entry.get("banco_idx", -1)
                 etiqueta = entry.get("etiqueta", "")
+                insc_cerrada = entry.get("insc_cerrada", False)
                 if 0 <= bidx < len(self.banco_cursos):
                     c = dict(self.banco_cursos[bidx])
                     c["etiqueta"] = etiqueta
+                    c["insc_cerrada"] = insc_cerrada
                     result.append(c)
             return result
 
@@ -1314,48 +1511,27 @@ class GeneradorMoodle(ctk.CTk):
                 '</body></html>'
             )
 
-        def _make_acordeon_inet(titulo, sintesis, info_url, ins_url,
-                                familia="", nivel="", destinatarios="", conocimientos="",
-                                compacto=False):
-            pad = "6px 0" if not compacto else "4px 0"
-            partes = []
-            _S_LBL = "font-size:0.82rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;"
-            _S_VAL = "font-size:0.9rem;color:#1e2a4a;margin:0 0 8px 0;"
-            for label, val in (
-                ("Familia profesional", familia),
-                ("Nivel", nivel),
-                ("Destinatarios", destinatarios),
-                ("Conocimientos previos", conocimientos),
-            ):
-                if val:
-                    partes.append(
-                        f'<p style="{_S_LBL}">{label}</p>'
-                        f'<p style="{_S_VAL}">{val}</p>'
-                    )
-            if sintesis:
-                partes.append(
-                    f'<p style="font-size:0.9rem;color:#374151;line-height:1.6;margin:0 0 10px 0;">{sintesis}</p>'
-                )
-            if ins_url:
-                partes.append(
-                    f'<a href="{ins_url}" target="_blank" '
-                    f'style="display:block;text-align:center;padding:9px;border-radius:8px;'
-                    f'background:#45658d;color:white;font-size:0.92rem;font-weight:700;'
-                    f'text-decoration:none;">Inscribirse →</a>'
-                )
-            if not partes:
-                partes.append(
-                    '<span style="font-size:0.9rem;color:#9ca3af;">Consultá disponibilidad.</span>'
-                )
-            contenido = "".join(partes)
+        def _attr(s):
+            return (s or "").replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;").replace(">", "&gt;")
+
+        def _make_popup_btn(titulo, sintesis, ins_url,
+                            familia="", nivel="", destinatarios="", conocimientos="",
+                            insc_cerrada=False):
+            cl_attr = 'data-cl="1" ' if insc_cerrada else ''
             return (
-                f'<details style="margin-top:4px;">'
-                f'<summary style="cursor:pointer;font-size:0.92rem;font-weight:600;'
-                f'color:#45658d;padding:{pad};border-top:1px solid #eee;'
-                f'list-style:none;user-select:none;">'
-                f'▶ Más información e inscripción</summary>'
-                f'<div style="padding:10px 0 4px 0;">{contenido}</div>'
-                f'</details>'
+                f'<button type="button" onclick="cnetPop(this)" '
+                f'data-t="{_attr(titulo)}" '
+                f'data-f="{_attr(familia)}" '
+                f'data-n="{_attr(nivel)}" '
+                f'data-d="{_attr(destinatarios)}" '
+                f'data-c="{_attr(conocimientos)}" '
+                f'data-s="{_attr(sintesis)}" '
+                f'data-i="{_attr(ins_url)}" '
+                f'{cl_attr}'
+                f'style="display:block;width:100%;text-align:center;padding:9px 10px;'
+                f'border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;'
+                f'background:#45658d;color:white;border:none;font-family:inherit;'
+                f'box-sizing:border-box;">Más información e inscripción</button>'
             )
 
         # ── Estilos inline ──
@@ -1391,7 +1567,8 @@ class GeneradorMoodle(ctk.CTk):
             for c in nuevos:
                 tit           = c.get("titulo", "")
                 img_url       = c.get("img", "")
-                ins_url       = c.get("form_externo", "") or coh_link
+                insc_cerrada  = c.get("insc_cerrada", False)
+                ins_url       = "" if insc_cerrada else (c.get("form_externo", "") or coh_link)
                 cat_n         = c.get("categoria", "")
                 familia       = c.get("familia_prof", "")
                 nivel         = c.get("nivel", "")
@@ -1399,9 +1576,10 @@ class GeneradorMoodle(ctk.CTk):
                 conocimientos = c.get("conocimientos", "")
                 sintesis      = c.get("sintesis", "")
                 search        = f"{tit.lower()} {cat_n.lower()} nuevo"
-                accion_html = _make_acordeon_inet(
-                    tit, sintesis, "", ins_url,
-                    familia, nivel, destinatarios, conocimientos
+                accion_html = _make_popup_btn(
+                    tit, sintesis, ins_url,
+                    familia, nivel, destinatarios, conocimientos,
+                    insc_cerrada=insc_cerrada
                 )
                 cc = _cat_color(cat_n)
                 if img_url:
@@ -1412,6 +1590,11 @@ class GeneradorMoodle(ctk.CTk):
                     )
                 else:
                     imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
+                cerrada_badge = (
+                    '<span style="background:#ef4444;color:white;font-size:0.8rem;'
+                    'font-weight:700;padding:2px 9px;border-radius:999px;'
+                    'display:inline-block;margin-bottom:4px;">🔒 Inscripción cerrada</span>'
+                ) if insc_cerrada else ""
                 nuevos_cards += (
                     f'<div data-search="{search}" style="background:white;border-radius:12px;'
                     f'border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.05);'
@@ -1421,6 +1604,7 @@ class GeneradorMoodle(ctk.CTk):
                     f'<span style="background:#22c55e;color:white;font-size:0.8rem;'
                     f'font-weight:700;padding:2px 9px;border-radius:999px;'
                     f'display:inline-block;margin-bottom:4px;">🆕 Nuevo</span>'
+                    f'{cerrada_badge}'
                     f'<p style="font-size:1rem;font-weight:600;color:#1e2a4a;'
                     f'line-height:1.4;margin:0;">{tit}</p>'
                     f'<div style="margin-top:auto;">{accion_html}</div>'
@@ -1462,7 +1646,8 @@ class GeneradorMoodle(ctk.CTk):
             for c in por_cat_activa[cat]:
                 tit           = c.get("titulo", "")
                 img_url       = c.get("img", "")
-                ins_url       = c.get("form_externo", "") or coh_link
+                insc_cerrada  = c.get("insc_cerrada", False)
+                ins_url       = "" if insc_cerrada else (c.get("form_externo", "") or coh_link)
                 etiqueta      = c.get("etiqueta", "")
                 familia       = c.get("familia_prof", "")
                 nivel         = c.get("nivel", "")
@@ -1485,9 +1670,17 @@ class GeneradorMoodle(ctk.CTk):
                 else:
                     badge_html = ""
 
-                accion_html = _make_acordeon_inet(
-                    tit, sintesis, "", ins_url,
-                    familia, nivel, destinatarios, conocimientos
+                if insc_cerrada:
+                    badge_html += (
+                        '<span style="background:#ef4444;color:white;font-size:0.8rem;'
+                        'font-weight:700;padding:2px 9px;border-radius:999px;'
+                        'display:inline-block;margin-bottom:4px;">🔒 Inscripción cerrada</span>'
+                    )
+
+                accion_html = _make_popup_btn(
+                    tit, sintesis, ins_url,
+                    familia, nivel, destinatarios, conocimientos,
+                    insc_cerrada=insc_cerrada
                 )
                 cc = _cat_color(cat)
                 if img_url:
@@ -1528,8 +1721,60 @@ class GeneradorMoodle(ctk.CTk):
                 f'{cards}</div></div>'
             )
 
+        popup_html = (
+            '<div id="cnetPop" onclick="if(event.target===this)cnetClose()" '
+            'style="display:none;position:fixed;inset:0;z-index:9999;'
+            'background:rgba(0,0,0,.65);align-items:center;justify-content:center;padding:16px;">'
+            '<div style="background:#fff;border-radius:14px;width:min(580px,95vw);'
+            'max-height:85vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.4);'
+            'display:flex;flex-direction:column;">'
+            # Cabecera
+            '<div style="display:flex;align-items:center;gap:12px;padding:14px 18px;'
+            'background:linear-gradient(135deg,#1e2a4a 0%,#45658d 100%);'
+            'border-radius:14px 14px 0 0;flex-shrink:0;">'
+            '<span id="cnetPopT" style="flex:1;font-size:1rem;font-weight:700;'
+            'color:white;line-height:1.3;"></span>'
+            '<button onclick="cnetClose()" type="button" '
+            'style="background:rgba(255,255,255,.15);color:white;border:none;'
+            'border-radius:8px;padding:5px 12px;cursor:pointer;font-size:0.9rem;'
+            'font-family:inherit;">✕ Cerrar</button>'
+            '</div>'
+            # Cuerpo
+            '<div id="cnetPopB" style="padding:20px 22px;flex:1;"></div>'
+            # Pie
+            '<div id="cnetPopF" style="padding:12px 22px 16px;border-top:1px solid #e5e7eb;'
+            'flex-shrink:0;"></div>'
+            '</div></div>\n'
+        )
+
         script = (
             f'<script>\n'
+            f'function cnetEsc(s){{return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}}\n'
+            f'function cnetPop(b){{\n'
+            f'  var d=b.dataset;\n'
+            f'  document.getElementById("cnetPopT").textContent=d.t||"";\n'
+            f'  var lbl="font-size:0.82rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;margin:0 0 2px;";\n'
+            f'  var val="font-size:0.9rem;color:#1e2a4a;margin:0 0 12px;";\n'
+            f'  var h="";\n'
+            f'  if(d.f)h+=\'<p style="\'+lbl+\'">Familia profesional</p><p style="\'+val+\'">\'+cnetEsc(d.f)+\'</p>\';\n'
+            f'  if(d.n)h+=\'<p style="\'+lbl+\'">Nivel</p><p style="\'+val+\'">\'+cnetEsc(d.n)+\'</p>\';\n'
+            f'  if(d.d)h+=\'<p style="\'+lbl+\'">Destinatarios</p><p style="\'+val+\'">\'+cnetEsc(d.d)+\'</p>\';\n'
+            f'  if(d.c)h+=\'<p style="\'+lbl+\'">Conocimientos previos</p><p style="\'+val+\'">\'+cnetEsc(d.c)+\'</p>\';\n'
+            f'  if(d.s)h+=\'<p style="font-size:0.9rem;color:#374151;line-height:1.65;margin:0;">\'+cnetEsc(d.s)+\'</p>\';\n'
+            f'  if(!h)h=\'<p style="color:#9ca3af;">Sin información adicional.</p>\';\n'
+            f'  document.getElementById("cnetPopB").innerHTML=h;\n'
+            f'  var fp=document.getElementById("cnetPopF");\n'
+            f'  if(d.cl){{fp.innerHTML=\'<p style="text-align:center;padding:8px 10px;border-radius:8px;background:#fef2f2;color:#b91c1c;font-size:0.92rem;font-weight:700;margin:0;">🔒 Inscripción cerrada</p>\';fp.style.display="";}}\n'
+            f'  else if(d.i){{fp.innerHTML=\'<a href="\'+d.i+\'" target="_blank" style="display:block;text-align:center;padding:10px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;">Inscribirse →</a>\';fp.style.display="";}}\n'
+            f'  else{{fp.innerHTML="";fp.style.display="none";}}\n'
+            f'  document.getElementById("cnetPop").style.display="flex";\n'
+            f'  document.body.style.overflow="hidden";\n'
+            f'}}\n'
+            f'function cnetClose(){{\n'
+            f'  document.getElementById("cnetPop").style.display="none";\n'
+            f'  document.body.style.overflow="";\n'
+            f'}}\n'
+            f'document.addEventListener("keydown",function(e){{if(e.key==="Escape")cnetClose();}})\n'
             f'function cnetFiltro(val){{\n'
             f'  var inp=document.getElementById("cnetSearch");\n'
             f'  if(inp)inp.value=val;\n'
@@ -1588,6 +1833,9 @@ class GeneradorMoodle(ctk.CTk):
 
         return (
             f'<div style="font-family:\'Segoe UI\',Arial,sans-serif;color:#333;line-height:1.5;">\n'
+
+            # Popup de información (oculto por defecto, compartido por todas las cards)
+            f'{popup_html}'
 
             # Hero y header de cohorte (solo CeNET; INET los omite, WordPress ya tiene su propio header)
             f'{_hero_html}'
