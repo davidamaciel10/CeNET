@@ -140,7 +140,6 @@ class GeneradorMoodle(ctk.CTk):
         self.cat_var           = tk.StringVar()
         self.img_var           = tk.StringVar()
         self.desc_var          = tk.StringVar()
-        self.inf_var           = tk.StringVar()
         self.ext_var           = tk.StringVar()
         self.familia_var       = tk.StringVar()
         self.nivel_var         = tk.StringVar()
@@ -427,13 +426,6 @@ class GeneradorMoodle(ctk.CTk):
         )
         self.sintesis_box.pack(fill="x", padx=14, pady=(0, 4))
 
-        # URL Más Info
-        self._label(card_form, "URL Más Info  (opcional, si hay página externa)", muted=True).pack(
-            anchor="w", padx=14, pady=(6, 1))
-        self._entry(card_form, textvariable=self.inf_var, width=0,
-                    placeholder="https://...").pack(
-            fill="x", padx=14, pady=(0, 4))
-
         # Formulario externo
         self._label(card_form, "Formulario externo", muted=True).pack(
             anchor="w", padx=14, pady=(6, 1))
@@ -539,7 +531,7 @@ class GeneradorMoodle(ctk.CTk):
         tree_frame.grid_rowconfigure(0, weight=1)
         tree_frame.grid_columnconfigure(0, weight=1)
 
-        cols = ("Titulo", "Categoria", "Descripcion", "Imagen", "Info", "Externo")
+        cols = ("Titulo", "Categoria", "Descripcion", "Imagen", "Externo")
         self.banco_tree = ttk.Treeview(
             tree_frame, columns=cols, show="headings",
             style="Dark.Treeview", selectmode="extended"
@@ -549,12 +541,11 @@ class GeneradorMoodle(ctk.CTk):
             "Categoria":   "Categoría",
             "Descripcion": "Descripción",
             "Imagen":      "URL Imagen",
-            "Info":        "URL Info",
             "Externo":     "Form. externo",
         }
         _COL_WIDTHS = {
             "Titulo": 240, "Categoria": 160, "Descripcion": 200,
-            "Imagen": 140, "Info": 140, "Externo": 120,
+            "Imagen": 140, "Externo": 140,
         }
         self._col_labels = _COL_LABELS
         for col in cols:
@@ -829,7 +820,6 @@ class GeneradorMoodle(ctk.CTk):
                 c.get("categoria", ""),
                 desc[:60] + ("…" if len(desc) > 60 else "") if desc else "",
                 c.get("img", ""),
-                c.get("info", ""),
                 ext if ext else "",
             ))
         n = len(self.banco_cursos)
@@ -851,7 +841,6 @@ class GeneradorMoodle(ctk.CTk):
             "categoria":      self.cat_var.get().strip() or "Sin categoría",
             "img":            self.img_var.get().strip(),
             "descripcion":    desc,
-            "info":           self.inf_var.get().strip(),
             "familia_prof":   self.familia_var.get().strip(),
             "nivel":          self.nivel_var.get().strip(),
             "destinatarios":  self.dest_var.get().strip(),
@@ -890,7 +879,6 @@ class GeneradorMoodle(ctk.CTk):
         self.cat_var.set(c.get("categoria", ""))
         self.img_var.set(c.get("img", ""))
         self.desc_var.set(c.get("descripcion", ""))
-        self.inf_var.set(c.get("info", ""))
         self.ext_var.set(c.get("form_externo", ""))
         self.familia_var.set(c.get("familia_prof", ""))
         self.nivel_var.set(c.get("nivel", ""))
@@ -1072,7 +1060,7 @@ class GeneradorMoodle(ctk.CTk):
     def _banco_limpiar_form(self):
         """Limpia los campos del formulario del banco."""
         for v in (self.tit_var, self.cat_var, self.img_var, self.desc_var,
-                  self.inf_var, self.ext_var, self.familia_var, self.nivel_var,
+                  self.ext_var, self.familia_var, self.nivel_var,
                   self.dest_var, self.conoc_var, self.curso_previo_var):
             v.set("")
         if self.sintesis_box:
@@ -1109,7 +1097,7 @@ class GeneradorMoodle(ctk.CTk):
         field_map = {
             "Titulo": "titulo", "Categoria": "categoria",
             "Descripcion": "descripcion", "Imagen": "img",
-            "Info": "info", "Externo": "form_externo",
+            "Externo": "form_externo",
         }
         field = field_map.get(col, col.lower())
         if self._sort_state["col"] == col:
@@ -1170,7 +1158,6 @@ class GeneradorMoodle(ctk.CTk):
             "categoria": "categoria", "category": "categoria",
             "img": "img", "imagen": "img", "image": "img", "url_imagen": "img",
             "descripcion": "descripcion", "description": "descripcion",
-            "info": "info", "url_info": "info",
             "form_externo": "form_externo", "formulario_externo": "form_externo",
             "familia_prof": "familia_prof", "familia": "familia_prof",
             "nivel": "nivel",
