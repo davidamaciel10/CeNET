@@ -150,6 +150,7 @@ class GeneradorMoodle(ctk.CTk):
         self._cat_nueva_var    = tk.StringVar()
         self._banco_filtro_var = tk.StringVar()
         self.sintesis_box      = None  # CTkTextbox; assigned in _build_tab_banco
+        self._banco_disp_vars  = {}    # bidx -> BooleanVar para banco disponible
 
         self._setup_ttk_theme()
         self._build_ui()
@@ -514,8 +515,6 @@ class GeneradorMoodle(ctk.CTk):
                   color="ghost", height=32, width=42).pack(side="right", padx=2)
         self._btn(abar, "▲", self._banco_subir,
                   color="ghost", height=32, width=42).pack(side="right", padx=2)
-        self._btn(abar, "📊 CSV", self._banco_importar_csv,
-                  color="info", height=32, width=90).pack(side="left", padx=(8, 2))
 
         # Barra de búsqueda
         filtro_frame = ctk.CTkFrame(right, fg_color="transparent")
@@ -663,7 +662,7 @@ class GeneradorMoodle(ctk.CTk):
         coh_cols = ("Titulo", "Categoria", "Etiqueta")
         self.coh_tree = ttk.Treeview(
             coh_tree_frame, columns=coh_cols, show="headings",
-            style="Dark.Treeview", selectmode="browse"
+            style="Dark.Treeview", selectmode="extended"
         )
         for col, w, lbl in [
             ("Titulo",    300, "Título"),
@@ -697,9 +696,9 @@ class GeneradorMoodle(ctk.CTk):
         self.lbl_banco_disp_count = self._label(bot_header, "0", size=11, muted=True)
         self.lbl_banco_disp_count.pack(side="left", padx=4)
         self._btn(bot_header, "Agregar todos", self._banco_agregar_todos,
-                  color="accent", height=28, width=120).pack(side="right", padx=8)
-        self._label(bot_header, "☑ Tildar para agregar", size=11, muted=True).pack(
-            side="right", padx=4)
+                  color="ghost", height=28, width=115).pack(side="right", padx=(2, 4))
+        self._btn(bot_header, "Agregar seleccionados", self._banco_agregar_seleccionados,
+                  color="accent", height=28, width=175).pack(side="right", padx=2)
 
         self._banco_disp_frame = ctk.CTkScrollableFrame(
             bot_frame, fg_color="transparent",
@@ -1218,15 +1217,18 @@ class GeneradorMoodle(ctk.CTk):
     def _refresh_banco_disponible(self):
         for w in self._banco_disp_frame.winfo_children():
             w.destroy()
+        self._banco_disp_vars = {}
         ya_en_coh = {entry.get("banco_idx") for entry in self.cohorte.get("cursos", [])}
         disponibles = [(bidx, c) for bidx, c in enumerate(self.banco_cursos) if bidx not in ya_en_coh]
         self.lbl_banco_disp_count.configure(
             text=f"{len(disponibles)} disponible{'s' if len(disponibles) != 1 else ''}")
         for bidx, c in disponibles:
+            var = tk.BooleanVar(value=False)
+            self._banco_disp_vars[bidx] = var
             texto = f"{c.get('titulo','')}  [{c.get('categoria','')}]"
             cb = ctk.CTkCheckBox(
                 self._banco_disp_frame, text=texto,
-                command=lambda b=bidx: self._banco_toggle_add(b),
+                variable=var,
                 fg_color=COLORS["accent"], hover_color=COLORS["accent_hover"],
                 border_color=COLORS["border"], text_color=COLORS["text"],
                 font=ctk.CTkFont(family="Segoe UI", size=12),
@@ -1234,20 +1236,30 @@ class GeneradorMoodle(ctk.CTk):
             )
             cb.pack(anchor="w", padx=8, pady=2)
 
-    def _banco_toggle_add(self, banco_idx):
+    def _banco_agregar_seleccionados(self):
         ya_en_coh = {entry.get("banco_idx") for entry in self.cohorte.get("cursos", [])}
-        if banco_idx not in ya_en_coh:
-            self.cohorte["cursos"].append({"banco_idx": banco_idx, "etiqueta": ""})
-        self._refresh_cohorte_panel()
-        self._marcar_cambio()
+        agregados = 0
+        for bidx, var in self._banco_disp_vars.items():
+            if var.get() and bidx not in ya_en_coh:
+                self.cohorte["cursos"].append({"banco_idx": bidx, "etiqueta": ""})
+                agregados += 1
+        if agregados:
+            self._refresh_cohorte_panel()
+            self._marcar_cambio()
 
     def _coh_quitar_curso(self):
-        pos = self._coh_sel_idx()
-        if pos is None:
-            messagebox.showinfo("Info", "Seleccioná un curso para quitar.", parent=self)
+        selected = self.coh_tree.selection()
+        if not selected:
+            messagebox.showinfo("Info", "Seleccioná uno o más cursos para quitar.", parent=self)
             return
-        del self.cohorte["cursos"][pos]
+        indices = sorted(
+            [int(self.coh_tree.item(item, "tags")[0]) for item in selected],
+            reverse=True
+        )
+        for pos in indices:
+            del self.cohorte["cursos"][pos]
         self._refresh_cohorte_panel()
+        self._marcar_cambio()
 
     def _coh_set_etiqueta(self, etiqueta):
         pos = self._coh_sel_idx()
@@ -1609,21 +1621,12 @@ class GeneradorMoodle(ctk.CTk):
                     )
                 else:
                     imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
-                cerrada_badge = (
-                    '<span style="background:#ef4444;color:white;font-size:0.8rem;'
-                    'font-weight:700;padding:2px 9px;border-radius:999px;'
-                    'display:inline-block;margin-bottom:4px;">🔒 Inscripción cerrada</span>'
-                ) if insc_cerrada else ""
                 nuevos_cards += (
                     f'<div data-search="{search}" style="background:white;border-radius:12px;'
                     f'border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,.05);'
                     f'overflow:hidden;display:flex;flex-direction:column;">'
                     f'{imagen_html}'
                     f'<div style="padding:12px;flex:1;display:flex;flex-direction:column;gap:6px;">'
-                    f'<span style="background:#22c55e;color:white;font-size:0.8rem;'
-                    f'font-weight:700;padding:2px 9px;border-radius:999px;'
-                    f'display:inline-block;margin-bottom:4px;">🆕 Nuevo</span>'
-                    f'{cerrada_badge}'
                     f'<p style="font-size:1rem;font-weight:600;color:#1e2a4a;'
                     f'line-height:1.4;margin:0;">{tit}</p>'
                     f'<div style="margin-top:auto;">{accion_html}</div>'
@@ -1632,8 +1635,8 @@ class GeneradorMoodle(ctk.CTk):
             bloque_nuevos = (
                 f'<div style="max-width:1200px;margin:0 auto 28px;padding:0 16px;">'
                 f'<div style="font-size:1.1rem;font-weight:700;color:#1e2a4a;'
-                f'border-bottom:2px solid #22c55e;padding-bottom:8px;margin-bottom:16px;">'
-                f'🆕 Nuevos en esta edición</div>'
+                f'border-bottom:2px solid #45658d;padding-bottom:8px;margin-bottom:16px;">'
+                f'Nuevos en esta edición</div>'
                 f'<div id="secNuevos" style="display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));">{nuevos_cards}</div></div>\n'
             )
 
@@ -1662,7 +1665,12 @@ class GeneradorMoodle(ctk.CTk):
         secs_activa = ""
         for cat_idx, cat in enumerate(cats_activa_orden):
             cards = ""
-            for c in por_cat_activa[cat]:
+            # Destacados primero dentro de la categoría
+            cursos_cat = sorted(
+                por_cat_activa[cat],
+                key=lambda x: 0 if x.get("etiqueta") == "Destacado" else 1
+            )
+            for c in cursos_cat:
                 tit           = c.get("titulo", "")
                 img_url       = c.get("img", "")
                 insc_cerrada  = c.get("insc_cerrada", False)
@@ -1675,27 +1683,6 @@ class GeneradorMoodle(ctk.CTk):
                 sintesis       = c.get("sintesis", "")
                 requisito_insc = c.get("requisito_insc", "")
                 search         = f"{tit.lower()} {cat.lower()} {etiqueta.lower()}"
-                if etiqueta == "Destacado":
-                    badge_html = (
-                        '<span style="background:#d4a843;color:white;font-size:0.8rem;'
-                        'font-weight:700;padding:2px 9px;border-radius:999px;'
-                        'display:inline-block;margin-bottom:4px;">⭐ Destacado</span>'
-                    )
-                elif etiqueta == "Nuevo":
-                    badge_html = (
-                        '<span style="background:#22c55e;color:white;font-size:0.8rem;'
-                        'font-weight:700;padding:2px 9px;border-radius:999px;'
-                        'display:inline-block;margin-bottom:4px;">🆕 Nuevo</span>'
-                    )
-                else:
-                    badge_html = ""
-
-                if insc_cerrada:
-                    badge_html += (
-                        '<span style="background:#ef4444;color:white;font-size:0.8rem;'
-                        'font-weight:700;padding:2px 9px;border-radius:999px;'
-                        'display:inline-block;margin-bottom:4px;">🔒 Inscripción cerrada</span>'
-                    )
 
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
@@ -1719,7 +1706,6 @@ class GeneradorMoodle(ctk.CTk):
                     f'display:flex;flex-direction:column;">'
                     f'{imagen_html}'
                     f'<div style="padding:14px;flex:1;display:flex;flex-direction:column;gap:8px;">'
-                    f'{badge_html}'
                     f'<p style="font-size:1rem;font-weight:600;color:#1e2a4a;'
                     f'line-height:1.4;margin:0;min-height:38px;">{tit}</p>'
                     f'<div style="margin-top:auto;">{accion_html}</div>'
@@ -1785,8 +1771,8 @@ class GeneradorMoodle(ctk.CTk):
             f'  if(!h)h=\'<p style="color:#9ca3af;">Sin información adicional.</p>\';\n'
             f'  document.getElementById("cnetPopB").innerHTML=h;\n'
             f'  var fp=document.getElementById("cnetPopF");\n'
-            f'  if(d.cl){{fp.innerHTML=\'<p style="text-align:center;padding:8px 10px;border-radius:8px;background:#fef2f2;color:#b91c1c;font-size:0.92rem;font-weight:700;margin:0;">🔒 Inscripción cerrada</p>\';fp.style.display="";}}\n'
-            f'  else if(d.i){{var btn_txt=d.i.indexOf("mailto:")===0?"Inscribirse por mail →":"Inscribirse →";fp.innerHTML=\'<a href="\'+d.i+\'" target="_blank" style="display:block;text-align:center;padding:10px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;">\'+btn_txt+\'</a>\';fp.style.display="";}}\n'
+            f'  if(d.cl){{fp.innerHTML=\'<p style="text-align:center;padding:8px 10px;border-radius:8px;background:#f3f4f6;color:#6b7280;font-size:0.92rem;font-weight:600;margin:0;">Inscripción no disponible</p>\';fp.style.display="";}}\n'
+            f'  else if(d.i){{var is_mail=d.i.indexOf("mailto:")===0;var btn_txt=is_mail?"Para inscribirse: "+d.i.substring(7):"Inscribirse →";fp.innerHTML=\'<a href="\'+d.i+\'" style="display:block;text-align:center;padding:10px 14px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;word-break:break-all;">\'+btn_txt+\'</a>\';fp.style.display="";}}\n'
             f'  else{{fp.innerHTML="";fp.style.display="none";}}\n'
             f'  document.getElementById("cnetPop").style.display="flex";\n'
             f'  document.body.style.overflow="hidden";\n'
