@@ -145,11 +145,12 @@ class GeneradorMoodle(ctk.CTk):
         self.familia_var       = tk.StringVar()
         self.nivel_var         = tk.StringVar()
         self.dest_var          = tk.StringVar()
-        self.conoc_var         = tk.StringVar()
-        self.req_insc_var      = tk.StringVar()
-        self.mail_instr_var    = tk.StringVar()
-        self._cat_nueva_var    = tk.StringVar()
-        self._banco_filtro_var = tk.StringVar()
+        self.conoc_var          = tk.StringVar()
+        self.curso_previo_var   = tk.StringVar()
+        self.mail_instr_var     = tk.StringVar()
+        self._cat_nueva_var     = tk.StringVar()
+        self._banco_filtro_var  = tk.StringVar()
+        self._mutual_exc_guard  = False
         self.sintesis_box      = None  # CTkTextbox; assigned in _build_tab_banco
         self._banco_disp_vars  = {}    # bidx -> BooleanVar para banco disponible
 
@@ -161,6 +162,10 @@ class GeneradorMoodle(ctk.CTk):
         self.coh_estado_var.trace_add("write", self._save_coh_edit)
         self.coh_link_var.trace_add("write",   self._save_coh_edit)
         self.titulo_oferta_var.trace_add("write", lambda *_: self._save_banco_json())
+
+        # Exclusión mutua: curso previo <-> conocimientos previos
+        self.curso_previo_var.trace_add("write", self._on_curso_previo_changed)
+        self.conoc_var.trace_add("write",        self._on_conoc_changed)
 
     # ─────────────────────────────────────────
     # INDICADOR DE CAMBIOS
@@ -404,9 +409,9 @@ class GeneradorMoodle(ctk.CTk):
         # Conocimientos previos
         self._label(card_form, "Conocimientos previos", muted=True).pack(
             anchor="w", padx=14, pady=(6, 1))
-        self._entry(card_form, textvariable=self.conoc_var, width=0,
-                    placeholder="Ej: No se requieren").pack(
-            fill="x", padx=14, pady=(0, 4))
+        self._conoc_entry = self._entry(card_form, textvariable=self.conoc_var, width=0,
+                    placeholder="Ej: No se requieren")
+        self._conoc_entry.pack(fill="x", padx=14, pady=(0, 4))
 
         # Síntesis (multilinea)
         self._label(card_form, "Síntesis", muted=True).pack(
@@ -443,18 +448,18 @@ class GeneradorMoodle(ctk.CTk):
                     placeholder="https://  o  mailto:correo@dominio.com").pack(
             fill="x", padx=14, pady=(2, 4))
 
-        # Requisito de inscripción
-        self._label(card_form, "Requisito de inscripción", muted=True).pack(
+        # Requisito de curso previo
+        self._label(card_form, "Requisito de curso previo", muted=True).pack(
             anchor="w", padx=14, pady=(6, 1))
         self._label(
             card_form,
-            "Si existe un requisito previo (ej: haber aprobado otro curso), se muestra\n"
-            "como advertencia en el popup. La card no cambia visualmente.",
+            "Completar si el curso requiere haber aprobado otro. Excluye\n"
+            "Conocimientos previos. Aparece como advertencia en el popup.",
             size=10, muted=True
         ).pack(anchor="w", padx=14)
-        self._entry(card_form, textvariable=self.req_insc_var, width=0,
-                    placeholder="Ej: Es necesario haber aprobado el curso Tecnología neumática").pack(
-            fill="x", padx=14, pady=(2, 4))
+        self._curso_previo_entry = self._entry(card_form, textvariable=self.curso_previo_var, width=0,
+                    placeholder="Ej: Es necesario haber aprobado el curso Tecnología neumática")
+        self._curso_previo_entry.pack(fill="x", padx=14, pady=(2, 4))
 
         # Instrucción de mail
         self._label(card_form, "Instrucción de inscripción por mail", muted=True).pack(
@@ -865,8 +870,8 @@ class GeneradorMoodle(ctk.CTk):
             "nivel":          self.nivel_var.get().strip(),
             "destinatarios":  self.dest_var.get().strip(),
             "conocimientos":  self.conoc_var.get().strip(),
-            "sintesis":       sintesis_txt,
-            "requisito_insc": self.req_insc_var.get().strip(),
+            "sintesis":        sintesis_txt,
+            "curso_previo":    self.curso_previo_var.get().strip(),
             "mail_instruccion": self.mail_instr_var.get().strip(),
         }
         if ext:
@@ -906,7 +911,7 @@ class GeneradorMoodle(ctk.CTk):
         self.nivel_var.set(c.get("nivel", ""))
         self.dest_var.set(c.get("destinatarios", ""))
         self.conoc_var.set(c.get("conocimientos", ""))
-        self.req_insc_var.set(c.get("requisito_insc", ""))
+        self.curso_previo_var.set(c.get("curso_previo", "") or c.get("requisito_insc", ""))
         self.mail_instr_var.set(c.get("mail_instruccion", ""))
         if self.sintesis_box:
             self.sintesis_box.delete("1.0", "end")
@@ -1083,10 +1088,36 @@ class GeneradorMoodle(ctk.CTk):
         """Limpia los campos del formulario del banco."""
         for v in (self.tit_var, self.cat_var, self.img_var, self.desc_var,
                   self.inf_var, self.ext_var, self.familia_var, self.nivel_var,
-                  self.dest_var, self.conoc_var, self.req_insc_var, self.mail_instr_var):
+                  self.dest_var, self.conoc_var, self.curso_previo_var, self.mail_instr_var):
             v.set("")
         if self.sintesis_box:
             self.sintesis_box.delete("1.0", "end")
+
+    def _on_curso_previo_changed(self, *_):
+        if self._mutual_exc_guard:
+            return
+        if self.curso_previo_var.get().strip():
+            self._mutual_exc_guard = True
+            self.conoc_var.set("")
+            self._mutual_exc_guard = False
+            if hasattr(self, "_conoc_entry"):
+                self._conoc_entry.configure(state="disabled")
+        else:
+            if hasattr(self, "_conoc_entry"):
+                self._conoc_entry.configure(state="normal")
+
+    def _on_conoc_changed(self, *_):
+        if self._mutual_exc_guard:
+            return
+        if self.conoc_var.get().strip():
+            self._mutual_exc_guard = True
+            self.curso_previo_var.set("")
+            self._mutual_exc_guard = False
+            if hasattr(self, "_curso_previo_entry"):
+                self._curso_previo_entry.configure(state="disabled")
+        else:
+            if hasattr(self, "_curso_previo_entry"):
+                self._curso_previo_entry.configure(state="normal")
 
     def _banco_sort(self, col):
         """Ordena banco_cursos por la columna indicada y remapea índices de cohorte."""
@@ -1219,8 +1250,11 @@ class GeneradorMoodle(ctk.CTk):
             insc_cerrada = entry.get("insc_cerrada", False)
             if 0 <= bidx < len(self.banco_cursos):
                 c = self.banco_cursos[bidx]
+                tiene_previo = bool(c.get("curso_previo", "") or c.get("requisito_insc", ""))
                 if insc_cerrada:
                     etiq_display = f"🔒 {etiqueta}" if etiqueta else "🔒 Cerrada"
+                elif tiene_previo:
+                    etiq_display = f"◆ {etiqueta}" if etiqueta else "◆ Previo"
                 else:
                     etiq_display = etiqueta if etiqueta else "—"
                 self.coh_tree.insert("", "end", tags=(str(i),), values=(
@@ -1582,7 +1616,7 @@ class GeneradorMoodle(ctk.CTk):
 
         def _make_popup_btn(titulo, sintesis, ins_url,
                             familia="", nivel="", destinatarios="", conocimientos="",
-                            insc_cerrada=False, requisito_insc="", mail_instruccion=""):
+                            insc_cerrada=False, curso_previo="", mail_instruccion=""):
             cl_attr = 'data-cl="1" ' if insc_cerrada else ''
             return (
                 f'<button type="button" onclick="cnetPop(this)" '
@@ -1593,7 +1627,7 @@ class GeneradorMoodle(ctk.CTk):
                 f'data-c="{_attr(conocimientos)}" '
                 f'data-s="{_attr(sintesis)}" '
                 f'data-i="{_attr(ins_url)}" '
-                f'data-r="{_attr(requisito_insc)}" '
+                f'data-r="{_attr(curso_previo)}" '
                 f'data-m="{_attr(mail_instruccion)}" '
                 f'{cl_attr}'
                 f'style="display:block;width:100%;text-align:center;padding:9px 10px;'
@@ -1643,12 +1677,12 @@ class GeneradorMoodle(ctk.CTk):
                 destinatarios = c.get("destinatarios", "")
                 conocimientos  = c.get("conocimientos", "")
                 sintesis       = c.get("sintesis", "")
-                requisito_insc = c.get("requisito_insc", "")
+                curso_previo = c.get("curso_previo", "") or c.get("requisito_insc", "")
                 search         = f"{tit.lower()} {cat_n.lower()} nuevo"
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos,
-                    insc_cerrada=insc_cerrada, requisito_insc=requisito_insc,
+                    insc_cerrada=insc_cerrada, curso_previo=curso_previo,
                     mail_instruccion=c.get("mail_instruccion", "")
                 )
                 cc = _cat_color(cat_n)
@@ -1720,13 +1754,13 @@ class GeneradorMoodle(ctk.CTk):
                 destinatarios = c.get("destinatarios", "")
                 conocimientos  = c.get("conocimientos", "")
                 sintesis       = c.get("sintesis", "")
-                requisito_insc = c.get("requisito_insc", "")
+                curso_previo = c.get("curso_previo", "") or c.get("requisito_insc", "")
                 search         = f"{tit.lower()} {cat.lower()} {etiqueta.lower()}"
 
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos,
-                    insc_cerrada=insc_cerrada, requisito_insc=requisito_insc,
+                    insc_cerrada=insc_cerrada, curso_previo=curso_previo,
                     mail_instruccion=c.get("mail_instruccion", "")
                 )
                 cc = _cat_color(cat)
@@ -1802,11 +1836,11 @@ class GeneradorMoodle(ctk.CTk):
             f'  var lbl="font-size:0.82rem;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.04em;margin:0 0 2px;";\n'
             f'  var val="font-size:0.9rem;color:#1e2a4a;margin:0 0 12px;";\n'
             f'  var h="";\n'
-            f'  if(d.r)h+=\'<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;margin-bottom:14px;">\'+\'<p style="font-size:0.8rem;font-weight:700;color:#c2410c;text-transform:uppercase;letter-spacing:.04em;margin:0 0 4px;">⚠ Requisito de inscripción</p>\'+\'<p style="font-size:0.88rem;color:#7c2d12;margin:0;">\'+cnetEsc(d.r)+\'</p></div>\';\n'
+            f'  if(d.r)h+=\'<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;margin-bottom:14px;">\'+\'<p style="font-size:0.8rem;font-weight:700;color:#c2410c;text-transform:uppercase;letter-spacing:.04em;margin:0 0 4px;">⚠ Requisito de curso previo</p>\'+\'<p style="font-size:0.88rem;color:#7c2d12;margin:0;">\'+cnetEsc(d.r)+\'</p></div>\';\n'
             f'  if(d.f)h+=\'<p style="\'+lbl+\'">Familia profesional</p><p style="\'+val+\'">\'+cnetEsc(d.f)+\'</p>\';\n'
             f'  if(d.n)h+=\'<p style="\'+lbl+\'">Nivel</p><p style="\'+val+\'">\'+cnetEsc(d.n)+\'</p>\';\n'
             f'  if(d.d)h+=\'<p style="\'+lbl+\'">Destinatarios</p><p style="\'+val+\'">\'+cnetEsc(d.d)+\'</p>\';\n'
-            f'  if(d.c)h+=\'<p style="\'+lbl+\'">Conocimientos previos</p><p style="\'+val+\'">\'+cnetEsc(d.c)+\'</p>\';\n'
+            f'  if(!d.r&&d.c)h+=\'<p style="\'+lbl+\'">Conocimientos previos</p><p style="\'+val+\'">\'+cnetEsc(d.c)+\'</p>\';\n'
             f'  if(d.s)h+=\'<p style="font-size:0.9rem;color:#374151;line-height:1.65;margin:0;">\'+cnetEsc(d.s)+\'</p>\';\n'
             f'  if(!h)h=\'<p style="color:#9ca3af;">Sin información adicional.</p>\';\n'
             f'  document.getElementById("cnetPopB").innerHTML=h;\n'
