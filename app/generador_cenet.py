@@ -147,7 +147,6 @@ class GeneradorMoodle(ctk.CTk):
         self.dest_var          = tk.StringVar()
         self.conoc_var          = tk.StringVar()
         self.curso_previo_var   = tk.StringVar()
-        self.mail_instr_var     = tk.StringVar()
         self._cat_nueva_var     = tk.StringVar()
         self._banco_filtro_var  = tk.StringVar()
         self._mutual_exc_guard  = False
@@ -461,17 +460,6 @@ class GeneradorMoodle(ctk.CTk):
                     placeholder="Ej: Es necesario haber aprobado el curso Tecnología neumática")
         self._curso_previo_entry.pack(fill="x", padx=14, pady=(2, 4))
 
-        # Instrucción de mail
-        self._label(card_form, "Instrucción de inscripción por mail", muted=True).pack(
-            anchor="w", padx=14, pady=(6, 1))
-        self._label(
-            card_form,
-            "Texto del botón cuando form_externo es mailto:  (vacío = texto por defecto).",
-            size=10, muted=True
-        ).pack(anchor="w", padx=14)
-        self._entry(card_form, textvariable=self.mail_instr_var, width=0,
-                    placeholder="Ej: Para inscribirse mandar NOMBRE, APELLIDO y CURSO por mail a").pack(
-            fill="x", padx=14, pady=(2, 4))
 
         btn_row = ctk.CTkFrame(card_form, fg_color="transparent")
         btn_row.pack(fill="x", padx=14, pady=(6, 12))
@@ -670,8 +658,6 @@ class GeneradorMoodle(ctk.CTk):
                   color="success", height=28, width=36).pack(side="right", padx=2)
         self._btn(top_bar, "—", lambda: self._coh_set_etiqueta(""),
                   color="ghost", height=28, width=36).pack(side="right", padx=2)
-        self._btn(top_bar, "🔒", self._coh_toggle_insc_cerrada,
-                  color="danger", height=28, width=36).pack(side="right", padx=2)
 
         # Treeview cohorte
         coh_tree_frame = ctk.CTkFrame(top_frame, fg_color="transparent")
@@ -872,7 +858,6 @@ class GeneradorMoodle(ctk.CTk):
             "conocimientos":  self.conoc_var.get().strip(),
             "sintesis":        sintesis_txt,
             "curso_previo":    self.curso_previo_var.get().strip(),
-            "mail_instruccion": self.mail_instr_var.get().strip(),
         }
         if ext:
             curso["form_externo"] = ext
@@ -912,7 +897,7 @@ class GeneradorMoodle(ctk.CTk):
         self.dest_var.set(c.get("destinatarios", ""))
         self.conoc_var.set(c.get("conocimientos", ""))
         self.curso_previo_var.set(c.get("curso_previo", "") or c.get("requisito_insc", ""))
-        self.mail_instr_var.set(c.get("mail_instruccion", ""))
+
         if self.sintesis_box:
             self.sintesis_box.delete("1.0", "end")
             sintesis = c.get("sintesis", "")
@@ -1088,7 +1073,7 @@ class GeneradorMoodle(ctk.CTk):
         """Limpia los campos del formulario del banco."""
         for v in (self.tit_var, self.cat_var, self.img_var, self.desc_var,
                   self.inf_var, self.ext_var, self.familia_var, self.nivel_var,
-                  self.dest_var, self.conoc_var, self.curso_previo_var, self.mail_instr_var):
+                  self.dest_var, self.conoc_var, self.curso_previo_var):
             v.set("")
         if self.sintesis_box:
             self.sintesis_box.delete("1.0", "end")
@@ -1247,13 +1232,10 @@ class GeneradorMoodle(ctk.CTk):
         for i, entry in enumerate(self.cohorte.get("cursos", [])):
             bidx = entry.get("banco_idx", -1)
             etiqueta = entry.get("etiqueta", "")
-            insc_cerrada = entry.get("insc_cerrada", False)
             if 0 <= bidx < len(self.banco_cursos):
                 c = self.banco_cursos[bidx]
                 tiene_previo = bool(c.get("curso_previo", "") or c.get("requisito_insc", ""))
-                if insc_cerrada:
-                    etiq_display = f"🔒 {etiqueta}" if etiqueta else "🔒 Cerrada"
-                elif tiene_previo:
+                if tiene_previo:
                     etiq_display = f"◆ {etiqueta}" if etiqueta else "◆ Previo"
                 else:
                     etiq_display = etiqueta if etiqueta else "—"
@@ -1371,17 +1353,6 @@ class GeneradorMoodle(ctk.CTk):
             if self.coh_tree.item(ch, "tags") == (str(pos + 1),):
                 self.coh_tree.selection_set(ch)
                 break
-
-    def _coh_toggle_insc_cerrada(self):
-        """Alterna inscripción cerrada/abierta para el curso seleccionado."""
-        pos = self._coh_sel_idx()
-        if pos is None:
-            messagebox.showinfo("Info", "Seleccioná un curso para cambiar su estado de inscripción.", parent=self)
-            return
-        current = self.cohorte["cursos"][pos].get("insc_cerrada", False)
-        self.cohorte["cursos"][pos]["insc_cerrada"] = not current
-        self._refresh_coh_tree()
-        self._marcar_cambio()
 
     def _banco_agregar_todos(self):
         """Agrega todos los cursos disponibles del banco a la cohorte."""
@@ -1546,11 +1517,9 @@ class GeneradorMoodle(ctk.CTk):
             for entry in self.cohorte.get("cursos", []):
                 bidx = entry.get("banco_idx", -1)
                 etiqueta = entry.get("etiqueta", "")
-                insc_cerrada = entry.get("insc_cerrada", False)
                 if 0 <= bidx < len(self.banco_cursos):
                     c = dict(self.banco_cursos[bidx])
                     c["etiqueta"] = etiqueta
-                    c["insc_cerrada"] = insc_cerrada
                     result.append(c)
             return result
 
@@ -1616,8 +1585,7 @@ class GeneradorMoodle(ctk.CTk):
 
         def _make_popup_btn(titulo, sintesis, ins_url,
                             familia="", nivel="", destinatarios="", conocimientos="",
-                            insc_cerrada=False, curso_previo="", mail_instruccion=""):
-            cl_attr = 'data-cl="1" ' if insc_cerrada else ''
+                            curso_previo=""):
             return (
                 f'<button type="button" onclick="cnetPop(this)" '
                 f'data-t="{_attr(titulo)}" '
@@ -1628,8 +1596,6 @@ class GeneradorMoodle(ctk.CTk):
                 f'data-s="{_attr(sintesis)}" '
                 f'data-i="{_attr(ins_url)}" '
                 f'data-r="{_attr(curso_previo)}" '
-                f'data-m="{_attr(mail_instruccion)}" '
-                f'{cl_attr}'
                 f'style="display:block;width:100%;text-align:center;padding:9px 10px;'
                 f'border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;'
                 f'background:#45658d;color:white;border:none;font-family:inherit;'
@@ -1669,8 +1635,7 @@ class GeneradorMoodle(ctk.CTk):
             for c in nuevos:
                 tit           = c.get("titulo", "")
                 img_url       = c.get("img", "")
-                insc_cerrada  = c.get("insc_cerrada", False)
-                ins_url       = "" if insc_cerrada else (c.get("form_externo", "") or coh_link)
+                ins_url       = c.get("form_externo", "") or coh_link
                 cat_n         = c.get("categoria", "")
                 familia       = c.get("familia_prof", "")
                 nivel         = c.get("nivel", "")
@@ -1682,8 +1647,7 @@ class GeneradorMoodle(ctk.CTk):
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos,
-                    insc_cerrada=insc_cerrada, curso_previo=curso_previo,
-                    mail_instruccion=c.get("mail_instruccion", "")
+                    curso_previo=curso_previo,
                 )
                 cc = _cat_color(cat_n)
                 if img_url:
@@ -1746,8 +1710,7 @@ class GeneradorMoodle(ctk.CTk):
             for c in cursos_cat:
                 tit           = c.get("titulo", "")
                 img_url       = c.get("img", "")
-                insc_cerrada  = c.get("insc_cerrada", False)
-                ins_url       = "" if insc_cerrada else (c.get("form_externo", "") or coh_link)
+                ins_url       = c.get("form_externo", "") or coh_link
                 etiqueta      = c.get("etiqueta", "")
                 familia       = c.get("familia_prof", "")
                 nivel         = c.get("nivel", "")
@@ -1760,8 +1723,7 @@ class GeneradorMoodle(ctk.CTk):
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos,
-                    insc_cerrada=insc_cerrada, curso_previo=curso_previo,
-                    mail_instruccion=c.get("mail_instruccion", "")
+                    curso_previo=curso_previo,
                 )
                 cc = _cat_color(cat)
                 if img_url:
@@ -1845,8 +1807,7 @@ class GeneradorMoodle(ctk.CTk):
             f'  if(!h)h=\'<p style="color:#9ca3af;">Sin información adicional.</p>\';\n'
             f'  document.getElementById("cnetPopB").innerHTML=h;\n'
             f'  var fp=document.getElementById("cnetPopF");\n'
-            f'  if(d.cl){{fp.innerHTML=\'<p style="text-align:center;padding:8px 10px;border-radius:8px;background:#f3f4f6;color:#6b7280;font-size:0.92rem;font-weight:600;margin:0;">Inscripción no disponible</p>\';fp.style.display="";}}\n'
-            f'  else if(d.i){{var is_mail=d.i.indexOf("mailto:")===0;var def_mail="Para inscribirse mandar NOMBRE, APELLIDO y CURSO por mail a "+d.i.substring(7);var btn_txt=is_mail?(d.m||def_mail):"Inscribirse →";fp.innerHTML=\'<a href="\'+d.i+\'" style="display:block;text-align:center;padding:10px 14px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;word-break:break-all;line-height:1.5;">\'+btn_txt+\'</a>\';fp.style.display="";}}\n'
+            f'  if(d.i){{var is_mail=d.i.indexOf("mailto:")===0;var def_mail="Para inscribirse mandar NOMBRE, APELLIDO y CURSO por mail a "+d.i.substring(7);var btn_txt=is_mail?def_mail:"Inscribirse →";fp.innerHTML=\'<a href="\'+d.i+\'" style="display:block;text-align:center;padding:10px 14px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;word-break:break-all;line-height:1.5;">\'+btn_txt+\'</a>\';fp.style.display="";}}\n'
             f'  else{{fp.innerHTML="";fp.style.display="none";}}\n'
             f'  document.getElementById("cnetPop").style.display="flex";\n'
             f'  document.body.style.overflow="hidden";\n'
