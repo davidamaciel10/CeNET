@@ -518,6 +518,18 @@ class GeneradorMoodle(ctk.CTk):
             self._entry(card_cfg, textvariable=var, width=0,
                         placeholder=ph).pack(fill="x", padx=14, pady=(0, 2))
 
+        ctk.CTkFrame(card_cfg, height=1, fg_color=COLORS["border"]).pack(fill="x", padx=14, pady=(6, 4))
+        self._label(card_cfg, "Mensaje inscripción con prereq", muted=True).pack(anchor="w", padx=14, pady=(4, 1))
+        self._label(card_cfg, "Se muestra cuando el curso tiene requisito de previo.", size=10, muted=True).pack(anchor="w", padx=14)
+        msg_box = ctk.CTkTextbox(card_cfg, height=60, fg_color=COLORS["bg_input"],
+            border_color=COLORS["border"], text_color=COLORS["text"],
+            font=ctk.CTkFont(family="Segoe UI", size=11), border_width=1, wrap="word")
+        msg_box.pack(fill="x", padx=14, pady=(2, 8))
+        msg_box.insert("1.0", self.coh_msg_req_var.get())
+        def _on_msg_req_change(event=None):
+            self.coh_msg_req_var.set(msg_box.get("1.0", "end-1c").strip())
+        msg_box.bind("<KeyRelease>", _on_msg_req_change)
+
         ctk.CTkFrame(card_cfg, height=8, fg_color="transparent").pack()
 
         # Panel derecho: grid con 2 rows
@@ -742,6 +754,11 @@ class GeneradorMoodle(ctk.CTk):
             self.banco_tree.insert("", "end", tags=tags, values=(
                 titulo_display,
                 c.get("categoria", ""),
+                c.get("familia_prof", ""),
+                c.get("nivel", ""),
+                c.get("destinatarios", ""),
+                c.get("conocimientos", ""),
+                c.get("curso_previo", ""),
                 sint[:70] + ("…" if len(sint) > 70 else "") if sint else "",
                 ext if ext else "",
             ))
@@ -750,12 +767,12 @@ class GeneradorMoodle(ctk.CTk):
             text=f"{n} curso{'s' if n != 1 else ''} en el banco")
 
     def _banco_agregar_o_guardar(self):
-        """Agrega al banco o guarda edición."""
+        """Agrega al banco o guarda edición. Devuelve True si tuvo éxito."""
         titulo = self.tit_var.get().strip()
         if not titulo:
             messagebox.showwarning(
                 "Atención", "El título es obligatorio.", parent=self)
-            return
+            return False
         ext = self.ext_var.get().strip()
         sintesis_txt = self.sintesis_box.get("1.0", "end-1c").strip() if self.sintesis_box else ""
         curso = {
@@ -773,16 +790,8 @@ class GeneradorMoodle(ctk.CTk):
             curso["form_externo"] = ext
         fue_edicion = self._banco_edit_idx is not None
         if fue_edicion:
-            # Al editar, actualizar banco_cursos y actualizar referencias en cohortes
             self.banco_cursos[self._banco_edit_idx] = curso
             self._banco_edit_idx = None
-            self.lbl_banco_form_title.configure(text="➕  Añadir / Editar Curso")
-            self.btn_banco_guardar.configure(
-                text="➕  Agregar",
-                fg_color=COLORS["success"],
-                hover_color=("#16a34a", "#15803d")
-            )
-            self.btn_banco_cancelar.pack_forget()
         else:
             self.banco_cursos.append(curso)
         self._banco_limpiar_form()
@@ -791,8 +800,12 @@ class GeneradorMoodle(ctk.CTk):
         self._marcar_cambio()
         tit_corto = titulo[:30] + ("…" if len(titulo) > 30 else "")
         accion = "Actualizado" if fue_edicion else "Agregado"
-        self.lbl_banco_status.configure(text=f"✓ {accion}: {tit_corto}")
-        self.after(2500, lambda: self.lbl_banco_status.configure(text=""))
+        try:
+            self.lbl_banco_status.configure(text=f"✓ {accion}: {tit_corto}")
+            self.after(2500, lambda: self.lbl_banco_status.configure(text=""))
+        except Exception:
+            pass
+        return True
 
     def _banco_editar(self):
         """Carga curso seleccionado al form para editar."""
@@ -800,56 +813,131 @@ class GeneradorMoodle(ctk.CTk):
         if idx is None:
             messagebox.showinfo("Info", "Seleccioná un curso para editar.", parent=self)
             return
-        c = self.banco_cursos[idx]
-        self.tit_var.set(c.get("titulo", ""))
-        self.cat_var.set(c.get("categoria", ""))
-        self.img_var.set(c.get("img", ""))
-        self.ext_var.set(c.get("form_externo", ""))
-        self.familia_var.set(c.get("familia_prof", ""))
-        self.nivel_var.set(c.get("nivel", ""))
-        self.dest_var.set(c.get("destinatarios", ""))
-        self.conoc_var.set(c.get("conocimientos", ""))
-        self.curso_previo_var.set(c.get("curso_previo", "") or c.get("requisito_insc", ""))
+        self._banco_abrir_form(idx)
 
-        if self.sintesis_box:
-            self.sintesis_box.delete("1.0", "end")
-            sintesis = c.get("sintesis", "")
-            if sintesis:
-                self.sintesis_box.insert("1.0", sintesis)
-        self._banco_edit_idx = idx
-        titulo_corto = c["titulo"][:28] + ("…" if len(c["titulo"]) > 28 else "")
-        self.lbl_banco_form_title.configure(text=f"✏  Editando: {titulo_corto}")
-        self.btn_banco_guardar.configure(
-            text="💾  Guardar Cambios",
-            fg_color=COLORS["warning"],
-            hover_color=("#d97706", "#b45309")
-        )
-        self.btn_banco_cancelar.pack(
-            side="left", fill="x", expand=True, padx=(4, 0))
-        if not self._banco_form_visible:
-            self._toggle_banco_form()
-
-    def _toggle_banco_form(self):
-        """Muestra u oculta el formulario del banco."""
-        if self._banco_form_visible:
-            self._form_scroll.grid_forget()
-            self._banco_form_visible = False
-            self.btn_toggle_form.configure(text="▼ Abrir")
+    def _banco_abrir_form(self, edit_idx=None):
+        """Abre popup modal para añadir/editar un curso del banco."""
+        if hasattr(self, '_banco_popup') and self._banco_popup.winfo_exists():
+            self._banco_popup.focus()
+            return
+        if edit_idx is not None:
+            c = self.banco_cursos[edit_idx]
+            self.tit_var.set(c.get("titulo", ""))
+            self.cat_var.set(c.get("categoria", ""))
+            self.img_var.set(c.get("img", ""))
+            self.ext_var.set(c.get("form_externo", ""))
+            self.familia_var.set(c.get("familia_prof", ""))
+            self.nivel_var.set(c.get("nivel", ""))
+            self.dest_var.set(c.get("destinatarios", ""))
+            self.conoc_var.set(c.get("conocimientos", ""))
+            self.curso_previo_var.set(c.get("curso_previo", "") or c.get("requisito_insc", ""))
         else:
-            self._form_scroll.grid(row=1, column=0, sticky="nsew")
-            self._banco_form_visible = True
-            self.btn_toggle_form.configure(text="▲ Cerrar")
+            self._banco_limpiar_form()
+        self._banco_edit_idx = edit_idx
+
+        popup = ctk.CTkToplevel(self)
+        popup.title("Editar Curso" if edit_idx is not None else "Añadir Curso al Banco")
+        popup.geometry("480x700")
+        popup.minsize(420, 500)
+        popup.resizable(True, True)
+        popup.grab_set()
+        self._banco_popup = popup
+        popup.configure(fg_color=COLORS["bg_dark"])
+
+        scroll = ctk.CTkScrollableFrame(popup, fg_color="transparent",
+            scrollbar_button_color=COLORS["border"],
+            scrollbar_button_hover_color=COLORS["accent"])
+        scroll.pack(fill="both", expand=True, padx=0, pady=0)
+
+        card = self._card(scroll)
+        card.pack(fill="x", padx=12, pady=(12, 4))
+
+        titulo_popup = ("Editando: " + self.banco_cursos[edit_idx]["titulo"][:30]) if edit_idx is not None else "Añadir Curso"
+        self._label(card, titulo_popup, size=13, bold=True).pack(anchor="w", padx=14, pady=(10, 6))
+
+        self._field(card, "Título", self.tit_var, required=True, placeholder="Nombre del curso")
+
+        row_cat = ctk.CTkFrame(card, fg_color="transparent")
+        row_cat.pack(fill="x", padx=14, pady=(6, 1))
+        self._label(row_cat, "Categoría *", muted=False).pack(side="left")
+        self.cat_combo = ctk.CTkComboBox(card, variable=self.cat_var,
+            values=self.categorias_sugeridas, width=200, height=34,
+            fg_color=COLORS["bg_input"], border_color=COLORS["border"],
+            button_color=COLORS["accent"], button_hover_color=COLORS["accent_hover"],
+            dropdown_fg_color=COLORS["bg_card"], dropdown_hover_color=COLORS["bg_hover"],
+            dropdown_text_color=COLORS["text"], text_color=COLORS["text"],
+            font=ctk.CTkFont(family="Segoe UI", size=12))
+        self.cat_combo.pack(fill="x", padx=14, pady=(0, 4))
+
+        self._field(card, "URL Imagen", self.img_var,
+            tooltip="URL de imagen de portada. Vacío = franja de color.",
+            placeholder="https://...  (vacío = franja de color)")
+        self._field(card, "Familia profesional", self.familia_var,
+            tooltip="Familia o área profesional del curso.",
+            placeholder="Ej: Todas las familias profesionales")
+        self._field(card, "Nivel", self.nivel_var,
+            tooltip="Nivel educativo al que está dirigido.",
+            placeholder="Ej: Secundario Técnico – Técnico Superior")
+        self._field(card, "Destinatarios", self.dest_var,
+            tooltip="A quiénes está dirigido el curso.",
+            placeholder="Ej: Autoridades y docentes de instituciones técnicas")
+        self._conoc_entry = self._field(card, "Conocimientos previos", self.conoc_var,
+            tooltip="Mutuamente exclusivo con Requisito de curso previo.",
+            placeholder="Ej: No se requieren")
+
+        row_sint = ctk.CTkFrame(card, fg_color="transparent")
+        row_sint.pack(fill="x", padx=14, pady=(6, 1))
+        self._label(row_sint, "Síntesis", muted=True).pack(side="left")
+        tip_sint = ctk.CTkLabel(row_sint, text=" ?", text_color=COLORS["accent"],
+            font=ctk.CTkFont(size=10), cursor="question_arrow")
+        tip_sint.pack(side="left")
+        _Tooltip(tip_sint, "Descripción del curso que aparece en el popup al hacer clic en la card.")
+        self.sintesis_box = ctk.CTkTextbox(card, height=80,
+            fg_color=COLORS["bg_input"], border_color=COLORS["border"],
+            text_color=COLORS["text"], font=ctk.CTkFont(family="Segoe UI", size=12),
+            border_width=1, wrap="word")
+        self.sintesis_box.pack(fill="x", padx=14, pady=(0, 4))
+        if edit_idx is not None:
+            sint = self.banco_cursos[edit_idx].get("sintesis", "")
+            if sint:
+                self.sintesis_box.insert("1.0", sint)
+
+        self._field(card, "Formulario externo", self.ext_var,
+            tooltip="Link de inscripción individual. mailto:correo para inscripción por mail.",
+            placeholder="https://  o  mailto:correo@dominio.com")
+        self._curso_previo_entry = self._field(card, "Requisito de curso previo", self.curso_previo_var,
+            tooltip="Completar si requiere haber aprobado otro curso. Excluye Conocimientos previos.",
+            placeholder="Ej: Es necesario haber aprobado Tecnología neumática")
+
+        self.lbl_banco_status = self._label(card, "", size=11, text_color=COLORS["success"])
+        self.lbl_banco_status.pack(anchor="w", padx=14, pady=(2, 2))
+
+        btn_row = ctk.CTkFrame(card, fg_color="transparent")
+        btn_row.pack(fill="x", padx=14, pady=(4, 14))
+
+        def _on_save():
+            if self._banco_agregar_o_guardar():
+                if popup.winfo_exists():
+                    popup.destroy()
+
+        def _on_cancel():
+            self._banco_cancelar()
+            if popup.winfo_exists():
+                popup.destroy()
+
+        self.btn_banco_guardar = self._btn(btn_row,
+            "💾  Guardar Cambios" if edit_idx is not None else "➕  Agregar",
+            _on_save, color="warning" if edit_idx is not None else "success", height=36)
+        self.btn_banco_guardar.pack(side="left", fill="x", expand=True, padx=(0, 4))
+
+        self.btn_banco_cancelar = self._btn(btn_row, "Cancelar", _on_cancel, color="ghost", height=36)
+        self.btn_banco_cancelar.pack(side="left", fill="x", expand=True, padx=(4, 0))
+        if edit_idx is None:
+            self.btn_banco_cancelar.pack_forget()
 
     def _banco_cancelar(self):
         """Cancela edición del banco."""
         self._banco_edit_idx = None
-        self.lbl_banco_form_title.configure(text="➕  Añadir / Editar Curso")
-        self.btn_banco_guardar.configure(
-            text="➕  Agregar",
-            fg_color=COLORS["success"],
-            hover_color=("#16a34a", "#15803d")
-        )
-        self.btn_banco_cancelar.pack_forget()
         self._banco_limpiar_form()
 
     def _banco_eliminar(self):
@@ -1012,10 +1100,16 @@ class GeneradorMoodle(ctk.CTk):
             self.conoc_var.set("")
             self._mutual_exc_guard = False
             if hasattr(self, "_conoc_entry"):
-                self._conoc_entry.configure(state="disabled")
+                try:
+                    self._conoc_entry.configure(state="disabled")
+                except Exception:
+                    pass
         else:
             if hasattr(self, "_conoc_entry"):
-                self._conoc_entry.configure(state="normal")
+                try:
+                    self._conoc_entry.configure(state="normal")
+                except Exception:
+                    pass
 
     def _on_conoc_changed(self, *_):
         if self._mutual_exc_guard:
@@ -1025,16 +1119,25 @@ class GeneradorMoodle(ctk.CTk):
             self.curso_previo_var.set("")
             self._mutual_exc_guard = False
             if hasattr(self, "_curso_previo_entry"):
-                self._curso_previo_entry.configure(state="disabled")
+                try:
+                    self._curso_previo_entry.configure(state="disabled")
+                except Exception:
+                    pass
         else:
             if hasattr(self, "_curso_previo_entry"):
-                self._curso_previo_entry.configure(state="normal")
+                try:
+                    self._curso_previo_entry.configure(state="normal")
+                except Exception:
+                    pass
 
     def _banco_sort(self, col):
         """Ordena banco_cursos por la columna indicada y remapea índices de cohorte."""
         field_map = {
             "Titulo": "titulo", "Categoria": "categoria",
-            "Sintesis": "sintesis", "Externo": "form_externo",
+            "Familia": "familia_prof", "Nivel": "nivel",
+            "Destinatarios": "destinatarios", "Conocimientos": "conocimientos",
+            "ReqPrevio": "curso_previo", "Sintesis": "sintesis",
+            "Externo": "form_externo",
         }
         field = field_map.get(col, col.lower())
         if self._sort_state["col"] == col:
@@ -1142,6 +1245,7 @@ class GeneradorMoodle(ctk.CTk):
         self.cohorte["nombre"] = self.coh_nombre_var.get().strip() or self.cohorte.get("nombre", "2° cohorte")
         self.cohorte["estado"] = self.coh_estado_var.get()
         self.cohorte["link"]   = self.coh_link_var.get()
+        self.cohorte["msg_requisito"] = self.coh_msg_req_var.get()
         self._save_banco_json()
 
     def _refresh_cohorte_panel(self):
@@ -1163,9 +1267,17 @@ class GeneradorMoodle(ctk.CTk):
                     etiq_display = f"◆ {etiqueta}" if etiqueta else "◆ Previo"
                 else:
                     etiq_display = etiqueta if etiqueta else "—"
+                sint = c.get("sintesis", "")
                 self.coh_tree.insert("", "end", tags=(str(i),), values=(
                     c.get("titulo", ""),
                     c.get("categoria", ""),
+                    c.get("familia_prof", ""),
+                    c.get("nivel", ""),
+                    c.get("destinatarios", ""),
+                    c.get("conocimientos", ""),
+                    c.get("curso_previo", ""),
+                    sint[:70] + ("…" if len(sint) > 70 else "") if sint else "",
+                    c.get("form_externo", ""),
                     etiq_display,
                 ))
                 n += 1
@@ -1518,7 +1630,7 @@ class GeneradorMoodle(ctk.CTk):
 
         def _make_popup_btn(titulo, sintesis, ins_url,
                             familia="", nivel="", destinatarios="", conocimientos="",
-                            curso_previo=""):
+                            curso_previo="", msg_req=""):
             return (
                 f'<button type="button" onclick="cnetPop(this)" '
                 f'data-t="{_attr(titulo)}" '
@@ -1529,6 +1641,7 @@ class GeneradorMoodle(ctk.CTk):
                 f'data-s="{_attr(sintesis)}" '
                 f'data-i="{_attr(ins_url)}" '
                 f'data-r="{_attr(curso_previo)}" '
+                f'data-rm="{_attr(msg_req)}" '
                 f'style="display:block;width:100%;text-align:center;padding:9px 10px;'
                 f'border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;'
                 f'background:#45658d;color:white;border:none;font-family:inherit;'
@@ -1565,6 +1678,7 @@ class GeneradorMoodle(ctk.CTk):
         bloque_nuevos = ""
         if nuevos:
             nuevos_cards = ""
+            msg_req = self.coh_msg_req_var.get()
             for c in nuevos:
                 tit           = c.get("titulo", "")
                 img_url       = c.get("img", "")
@@ -1580,7 +1694,7 @@ class GeneradorMoodle(ctk.CTk):
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos,
-                    curso_previo=curso_previo,
+                    curso_previo=curso_previo, msg_req=msg_req,
                 )
                 cc = _cat_color(cat_n)
                 if img_url:
@@ -1640,6 +1754,7 @@ class GeneradorMoodle(ctk.CTk):
                 por_cat_activa[cat],
                 key=lambda x: 0 if x.get("etiqueta") == "Destacado" else 1
             )
+            msg_req = self.coh_msg_req_var.get()
             for c in cursos_cat:
                 tit           = c.get("titulo", "")
                 img_url       = c.get("img", "")
@@ -1656,7 +1771,7 @@ class GeneradorMoodle(ctk.CTk):
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos,
-                    curso_previo=curso_previo,
+                    curso_previo=curso_previo, msg_req=msg_req,
                 )
                 cc = _cat_color(cat)
                 if img_url:
@@ -1740,7 +1855,8 @@ class GeneradorMoodle(ctk.CTk):
             f'  if(!h)h=\'<p style="color:#9ca3af;">Sin información adicional.</p>\';\n'
             f'  document.getElementById("cnetPopB").innerHTML=h;\n'
             f'  var fp=document.getElementById("cnetPopF");\n'
-            f'  if(d.i){{var is_mail=d.i.indexOf("mailto:")===0;var def_mail="Para inscribirse mandar NOMBRE, APELLIDO y CURSO por mail a "+d.i.substring(7);var btn_txt=is_mail?def_mail:"Inscribirse →";fp.innerHTML=\'<a href="\'+d.i+\'" style="display:block;text-align:center;padding:10px 14px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;word-break:break-all;line-height:1.5;">\'+btn_txt+\'</a>\';fp.style.display="";}}\n'
+            f'  if(d.r&&d.rm){{fp.innerHTML=\'<p style="text-align:center;padding:10px 14px;border-radius:8px;background:#fff7ed;color:#c2410c;font-size:0.88rem;font-weight:600;margin:0;border:1px solid #fed7aa;">\'+cnetEsc(d.rm)+\'</p>\';fp.style.display="";}}\n'
+            f'  else if(d.i){{var is_mail=d.i.indexOf("mailto:")===0;var def_mail="Para inscribirse mandar NOMBRE, APELLIDO y CURSO por mail a "+d.i.substring(7);var btn_txt=is_mail?def_mail:"Inscribirse →";fp.innerHTML=\'<a href="\'+d.i+\'" style="display:block;text-align:center;padding:10px 14px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;word-break:break-all;line-height:1.5;">\'+btn_txt+\'</a>\';fp.style.display="";}}\n'
             f'  else{{fp.innerHTML="";fp.style.display="none";}}\n'
             f'  document.getElementById("cnetPop").style.display="flex";\n'
             f'  document.body.style.overflow="hidden";\n'
