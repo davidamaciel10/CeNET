@@ -147,6 +147,7 @@ class GeneradorMoodle(ctk.CTk):
         self.dest_var          = tk.StringVar()
         self.conoc_var         = tk.StringVar()
         self.req_insc_var      = tk.StringVar()
+        self.mail_instr_var    = tk.StringVar()
         self._cat_nueva_var    = tk.StringVar()
         self._banco_filtro_var = tk.StringVar()
         self.sintesis_box      = None  # CTkTextbox; assigned in _build_tab_banco
@@ -453,6 +454,18 @@ class GeneradorMoodle(ctk.CTk):
         ).pack(anchor="w", padx=14)
         self._entry(card_form, textvariable=self.req_insc_var, width=0,
                     placeholder="Ej: Es necesario haber aprobado el curso Tecnología neumática").pack(
+            fill="x", padx=14, pady=(2, 4))
+
+        # Instrucción de mail
+        self._label(card_form, "Instrucción de inscripción por mail", muted=True).pack(
+            anchor="w", padx=14, pady=(6, 1))
+        self._label(
+            card_form,
+            "Texto del botón cuando form_externo es mailto:  (vacío = texto por defecto).",
+            size=10, muted=True
+        ).pack(anchor="w", padx=14)
+        self._entry(card_form, textvariable=self.mail_instr_var, width=0,
+                    placeholder="Ej: Para inscribirse mandar NOMBRE, APELLIDO y CURSO por mail a").pack(
             fill="x", padx=14, pady=(2, 4))
 
         btn_row = ctk.CTkFrame(card_form, fg_color="transparent")
@@ -854,6 +867,7 @@ class GeneradorMoodle(ctk.CTk):
             "conocimientos":  self.conoc_var.get().strip(),
             "sintesis":       sintesis_txt,
             "requisito_insc": self.req_insc_var.get().strip(),
+            "mail_instruccion": self.mail_instr_var.get().strip(),
         }
         if ext:
             curso["form_externo"] = ext
@@ -893,6 +907,7 @@ class GeneradorMoodle(ctk.CTk):
         self.dest_var.set(c.get("destinatarios", ""))
         self.conoc_var.set(c.get("conocimientos", ""))
         self.req_insc_var.set(c.get("requisito_insc", ""))
+        self.mail_instr_var.set(c.get("mail_instruccion", ""))
         if self.sintesis_box:
             self.sintesis_box.delete("1.0", "end")
             sintesis = c.get("sintesis", "")
@@ -1068,7 +1083,7 @@ class GeneradorMoodle(ctk.CTk):
         """Limpia los campos del formulario del banco."""
         for v in (self.tit_var, self.cat_var, self.img_var, self.desc_var,
                   self.inf_var, self.ext_var, self.familia_var, self.nivel_var,
-                  self.dest_var, self.conoc_var, self.req_insc_var):
+                  self.dest_var, self.conoc_var, self.req_insc_var, self.mail_instr_var):
             v.set("")
         if self.sintesis_box:
             self.sintesis_box.delete("1.0", "end")
@@ -1567,7 +1582,7 @@ class GeneradorMoodle(ctk.CTk):
 
         def _make_popup_btn(titulo, sintesis, ins_url,
                             familia="", nivel="", destinatarios="", conocimientos="",
-                            insc_cerrada=False, requisito_insc=""):
+                            insc_cerrada=False, requisito_insc="", mail_instruccion=""):
             cl_attr = 'data-cl="1" ' if insc_cerrada else ''
             return (
                 f'<button type="button" onclick="cnetPop(this)" '
@@ -1579,6 +1594,7 @@ class GeneradorMoodle(ctk.CTk):
                 f'data-s="{_attr(sintesis)}" '
                 f'data-i="{_attr(ins_url)}" '
                 f'data-r="{_attr(requisito_insc)}" '
+                f'data-m="{_attr(mail_instruccion)}" '
                 f'{cl_attr}'
                 f'style="display:block;width:100%;text-align:center;padding:9px 10px;'
                 f'border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;'
@@ -1632,7 +1648,8 @@ class GeneradorMoodle(ctk.CTk):
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos,
-                    insc_cerrada=insc_cerrada, requisito_insc=requisito_insc
+                    insc_cerrada=insc_cerrada, requisito_insc=requisito_insc,
+                    mail_instruccion=c.get("mail_instruccion", "")
                 )
                 cc = _cat_color(cat_n)
                 if img_url:
@@ -1709,7 +1726,8 @@ class GeneradorMoodle(ctk.CTk):
                 accion_html = _make_popup_btn(
                     tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos,
-                    insc_cerrada=insc_cerrada, requisito_insc=requisito_insc
+                    insc_cerrada=insc_cerrada, requisito_insc=requisito_insc,
+                    mail_instruccion=c.get("mail_instruccion", "")
                 )
                 cc = _cat_color(cat)
                 if img_url:
@@ -1794,7 +1812,7 @@ class GeneradorMoodle(ctk.CTk):
             f'  document.getElementById("cnetPopB").innerHTML=h;\n'
             f'  var fp=document.getElementById("cnetPopF");\n'
             f'  if(d.cl){{fp.innerHTML=\'<p style="text-align:center;padding:8px 10px;border-radius:8px;background:#f3f4f6;color:#6b7280;font-size:0.92rem;font-weight:600;margin:0;">Inscripción no disponible</p>\';fp.style.display="";}}\n'
-            f'  else if(d.i){{var is_mail=d.i.indexOf("mailto:")===0;var btn_txt=is_mail?"Para inscribirse mandar NOMBRE, APELLIDO y CURSO por mail a "+d.i.substring(7):"Inscribirse →";fp.innerHTML=\'<a href="\'+d.i+\'" style="display:block;text-align:center;padding:10px 14px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;word-break:break-all;line-height:1.5;">\'+btn_txt+\'</a>\';fp.style.display="";}}\n'
+            f'  else if(d.i){{var is_mail=d.i.indexOf("mailto:")===0;var def_mail="Para inscribirse mandar NOMBRE, APELLIDO y CURSO por mail a "+d.i.substring(7);var btn_txt=is_mail?(d.m||def_mail):"Inscribirse →";fp.innerHTML=\'<a href="\'+d.i+\'" style="display:block;text-align:center;padding:10px 14px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;word-break:break-all;line-height:1.5;">\'+btn_txt+\'</a>\';fp.style.display="";}}\n'
             f'  else{{fp.innerHTML="";fp.style.display="none";}}\n'
             f'  document.getElementById("cnetPop").style.display="flex";\n'
             f'  document.body.style.overflow="hidden";\n'
