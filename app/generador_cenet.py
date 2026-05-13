@@ -640,6 +640,8 @@ class GeneradorMoodle(ctk.CTk):
 
         self._btn(top_bar, "Quitar", self._coh_quitar_curso,
                   color="danger", height=28, width=80).pack(side="right", padx=(2, 4))
+        self._btn(top_bar, "✏ Editar", self._coh_editar_en_banco,
+                  color="warning", height=28, width=90).pack(side="right", padx=2)
         self._btn(top_bar, "▼", self._coh_bajar,
                   color="ghost", height=28, width=36).pack(side="right", padx=2)
         self._btn(top_bar, "▲", self._coh_subir,
@@ -1268,6 +1270,26 @@ class GeneradorMoodle(ctk.CTk):
         self.cohorte["cursos"][pos]["etiqueta"] = etiqueta
         self._refresh_coh_tree()
 
+    def _coh_editar_en_banco(self):
+        """Salta al banco tab y abre el form de edición del curso seleccionado en la cohorte."""
+        pos = self._coh_sel_idx()
+        if pos is None:
+            messagebox.showinfo("Info", "Seleccioná un curso para editar.", parent=self)
+            return
+        bidx = self.cohorte["cursos"][pos].get("banco_idx", -1)
+        if bidx < 0 or bidx >= len(self.banco_cursos):
+            return
+        # Ir a la pestaña banco
+        self.tabview.set("📚  Banco de Cursos")
+        # Seleccionar la fila correspondiente en banco_tree
+        for child in self.banco_tree.get_children():
+            if self.banco_tree.item(child, "tags") == (str(bidx),):
+                self.banco_tree.selection_set(child)
+                self.banco_tree.see(child)
+                break
+        # Abrir el formulario de edición
+        self._banco_editar()
+
     def _coh_sel_idx(self):
         sel = self.coh_tree.selection()
         if not sel:
@@ -1772,7 +1794,7 @@ class GeneradorMoodle(ctk.CTk):
             f'  document.getElementById("cnetPopB").innerHTML=h;\n'
             f'  var fp=document.getElementById("cnetPopF");\n'
             f'  if(d.cl){{fp.innerHTML=\'<p style="text-align:center;padding:8px 10px;border-radius:8px;background:#f3f4f6;color:#6b7280;font-size:0.92rem;font-weight:600;margin:0;">Inscripción no disponible</p>\';fp.style.display="";}}\n'
-            f'  else if(d.i){{var is_mail=d.i.indexOf("mailto:")===0;var btn_txt=is_mail?"Para inscribirse: "+d.i.substring(7):"Inscribirse →";fp.innerHTML=\'<a href="\'+d.i+\'" style="display:block;text-align:center;padding:10px 14px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;word-break:break-all;">\'+btn_txt+\'</a>\';fp.style.display="";}}\n'
+            f'  else if(d.i){{var is_mail=d.i.indexOf("mailto:")===0;var btn_txt=is_mail?"Para inscribirse mandar NOMBRE, APELLIDO y CURSO por mail a "+d.i.substring(7):"Inscribirse →";fp.innerHTML=\'<a href="\'+d.i+\'" style="display:block;text-align:center;padding:10px 14px;border-radius:8px;background:#45658d;color:white;font-size:0.92rem;font-weight:700;text-decoration:none;word-break:break-all;line-height:1.5;">\'+btn_txt+\'</a>\';fp.style.display="";}}\n'
             f'  else{{fp.innerHTML="";fp.style.display="none";}}\n'
             f'  document.getElementById("cnetPop").style.display="flex";\n'
             f'  document.body.style.overflow="hidden";\n'
