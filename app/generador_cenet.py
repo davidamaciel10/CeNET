@@ -197,6 +197,12 @@ class GeneradorMoodle(ctk.CTk):
         self._setup_ttk_theme()
         self._build_ui()
 
+        # Atajos de teclado globales
+        self.bind_all("<Control-s>", lambda e: self._guardar_json())
+        self.bind_all("<Control-S>", lambda e: self._guardar_json())
+        self.bind_all("<Control-n>", lambda e: self._banco_abrir_form())
+        self.bind_all("<Control-N>", lambda e: self._banco_abrir_form())
+
         # Abrir en cohorte si ya tiene cursos cargados
         if self.cohorte.get("cursos"):
             self.after(50, lambda: self.tabview.set("🗓  Cohorte"))
@@ -411,6 +417,9 @@ class GeneradorMoodle(ctk.CTk):
             side="left", padx=4)
         self.lbl_banco_count = self._label(abar, "0 cursos", size=11, muted=True)
         self.lbl_banco_count.pack(side="left", padx=8)
+        self.lbl_prereq_count = self._label(abar, "", size=11,
+            text_color=COLORS["warning"])
+        self.lbl_prereq_count.pack(side="left", padx=4)
 
         self._btn(abar, "Eliminar", self._banco_eliminar,
                   color="danger", height=32, width=100).pack(side="right", padx=(4, 0))
@@ -483,6 +492,8 @@ class GeneradorMoodle(ctk.CTk):
 
         self.banco_tree.tag_configure("en_coh", foreground="#6b7280")
         self.banco_tree.bind("<Double-1>", lambda _: self._banco_abrir_form(self._banco_sel_idx()))
+        self.banco_tree.bind("<Button-3>", self._banco_ctx_menu)
+        self.banco_tree.bind("<Button-2>", self._banco_ctx_menu)
 
     # ─────────────────────────────────────────
     # TAB 2: COHORTES
@@ -614,6 +625,8 @@ class GeneradorMoodle(ctk.CTk):
         self.coh_tree.configure(yscrollcommand=coh_vsb.set)
         self.coh_tree.grid(row=0, column=0, sticky="nsew")
         coh_vsb.grid(row=0, column=1, sticky="ns")
+        self.coh_tree.bind("<Button-3>", self._coh_ctx_menu)
+        self.coh_tree.bind("<Button-2>", self._coh_ctx_menu)
 
         # Bottom: Banco disponible
         bot_frame = ctk.CTkFrame(
@@ -780,6 +793,12 @@ class GeneradorMoodle(ctk.CTk):
         n = len(self.banco_cursos)
         self.lbl_banco_count.configure(
             text=f"{n} curso{'s' if n != 1 else ''} en el banco")
+        n_req = sum(1 for c in self.banco_cursos if c.get("curso_previo", "").strip())
+        try:
+            self.lbl_prereq_count.configure(
+                text=f"· {n_req} con prereq" if n_req else "")
+        except Exception:
+            pass
 
     def _banco_agregar_o_guardar(self):
         """Agrega al banco o guarda edición. Devuelve True si tuvo éxito."""
@@ -821,6 +840,37 @@ class GeneradorMoodle(ctk.CTk):
         except Exception:
             pass
         return True
+
+    def _banco_ctx_menu(self, event):
+        item = self.banco_tree.identify_row(event.y)
+        if not item:
+            return
+        if item not in self.banco_tree.selection():
+            self.banco_tree.selection_set(item)
+        menu = tk.Menu(self, tearoff=0,
+            background=_c("bg_card"), foreground=_c("text"),
+            activebackground=_c("accent"), activeforeground="#ffffff",
+            font=("Segoe UI", 11), bd=0, relief="flat")
+        idx = self._banco_sel_idx()
+        menu.add_command(label="✏  Editar",
+            command=lambda: self._banco_abrir_form(idx))
+        menu.add_command(label="📋  Duplicar", command=self._banco_duplicar)
+        menu.add_separator()
+        menu.add_command(label="🗑  Eliminar", command=self._banco_eliminar)
+        menu.tk_popup(event.x_root, event.y_root)
+
+    def _coh_ctx_menu(self, event):
+        item = self.coh_tree.identify_row(event.y)
+        if not item:
+            return
+        if item not in self.coh_tree.selection():
+            self.coh_tree.selection_set(item)
+        menu = tk.Menu(self, tearoff=0,
+            background=_c("bg_card"), foreground=_c("text"),
+            activebackground=_c("accent"), activeforeground="#ffffff",
+            font=("Segoe UI", 11), bd=0, relief="flat")
+        menu.add_command(label="🗑  Quitar de cohorte", command=self._coh_quitar_curso)
+        menu.tk_popup(event.x_root, event.y_root)
 
     def _banco_editar(self):
         """Carga curso seleccionado al form para editar."""
