@@ -103,10 +103,13 @@ class _Tooltip:
         self._tip = tk.Toplevel(self._widget)
         self._tip.wm_overrideredirect(True)
         self._tip.wm_geometry(f"+{x}+{y}")
+        bg = _c("navy") if ctk.get_appearance_mode() == "Dark" else _c("bg_card")
+        fg = "#e2e8f0" if ctk.get_appearance_mode() == "Dark" else _c("text")
         lbl = tk.Label(
             self._tip, text=self._text, justify="left",
-            background="#1e2a4a", foreground="#e2e8f0",
-            relief="flat", font=("Segoe UI", 9),
+            background=bg, foreground=fg,
+            relief="solid", borderwidth=1,
+            font=("Segoe UI", 9),
             wraplength=280, padx=10, pady=6,
         )
         lbl.pack()
@@ -124,7 +127,7 @@ class GeneradorMoodle(ctk.CTk):
 
     def __init__(self):
         super().__init__()
-        self.title("Generador de Catálogo CeNET v2.0")
+        self.title("Generador de Catálogo CeNET v3.1")
 
         sw = self.winfo_screenwidth()
         sh = self.winfo_screenheight()
@@ -145,6 +148,7 @@ class GeneradorMoodle(ctk.CTk):
         self._banco_edit_idx     = None
         self._hay_cambios        = False
         self._sort_state         = {"col": None, "reverse": False}
+        self._coh_sort_state     = {"col": None, "reverse": False}
 
         _loaded = self._load_banco_json()
         self.banco_cursos = _loaded.get("cursos", [])
@@ -183,14 +187,21 @@ class GeneradorMoodle(ctk.CTk):
         self.conoc_var          = tk.StringVar()
         self.curso_previo_var   = tk.StringVar()
         self._cat_nueva_var     = tk.StringVar()
-        self._banco_filtro_var  = tk.StringVar()
-        self._coh_filtro_var    = tk.StringVar()
+        self._banco_filtro_var      = tk.StringVar()
+        self._coh_filtro_var        = tk.StringVar()
+        self._banco_disp_filtro_var = tk.StringVar()
         self._mutual_exc_guard  = False
         self.sintesis_box      = None  # CTkTextbox; assigned in _build_tab_banco
         self._banco_disp_vars  = {}    # bidx -> BooleanVar para banco disponible
 
         self._setup_ttk_theme()
         self._build_ui()
+
+        # Atajos de teclado globales
+        self.bind_all("<Control-s>", lambda e: self._guardar_json())
+        self.bind_all("<Control-S>", lambda e: self._guardar_json())
+        self.bind_all("<Control-n>", lambda e: self._banco_abrir_form())
+        self.bind_all("<Control-N>", lambda e: self._banco_abrir_form())
 
         # Abrir en cohorte si ya tiene cursos cargados
         if self.cohorte.get("cursos"):
@@ -214,12 +225,12 @@ class GeneradorMoodle(ctk.CTk):
         """Marca que hay cambios sin guardar."""
         if not self._hay_cambios:
             self._hay_cambios = True
-            self.title("Generador de Catálogo CeNET v2.0 ●")
+            self.title("Generador de Catálogo CeNET v3.1 ●")
 
     def _limpiar_cambio(self):
         """Limpia el indicador de cambios."""
         self._hay_cambios = False
-        self.title("Generador de Catálogo CeNET v2.0")
+        self.title("Generador de Catálogo CeNET v3.1")
 
     def _on_close(self):
         if self._hay_cambios:
@@ -358,7 +369,7 @@ class GeneradorMoodle(ctk.CTk):
         self.btn_theme.pack(side="right", padx=(0, 16))
 
         ctk.CTkLabel(
-            hdr, text="v2.0",
+            hdr, text="v3.1",
             font=ctk.CTkFont(family="Segoe UI", size=11),
             text_color=COLORS["text_muted"]
         ).pack(side="right", padx=4)
@@ -406,6 +417,9 @@ class GeneradorMoodle(ctk.CTk):
             side="left", padx=4)
         self.lbl_banco_count = self._label(abar, "0 cursos", size=11, muted=True)
         self.lbl_banco_count.pack(side="left", padx=8)
+        self.lbl_prereq_count = self._label(abar, "", size=11,
+            text_color=COLORS["warning"])
+        self.lbl_prereq_count.pack(side="left", padx=4)
 
         self._btn(abar, "Eliminar", self._banco_eliminar,
                   color="danger", height=32, width=100).pack(side="right", padx=(4, 0))
@@ -478,6 +492,8 @@ class GeneradorMoodle(ctk.CTk):
 
         self.banco_tree.tag_configure("en_coh", foreground="#6b7280")
         self.banco_tree.bind("<Double-1>", lambda _: self._banco_abrir_form(self._banco_sel_idx()))
+        self.banco_tree.bind("<Button-3>", self._banco_ctx_menu)
+        self.banco_tree.bind("<Button-2>", self._banco_ctx_menu)
 
     # ─────────────────────────────────────────
     # TAB 2: COHORTES
@@ -586,26 +602,31 @@ class GeneradorMoodle(ctk.CTk):
             coh_tree_frame, columns=coh_cols, show="headings",
             style="Dark.Treeview", selectmode="extended"
         )
-        for col, w, lbl in [
-            ("Titulo",        200, "Título"),
-            ("Categoria",     150, "Categoría"),
-            ("Familia",       150, "Familia prof."),
-            ("Nivel",         120, "Nivel"),
-            ("Destinatarios", 180, "Destinatarios"),
-            ("Conocimientos", 150, "Conocimientos prev."),
-            ("ReqPrevio",     160, "Req. Curso Previo"),
-            ("Sintesis",      220, "Síntesis"),
-            ("Externo",       140, "Form. externo"),
-            ("Etiqueta",       90, "Etiqueta"),
-        ]:
-            self.coh_tree.heading(col, text=lbl)
-            self.coh_tree.column(col, width=w, minwidth=60)
+        _COH_COL_LABELS = {
+            "Titulo": "Título", "Categoria": "Categoría",
+            "Familia": "Familia prof.", "Nivel": "Nivel",
+            "Destinatarios": "Destinatarios", "Conocimientos": "Conocimientos prev.",
+            "ReqPrevio": "Req. Curso Previo", "Sintesis": "Síntesis",
+            "Externo": "Form. externo", "Etiqueta": "Etiqueta",
+        }
+        _COH_COL_WIDTHS = {
+            "Titulo": 200, "Categoria": 150, "Familia": 150, "Nivel": 120,
+            "Destinatarios": 180, "Conocimientos": 150, "ReqPrevio": 160,
+            "Sintesis": 220, "Externo": 140, "Etiqueta": 90,
+        }
+        self._coh_col_labels = _COH_COL_LABELS
+        for col in coh_cols:
+            self.coh_tree.heading(col, text=_COH_COL_LABELS[col],
+                                  command=lambda c=col: self._coh_sort(c))
+            self.coh_tree.column(col, width=_COH_COL_WIDTHS[col], minwidth=60)
 
         coh_vsb = ttk.Scrollbar(coh_tree_frame, orient="vertical",
                                  command=self.coh_tree.yview)
         self.coh_tree.configure(yscrollcommand=coh_vsb.set)
         self.coh_tree.grid(row=0, column=0, sticky="nsew")
         coh_vsb.grid(row=0, column=1, sticky="ns")
+        self.coh_tree.bind("<Button-3>", self._coh_ctx_menu)
+        self.coh_tree.bind("<Button-2>", self._coh_ctx_menu)
 
         # Bottom: Banco disponible
         bot_frame = ctk.CTkFrame(
@@ -613,7 +634,7 @@ class GeneradorMoodle(ctk.CTk):
             border_color=COLORS["border"], fg_color=COLORS["bg_card"]
         )
         bot_frame.grid(row=1, column=0, sticky="nsew")
-        bot_frame.grid_rowconfigure(1, weight=1)
+        bot_frame.grid_rowconfigure(2, weight=1)
         bot_frame.grid_columnconfigure(0, weight=1)
 
         bot_header = ctk.CTkFrame(bot_frame, fg_color="transparent", height=38)
@@ -629,12 +650,19 @@ class GeneradorMoodle(ctk.CTk):
         self._btn(bot_header, "Agregar seleccionados", self._banco_agregar_seleccionados,
                   color="accent", height=28, width=175).pack(side="right", padx=2)
 
+        disp_search = ctk.CTkFrame(bot_frame, fg_color="transparent")
+        disp_search.grid(row=1, column=0, sticky="ew", padx=8, pady=(0, 4))
+        self._entry(disp_search, textvariable=self._banco_disp_filtro_var, width=0,
+                    placeholder="🔍  Filtrar banco disponible...").pack(fill="x")
+        self._banco_disp_filtro_var.trace_add(
+            "write", lambda *_: self._refresh_banco_disponible())
+
         self._banco_disp_frame = ctk.CTkScrollableFrame(
             bot_frame, fg_color="transparent",
             scrollbar_button_color=COLORS["border"],
             scrollbar_button_hover_color=COLORS["accent"]
         )
-        self._banco_disp_frame.grid(row=1, column=0, sticky="nsew", padx=6, pady=(0, 6))
+        self._banco_disp_frame.grid(row=2, column=0, sticky="nsew", padx=6, pady=(0, 6))
 
     # ─────────────────────────────────────────
     # TAB 3: VISTA PREVIA HTML
@@ -765,6 +793,12 @@ class GeneradorMoodle(ctk.CTk):
         n = len(self.banco_cursos)
         self.lbl_banco_count.configure(
             text=f"{n} curso{'s' if n != 1 else ''} en el banco")
+        n_req = sum(1 for c in self.banco_cursos if c.get("curso_previo", "").strip())
+        try:
+            self.lbl_prereq_count.configure(
+                text=f"· {n_req} con prereq" if n_req else "")
+        except Exception:
+            pass
 
     def _banco_agregar_o_guardar(self):
         """Agrega al banco o guarda edición. Devuelve True si tuvo éxito."""
@@ -806,6 +840,37 @@ class GeneradorMoodle(ctk.CTk):
         except Exception:
             pass
         return True
+
+    def _banco_ctx_menu(self, event):
+        item = self.banco_tree.identify_row(event.y)
+        if not item:
+            return
+        if item not in self.banco_tree.selection():
+            self.banco_tree.selection_set(item)
+        menu = tk.Menu(self, tearoff=0,
+            background=_c("bg_card"), foreground=_c("text"),
+            activebackground=_c("accent"), activeforeground="#ffffff",
+            font=("Segoe UI", 11), bd=0, relief="flat")
+        idx = self._banco_sel_idx()
+        menu.add_command(label="✏  Editar",
+            command=lambda: self._banco_abrir_form(idx))
+        menu.add_command(label="📋  Duplicar", command=self._banco_duplicar)
+        menu.add_separator()
+        menu.add_command(label="🗑  Eliminar", command=self._banco_eliminar)
+        menu.tk_popup(event.x_root, event.y_root)
+
+    def _coh_ctx_menu(self, event):
+        item = self.coh_tree.identify_row(event.y)
+        if not item:
+            return
+        if item not in self.coh_tree.selection():
+            self.coh_tree.selection_set(item)
+        menu = tk.Menu(self, tearoff=0,
+            background=_c("bg_card"), foreground=_c("text"),
+            activebackground=_c("accent"), activeforeground="#ffffff",
+            font=("Segoe UI", 11), bd=0, relief="flat")
+        menu.add_command(label="🗑  Quitar de cohorte", command=self._coh_quitar_curso)
+        menu.tk_popup(event.x_root, event.y_root)
 
     def _banco_editar(self):
         """Carga curso seleccionado al form para editar."""
@@ -1169,6 +1234,42 @@ class GeneradorMoodle(ctk.CTk):
         self._save_banco_json()
         self._marcar_cambio()
 
+    def _coh_sort(self, col):
+        """Ordena la cohorte por la columna indicada."""
+        field_map = {
+            "Titulo": "titulo", "Categoria": "categoria",
+            "Familia": "familia_prof", "Nivel": "nivel",
+            "Destinatarios": "destinatarios", "Conocimientos": "conocimientos",
+            "ReqPrevio": "curso_previo", "Sintesis": "sintesis",
+            "Externo": "form_externo", "Etiqueta": "etiqueta",
+        }
+        field = field_map.get(col, col.lower())
+        if self._coh_sort_state["col"] == col:
+            self._coh_sort_state["reverse"] = not self._coh_sort_state["reverse"]
+        else:
+            self._coh_sort_state["col"] = col
+            self._coh_sort_state["reverse"] = False
+        reverse = self._coh_sort_state["reverse"]
+
+        def sort_key(entry):
+            if field == "etiqueta":
+                return (entry.get("etiqueta") or "").lower()
+            bidx = entry.get("banco_idx", -1)
+            if 0 <= bidx < len(self.banco_cursos):
+                return (self.banco_cursos[bidx].get(field) or "").lower()
+            return ""
+
+        self.cohorte["cursos"].sort(key=sort_key, reverse=reverse)
+
+        for c, lbl in self._coh_col_labels.items():
+            indicator = (" ▲" if not reverse else " ▼") if c == col else ""
+            self.coh_tree.heading(c, text=lbl + indicator,
+                                  command=lambda cc=c: self._coh_sort(cc))
+
+        self._refresh_coh_tree()
+        self._save_banco_json()
+        self._marcar_cambio()
+
     def _banco_importar_csv(self):
         """Importa cursos desde un archivo CSV."""
         archivo = filedialog.askopenfilename(
@@ -1300,10 +1401,16 @@ class GeneradorMoodle(ctk.CTk):
         disponibles = [(bidx, c) for bidx, c in enumerate(self.banco_cursos) if bidx not in ya_en_coh]
         self.lbl_banco_disp_count.configure(
             text=f"{len(disponibles)} disponible{'s' if len(disponibles) != 1 else ''}")
+        filtro = getattr(self, "_banco_disp_filtro_var", None)
+        filtro_txt = filtro.get().lower().strip() if filtro else ""
         for bidx, c in disponibles:
+            titulo = c.get("titulo", "")
+            cat = c.get("categoria", "")
+            if filtro_txt and filtro_txt not in titulo.lower() and filtro_txt not in cat.lower():
+                continue
             var = tk.BooleanVar(value=False)
             self._banco_disp_vars[bidx] = var
-            texto = f"{c.get('titulo','')}  [{c.get('categoria','')}]"
+            texto = f"{titulo}  [{cat}]"
             cb = ctk.CTkCheckBox(
                 self._banco_disp_frame, text=texto,
                 variable=var,
