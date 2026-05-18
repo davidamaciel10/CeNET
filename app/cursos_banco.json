@@ -219,11 +219,11 @@
       "img": "",
       "titulo": "Estrategias pedagógicas transversales para la lengua y comunicación en la ETP",
       "familia_prof": "Todas las familias profesionales",
-      "nivel": "",
-      "destinatarios": "",
-      "conocimientos": "",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de la Educación Técnico Profesional",
+      "conocimientos": "No requiere",
       "curso_previo": "",
-      "sintesis": "",
+      "sintesis": "El objetivo principal de este curso es abordar la enseñanza con un enfoque específico: posibilidades educativas que nos brinda enseñar lengua y la literatura en una escuela técnica (ET). Se analizarán oportunidades y desafíos que presenta la enseñanza de la lengua y la literatura en el marco de los debates actuales sobre transversalidad educativa, así como las ventajas de aplicaciones concretas al mundo de los talleres.",
       "form_externo": ""
     },
     {
@@ -289,11 +289,11 @@
       "img": "",
       "titulo": "Herramientas digitales aplicadas al dibujo técnico II (CAD-3D)",
       "familia_prof": "Fabricación digital",
-      "nivel": "",
-      "destinatarios": "",
-      "conocimientos": "Herramientas digitales aplicadas al dibujo técnico (CAD-2D)",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Escuela Técnica Secundaria. Docentes de Educación Técnico Profesional de Nivel Superior. Instructores de Formación Profesional.",
+      "conocimientos": "Haber aprobado Herramientas Digitales Aplicadas al Dibujo Técnico (CAD-2D) o tener conocimientos sólidos en AutoCAD 2D: dominio del entorno bidimensional, manejo de capas, bloques y estilos, comandos de dibujo y edición, interpretación de planos técnicos.",
       "curso_previo": "Herramientas digitales aplicadas al dibujo técnico (CAD-2D)",
-      "sintesis": "",
+      "sintesis": "El curso de CAD-3D tiene como propósito principal introducir al participante en la creación, modificación y presentación de modelos tridimensionales, aplicando herramientas específicas del entorno 3D de AutoCAD. Se trabajará con sólidos primitivos y operaciones complejas como extrusión, revolución, barrido y solevado, además de técnicas avanzadas de edición de aristas y caras. Progresión gradual desde la comprensión del espacio tridimensional y el SCU hasta la generación de presentaciones técnicas mediante vistas proyectadas, secciones y representaciones en papel.",
       "form_externo": ""
     },
     {
