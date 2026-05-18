@@ -583,6 +583,17 @@ class GeneradorMoodle(ctk.CTk):
         self._btn(top_bar, "▲", self._coh_subir,
                   color="ghost", height=28, width=36).pack(side="right", padx=2)
 
+        ctk.CTkLabel(top_bar, text="|", text_color=_c("text_muted"),
+                     fg_color="transparent").pack(side="right", padx=4)
+        self._btn(top_bar, "Sin etiqueta", lambda: self._coh_set_etiqueta(""),
+                  color="ghost", height=28, width=100).pack(side="right", padx=2)
+        self._btn(top_bar, "Destacado", lambda: self._coh_set_etiqueta("Destacado"),
+                  color="ghost", height=28, width=90).pack(side="right", padx=2)
+        self._btn(top_bar, "Nuevo", lambda: self._coh_set_etiqueta("Nuevo"),
+                  color="ghost", height=28, width=70).pack(side="right", padx=2)
+        ctk.CTkLabel(top_bar, text="Etiqueta:", text_color=_c("text_muted"),
+                     fg_color="transparent", font=ctk.CTkFont(size=11)).pack(side="right", padx=(6, 2))
+
         # Búsqueda en cohorte
         coh_search_frame = ctk.CTkFrame(top_frame, fg_color="transparent")
         coh_search_frame.grid(row=1, column=0, sticky="ew", padx=6, pady=(0, 2))
