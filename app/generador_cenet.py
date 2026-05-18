@@ -450,7 +450,7 @@ class GeneradorMoodle(ctk.CTk):
         tree_frame.grid_rowconfigure(0, weight=1)
         tree_frame.grid_columnconfigure(0, weight=1)
 
-        cols = ("Titulo", "Categoria", "Familia", "Nivel", "Destinatarios",
+        cols = ("Titulo", "Categoria", "Familia", "Nivel", "CargaHoraria", "Destinatarios",
                 "Conocimientos", "ReqPrevio", "Sintesis", "Externo")
         self.banco_tree = ttk.Treeview(
             tree_frame, columns=cols, show="headings",
@@ -461,6 +461,7 @@ class GeneradorMoodle(ctk.CTk):
             "Categoria":     "Categoría",
             "Familia":       "Familia prof.",
             "Nivel":         "Nivel",
+            "CargaHoraria":  "Carga horaria",
             "Destinatarios": "Destinatarios",
             "Conocimientos": "Conocimientos prev.",
             "ReqPrevio":     "Req. Curso Previo",
@@ -469,8 +470,8 @@ class GeneradorMoodle(ctk.CTk):
         }
         _COL_WIDTHS = {
             "Titulo": 200, "Categoria": 150, "Familia": 150, "Nivel": 120,
-            "Destinatarios": 180, "Conocimientos": 150, "ReqPrevio": 160,
-            "Sintesis": 220, "Externo": 140,
+            "CargaHoraria": 100, "Destinatarios": 180, "Conocimientos": 150,
+            "ReqPrevio": 160, "Sintesis": 220, "Externo": 140,
         }
         self._col_labels = _COL_LABELS
         for col in cols:
@@ -608,7 +609,7 @@ class GeneradorMoodle(ctk.CTk):
         coh_tree_frame.grid_rowconfigure(0, weight=1)
         coh_tree_frame.grid_columnconfigure(0, weight=1)
 
-        coh_cols = ("Titulo", "Categoria", "Familia", "Nivel", "Destinatarios",
+        coh_cols = ("Titulo", "Categoria", "Familia", "Nivel", "CargaHoraria", "Destinatarios",
                     "Conocimientos", "ReqPrevio", "Sintesis", "Externo", "Etiqueta")
         self.coh_tree = ttk.Treeview(
             coh_tree_frame, columns=coh_cols, show="headings",
@@ -617,14 +618,15 @@ class GeneradorMoodle(ctk.CTk):
         _COH_COL_LABELS = {
             "Titulo": "Título", "Categoria": "Categoría",
             "Familia": "Familia prof.", "Nivel": "Nivel",
+            "CargaHoraria": "Carga horaria",
             "Destinatarios": "Destinatarios", "Conocimientos": "Conocimientos prev.",
             "ReqPrevio": "Req. Curso Previo", "Sintesis": "Síntesis",
             "Externo": "Form. externo", "Etiqueta": "Etiqueta",
         }
         _COH_COL_WIDTHS = {
             "Titulo": 200, "Categoria": 150, "Familia": 150, "Nivel": 120,
-            "Destinatarios": 180, "Conocimientos": 150, "ReqPrevio": 160,
-            "Sintesis": 220, "Externo": 140, "Etiqueta": 90,
+            "CargaHoraria": 100, "Destinatarios": 180, "Conocimientos": 150,
+            "ReqPrevio": 160, "Sintesis": 220, "Externo": 140, "Etiqueta": 90,
         }
         self._coh_col_labels = _COH_COL_LABELS
         for col in coh_cols:
@@ -796,6 +798,7 @@ class GeneradorMoodle(ctk.CTk):
                 c.get("categoria", ""),
                 c.get("familia_prof", ""),
                 c.get("nivel", ""),
+                c.get("carga_horaria", ""),
                 c.get("destinatarios", ""),
                 c.get("conocimientos", ""),
                 c.get("curso_previo", ""),
@@ -1228,6 +1231,7 @@ class GeneradorMoodle(ctk.CTk):
         field_map = {
             "Titulo": "titulo", "Categoria": "categoria",
             "Familia": "familia_prof", "Nivel": "nivel",
+            "CargaHoraria": "carga_horaria",
             "Destinatarios": "destinatarios", "Conocimientos": "conocimientos",
             "ReqPrevio": "curso_previo", "Sintesis": "sintesis",
             "Externo": "form_externo",
@@ -1267,6 +1271,7 @@ class GeneradorMoodle(ctk.CTk):
         field_map = {
             "Titulo": "titulo", "Categoria": "categoria",
             "Familia": "familia_prof", "Nivel": "nivel",
+            "CargaHoraria": "carga_horaria",
             "Destinatarios": "destinatarios", "Conocimientos": "conocimientos",
             "ReqPrevio": "curso_previo", "Sintesis": "sintesis",
             "Externo": "form_externo", "Etiqueta": "etiqueta",
@@ -1402,6 +1407,7 @@ class GeneradorMoodle(ctk.CTk):
                     c.get("categoria", ""),
                     c.get("familia_prof", ""),
                     c.get("nivel", ""),
+                    c.get("carga_horaria", ""),
                     c.get("destinatarios", ""),
                     c.get("conocimientos", ""),
                     c.get("curso_previo", ""),
