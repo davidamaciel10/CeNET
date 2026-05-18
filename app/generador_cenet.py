@@ -1824,7 +1824,7 @@ class GeneradorMoodle(ctk.CTk):
                     f'</div></div>'
                 )
             bloque_nuevos = (
-                f'<div style="max-width:1200px;margin:0 auto 28px;padding:0 16px;">'
+                f'<div id="bloqueNuevos" style="max-width:1200px;margin:0 auto 28px;padding:0 16px;">'
                 f'<div style="font-size:1.1rem;font-weight:700;color:#1e2a4a;'
                 f'border-bottom:2px solid #45658d;padding-bottom:8px;margin-bottom:16px;">'
                 f'Nuevos en esta edición</div>'
@@ -1851,6 +1851,10 @@ class GeneradorMoodle(ctk.CTk):
         )
         if cats_activa_orden:
             btns_cat += f'\n<button type="button" style="{S_FA}" id="btnVerTodos" onclick="cnetFiltro(\'\')">Ver todos</button>'
+
+        btn_nuevos = (
+            f'<button type="button" style="{S_F}" onclick="cnetFiltroNuevos()">✨ Nuevos</button>\n'
+        ) if nuevos else ""
 
         # Cards de la cohorte activa agrupadas por categoría
         secs_activa = ""
@@ -1973,6 +1977,16 @@ class GeneradorMoodle(ctk.CTk):
             f'  document.body.style.overflow="";\n'
             f'}}\n'
             f'document.addEventListener("keydown",function(e){{if(e.key==="Escape")cnetClose();}})\n'
+            f'function cnetFiltroNuevos(){{\n'
+            f'  var secs=document.querySelectorAll("#cnetActiva [id^=\'cat_\']");\n'
+            f'  for(var i=0;i<secs.length;i++)secs[i].style.display="none";\n'
+            f'  var bn=document.getElementById("bloqueNuevos");\n'
+            f'  if(bn)bn.style.display="";\n'
+            f'  var inp=document.getElementById("cnetSearch");\n'
+            f'  if(inp)inp.value="";\n'
+            f'  var nr=document.getElementById("cnetNoRes");\n'
+            f'  if(nr)nr.style.display="none";\n'
+            f'}}\n'
             f'function cnetFiltro(val){{\n'
             f'  var inp=document.getElementById("cnetSearch");\n'
             f'  if(inp)inp.value=val;\n'
@@ -1997,17 +2011,16 @@ class GeneradorMoodle(ctk.CTk):
             f'    secs[i].style.display=vis>0?"":"none";\n'
             f'    if(vis>0)hayVis=true;\n'
             f'  }}\n'
-            f'  var nuevos=document.getElementById("secNuevos");\n'
-            f'  if(nuevos){{\n'
-            f'    var nCards=nuevos.querySelectorAll("[data-search]");\n'
+            f'  var bn=document.getElementById("bloqueNuevos");\n'
+            f'  if(bn){{\n'
+            f'    var nCards=bn.querySelectorAll("[data-search]");\n'
             f'    var nVis=0;\n'
             f'    for(var k=0;k<nCards.length;k++){{\n'
             f'      var nm=(nCards[k].getAttribute("data-search")||"").includes(val);\n'
             f'      nCards[k].style.display=nm?"":"none";\n'
             f'      if(nm)nVis++;\n'
             f'    }}\n'
-            f'    var secN=document.getElementById("secNuevos");\n'
-            f'    if(secN)secN.parentElement.style.display=nVis>0?"":"none";\n'
+            f'    bn.style.display=nVis>0?"":"none";\n'
             f'  }}\n'
             f'  var nr=document.getElementById("cnetNoRes");\n'
             f'  if(nr)nr.style.display=hayVis?"none":"block";\n'
@@ -2030,7 +2043,7 @@ class GeneradorMoodle(ctk.CTk):
         _coh_header = "" if es_inet else coh_header
 
         return (
-            f'<div style="font-family:\'Segoe UI\',Arial,sans-serif;color:#333;line-height:1.5;">\n'
+            f'<div style="font-family:\'Segoe UI\',Arial,sans-serif;color:#333;line-height:1.5;font-size:16px;">\n'
 
             # Popup de información (oculto por defecto, compartido por todas las cards)
             f'{popup_html}'
@@ -2056,6 +2069,7 @@ class GeneradorMoodle(ctk.CTk):
 
             # Filtros por categoría
             f'<div style="text-align:center;padding:0 0 18px;">'
+            f'{btn_nuevos}'
             f'{btns_cat}'
             f'</div>\n'
 
