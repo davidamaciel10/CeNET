@@ -2,87 +2,16 @@
   "cursos": [
     {
       "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/BUENAS%20PR%C3%81CTICAS%20%283%29.jpeg?forcedownload=1",
-      "titulo": "Buenas Prácticas en el uso de la información",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Aprender%20a%20comunicarse%20con%20la%20IA.jpg?forcedownload=1",
+      "titulo": "Aprender a comunicarse con la IA. Guía básica para la escritura de prompts",
       "familia_prof": "Todas las familias profesionales",
-      "nivel": "Secundario Técnico – Técnico Superior",
-      "destinatarios": "Autoridades y docentes de instituciones técnicas",
-      "conocimientos": "No se requiere",
+      "nivel": "Secundario – Formación Superior no universitario de ETP",
+      "destinatarios": "Profesores del área de informática, computación, tecnología y TIC",
+      "conocimientos": "Saber sobre inteligencia artificial",
       "curso_previo": "",
-      "sintesis": "Explorar y analizar buenas prácticas en torno al uso de la información desde la alfabetización informacional, incluyendo identificación, búsqueda, validación de información y evaluación crítica de tecnologías generativas con IA.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/CIUDADAN%C3%8DA%20%282%29.jpg?forcedownload=1",
-      "titulo": "Ciudadanía digital: de las redes al aula, del aula a las redes",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "Acercamiento reflexivo a entornos digitales con propósito pedagógico para fortalecer derechos de adolescentes y ciudadanos digitales, abordando oportunidades, desafíos y responsabilidades.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/creaci%C3%B3n%20de%20aulas%20virtuales%20%281%29.jpg?forcedownload=1",
-      "titulo": "Creación de Aulas Virtuales y Aplicación de Software en la Enseñanza Técnica",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Autoridades y docentes de instituciones técnicas",
-      "conocimientos": "No se requieren",
-      "curso_previo": "",
-      "sintesis": "Capacitación en creación y gestión de aulas virtuales en Google Classroom integrando simuladores técnicos, abarcando diseño de entornos virtuales, organización de contenidos y planificación de actividades en disciplinas como electricidad y mecánica.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Formaci%C3%B3n%20emprendedora%20en%20la%20ETP%20%284%29.jpg?forcedownload=1",
-      "titulo": "Formación emprendedora en la ETP",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Autoridades y docentes de instituciones técnicas",
-      "conocimientos": "No se requieren",
-      "curso_previo": "",
-      "sintesis": "Proporciona herramientas pedagógicas para complementar la enseñanza técnica con competencias emprendedoras, potenciando la capacidad estudiantil para identificar oportunidades, diseñar proyectos innovadores y generar impacto socioeconómico.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/An%C3%A1lisis%20de%20datos%20en%20la%20educaci%C3%B3n%20t%C3%A9cnica%C2%A0%20profesional%20Herramientas%20y%20actividades.jpg?forcedownload=1",
-      "titulo": "Introducción al análisis y la visualización de datos en la Educación Técnico Profesional",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "Conocimientos básicos de informática: manejo de hojas de cálculo y familiaridad con conceptos técnicos.",
-      "curso_previo": "",
-      "sintesis": "Integración del análisis de datos como herramienta pedagógica, abarcando desde el manejo básico hasta la creación de actividades didácticas con datasets reales, incluyendo identificación, organización, exploración y visualización de información.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Introducci%C3%B3n%20a%20la%20programaci%C3%B3n%20con%20Python.jpg?forcedownload=1",
-      "titulo": "Introducción a la programación con Python",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "Capacitación en el lenguaje de programación Python para su integración en prácticas educativas, abordando fundamentos de programación, estrategias didácticas y actividades prácticas de aula.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Inteligencia%20Artificial%20Generativa%20y%20educaci%C3%B3n%20%281%29.png?forcedownload=1",
-      "titulo": "Inteligencia artificial generativa como apoyo a la tarea docente. Estrategias para usar la IAG en la planificación, enseñanza y evaluación (Asociación Chicos.Net)",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Secundario Técnico – Técnico Superior",
-      "destinatarios": "Autoridades y docentes de instituciones técnicas",
-      "conocimientos": "No se requiere",
-      "curso_previo": "",
-      "sintesis": "Este curso propone una aproximación integral al uso de la inteligencia artificial generativa (IAG) en la tarea docente, articulando dos dimensiones clave: la planificación y producción de propuestas de enseñanza, y la evaluación de los aprendizajes en contextos atravesados por estas tecnologías.",
-      "form_externo": ""
+      "sintesis": "Domina la escritura de prompts como habilidad clave en la interacción con IA generativa, promoviendo creatividad, pensamiento crítico y resolución de problemas con enfoque ético y pedagógico. (Asociación Chicos.Net)",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
     },
     {
       "categoria": "Innovación y entornos digitales",
@@ -94,254 +23,21 @@
       "conocimientos": "No requiere",
       "curso_previo": "",
       "sintesis": "Establece bases de conocimiento para proyectos con machine learning e inteligencia artificial mediante un acercamiento teórico y práctico utilizando plataformas escolares. (Asociación Chicos.Net)",
-      "form_externo": ""
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
     },
     {
       "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Aprender%20a%20comunicarse%20con%20la%20IA.jpg?forcedownload=1",
-      "titulo": "Aprender a comunicarse con la IA. Guía básica para la escritura de prompts",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Secundario – Formación Superior no universitario de ETP",
-      "destinatarios": "Profesores del área de informática, computación, tecnología y TIC",
-      "conocimientos": "Saber sobre inteligencia artificial",
-      "curso_previo": "",
-      "sintesis": "Domina la escritura de prompts como habilidad clave en la interacción con IA generativa, promoviendo creatividad, pensamiento crítico y resolución de problemas con enfoque ético y pedagógico. (Asociación Chicos.Net)",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Herramientas%20metodol%C3%B3gicas%20para%20la%20formaci%C3%B3n%20emprendedora%20en%20la%20ETP%20%282%29.jpg?forcedownload=1",
-      "titulo": "Herramientas metodológicas para la formación emprendedora en la ETP",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/BUENAS%20PR%C3%81CTICAS%20%283%29.jpeg?forcedownload=1",
+      "titulo": "Buenas Prácticas en el uso de la información",
       "familia_prof": "Todas las familias profesionales",
       "nivel": "Secundario Técnico – Técnico Superior",
-      "destinatarios": "Autoridades y docentes de instituciones ETP",
+      "destinatarios": "Autoridades y docentes de instituciones técnicas",
       "conocimientos": "No se requiere",
       "curso_previo": "",
-      "sintesis": "Proporciona herramientas metodológicas (Lean Startup, Design Thinking, Prototipado, Canvas de Modelos de Negocio) para su integración en la formación técnica, transformando el aprendizaje en experiencias significativas conectadas con las demandas socioeconómicas regionales.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Desaf%C3%ADos%20de%20la%20IA%20en%20el%20mundo%20actual.%20Una%20propuesta%20para%20comprender%20cr%C3%ADticamente%20la%20inteligencia%20artificial%20y%20sus%20impactos%20en%20la%20sociedad.jpg?forcedownload=1",
-      "titulo": "Desafíos de la IA en el mundo actual",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Secundario, Superior Técnico, Formación Profesional",
-      "destinatarios": "Docentes e instructores de la ETP",
-      "curso_previo": "",
-      "sintesis": "El curso propone una aproximación integral a la inteligencia artificial entendida como un fenómeno sociotécnico que atraviesa la vida cotidiana, el mundo del trabajo y los entornos educativos.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Inteligencia%20artificial%20generativa%20como%20apoyo%20a%20la%20tarea%20docente.%20Estrategias%20para%20usar%20la%20IAG%20en%20la%20planificaci%C3%B3n%2C%20ense%C3%B1anza%20y%20evaluaci%C3%B3n%20400x257.png?forcedownload=1",
-      "titulo": "Inteligencia artificial generativa como apoyo a la tarea docente",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Secundario - Formación Superior no universitario de Educación Técnico Profesional",
-      "destinatarios": "Profesores del área de informática, computación, tecnología y TIC o NTIC",
-      "curso_previo": "",
-      "sintesis": "Este curso propone una aproximación integral al uso de la inteligencia artificial generativa (IAG) en la tarea docente, articulando dos dimensiones clave: la planificación y producción de propuestas de enseñanza, y la evaluación de los aprendizajes.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Innovación y entornos digitales",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/IA.png?forcedownload=1",
-      "titulo": "Educar en tiempos de IA. Alfabetización y ciudadanía digital en la escuela",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "Proporciona herramientas conceptuales y pedagógicas para comprender, reflexionar y actuar frente a los desafíos educativos, éticos y sociales de la inteligencia artificial, fortaleciendo la ciudadanía digital. (Asociación Chicos.Net)",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Estrategias pedagógicas para la ETP",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/inclusi%C3%B3n%202026.png?forcedownload=1",
-      "titulo": "Inclusión educativa de estudiantes con discapacidad en la ETP",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "Desarrolla capacidades críticas para aceptar las diferencias como diversidad y colaborar en la construcción de prácticas inclusivas desde un enfoque de derechos humanos en discapacidad.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Estrategias pedagógicas para la ETP",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Convivencia%20en%20las%20instituciones%20educativas%20de%20la%20ETP.jpg?forcedownload=1",
-      "titulo": "Convivencia en las instituciones educativas de la Educación Técnico Profesional",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Secundario, Formación Profesional, Superior no universitario ETP",
-      "conocimientos": "No se requieren",
-      "curso_previo": "",
-      "sintesis": "Aborda la intervención pedagógica ante conflictos y situaciones de violencia, promoviendo vínculos respetuosos, fortaleciendo el rol docente y la participación estudiantil bajo la normativa CFE vigente.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Estrategias pedagógicas para la ETP",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/La%20comunicaci%C3%B3n%20de%20proyectos%20en%20las%20Escuelas%20T%C3%A9cnicas.jpg?forcedownload=1",
-      "titulo": "La comunicación de proyectos en las Escuelas Técnicas",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Secundarios de la ETP",
-      "destinatarios": "Autoridades y docentes de instituciones técnicas",
-      "conocimientos": "No se requieren",
-      "curso_previo": "",
-      "sintesis": "Invita a planificar y desarrollar estrategias de comunicación para proyectos escolares, fortaleciendo el vínculo escuela-comunidad y potenciando la difusión de producciones estudiantiles.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Estrategias pedagógicas para la ETP",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/EL%20PROYECTO%20%281%29.jpg?forcedownload=1",
-      "titulo": "El Proyecto Tecnológico",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "Propone el proyecto tecnológico como modelo didáctico para la enseñanza de tecnología en todas sus fases, desde la concepción de la idea hasta la evaluación final.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Estrategias pedagógicas para la ETP",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/STEM%20y%20rob%C3%B3tica.jpeg?forcedownload=1",
-      "titulo": "STEM y Robótica en la ETP",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Secundario Técnico – Técnico Superior",
-      "destinatarios": "Autoridades y docentes de instituciones ETP",
-      "conocimientos": "No se requiere",
-      "curso_previo": "",
-      "sintesis": "Introduce el enfoque STEM y su aplicación mediante la robótica como herramienta pedagógica, explorando estrategias didácticas interdisciplinarias que integran pensamiento computacional, diseño y programación.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Estrategias pedagógicas para la ETP",
-      "img": "",
-      "titulo": "Estrategias pedagógicas transversales para la lengua y comunicación en la ETP",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de la Educación Técnico Profesional",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "El objetivo principal de este curso es abordar la enseñanza con un enfoque específico: posibilidades educativas que nos brinda enseñar lengua y la literatura en una escuela técnica (ET). Se analizarán oportunidades y desafíos que presenta la enseñanza de la lengua y la literatura en el marco de los debates actuales sobre transversalidad educativa, así como las ventajas de aplicaciones concretas al mundo de los talleres.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Seguridad institucional",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/5S%20%281%29.jpg?forcedownload=1",
-      "titulo": "Modelo 5S para la gestión de prevención, higiene y salud en la ETP",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "curso_previo": "",
-      "sintesis": "Aporta herramientas para implementar el Modelo 5S en escuelas técnicas, fortaleciendo la cultura de la prevención y el orden en aulas-taller e instituciones.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Seguridad institucional",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Prevenci%C3%B3n%2C%20higiene%20y%20salud%20laboral%20en%20instituciones%20de%20ETP.jpg?forcedownload=1",
-      "titulo": "Prevención, higiene y salud laboral en instituciones de ETP",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "Brinda herramientas para identificar riesgos laborales y promover acciones preventivas considerando el impacto en la salud física y mental.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Seguridad institucional",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Gesti%C3%B3n%20de%20riesgos%20y%20su%20prevenci%C3%B3n%20en%20las%20instituciones%20de%20ETP%20%282%29.png?forcedownload=1",
-      "titulo": "Gestión de riesgos y su prevención en las instituciones de ETP",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "curso_previo": "Es necesesario haber aprobado el curso \"Prevención, higiene y salud laboral en instituciones de ETP\" para poder inscribirse.",
-      "sintesis": "Curso avanzado orientado al diseño e implementación de estrategias de gestión de riesgos físicos y psicosociales, fortaleciendo las capacidades de liderazgo institucional.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Dise%C3%B1o%20y%20modelado%203D%20SolidEdge%20%282%29.jpg?forcedownload=1",
-      "titulo": "Diseño y modelado 3D con software paramétrico (SOLIDEDGE)",
-      "familia_prof": "Metalmecánica",
-      "nivel": "Secundario Técnico – Técnico Superior",
-      "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
-      "conocimientos": "Lectura de planos metalmecánicos",
-      "curso_previo": "",
-      "sintesis": "Capacita en diseño tridimensional, modelado, ensambles y generación de planos de fabricación, incluyendo prototipado mediante impresión 3D.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Herramientas%20digitales%20aplicadas%20al%20dibujo%20t%C3%A9cnico%20%28CAD%20-%202D%29.jpg?forcedownload=1",
-      "titulo": "Herramientas digitales aplicadas al dibujo técnico (CAD-2D)",
-      "familia_prof": "Fabricación digital",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Autoridades y docentes de instituciones técnicas",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "Introduce herramientas CAD para optimizar los procesos de diseño y dibujo técnico, aumentando la productividad en las etapas de diseño e impresión.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "",
-      "titulo": "Herramientas digitales aplicadas al dibujo técnico II (CAD-3D)",
-      "familia_prof": "Fabricación digital",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Escuela Técnica Secundaria. Docentes de Educación Técnico Profesional de Nivel Superior. Instructores de Formación Profesional.",
-      "conocimientos": "Haber aprobado Herramientas Digitales Aplicadas al Dibujo Técnico (CAD-2D) o tener conocimientos sólidos en AutoCAD 2D: dominio del entorno bidimensional, manejo de capas, bloques y estilos, comandos de dibujo y edición, interpretación de planos técnicos.",
-      "curso_previo": "Herramientas digitales aplicadas al dibujo técnico (CAD-2D)",
-      "sintesis": "El curso de CAD-3D tiene como propósito principal introducir al participante en la creación, modificación y presentación de modelos tridimensionales, aplicando herramientas específicas del entorno 3D de AutoCAD. Se trabajará con sólidos primitivos y operaciones complejas como extrusión, revolución, barrido y solevado, además de técnicas avanzadas de edición de aristas y caras. Progresión gradual desde la comprensión del espacio tridimensional y el SCU hasta la generación de presentaciones técnicas mediante vistas proyectadas, secciones y representaciones en papel.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/3D%20a%20%281%29.jpeg?forcedownload=1",
-      "titulo": "Técnicas sustentables en impresión 3D",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "Formación en diseño e impresión 3D con enfoque en sustentabilidad y reciclaje de materiales.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/INTRO%20A%20BIM%20%282%29.jpg?forcedownload=1",
-      "titulo": "Introducción al modelado con metodología BIM de Archicad",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "Introducción a la metodología BIM y al uso de Archicad para el modelado de información de construcción, optimizando tiempos y documentación.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Construcciones%20sustentables.jpeg?forcedownload=1",
-      "titulo": "Construcciones sustentables",
-      "familia_prof": "Construcciones",
-      "nivel": "Secundario – Formación profesional – Superior Técnico",
-      "destinatarios": "Docentes e instructores de la modalidad ETP",
-      "curso_previo": "",
-      "sintesis": "Desarrollo de prácticas y tecnologías para proyectos de construcción sustentables y eficientes.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/INTRO%20A%20LA%20AUTOMATIZACION%20%282%29.jpg?forcedownload=1",
-      "titulo": "Introducción a la automatización industrial",
-      "familia_prof": "Todas las familias profesionales",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "Introducción a la automatización industrial, tipos de señales y control mediante lógica cableada y programada.",
-      "form_externo": ""
+      "sintesis": "Explorar y analizar buenas prácticas en torno al uso de la información desde la alfabetización informacional, incluyendo identificación, búsqueda, validación de información y evaluación crítica de tecnologías generativas con IA.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
     },
     {
       "categoria": "Diseño, Producción y Especializaciones Técnicas",
@@ -353,53 +49,109 @@
       "conocimientos": "Conocimientos técnicos de electricidad, electrónica y automatización",
       "curso_previo": "",
       "sintesis": "Uso del software CADeSIMU como herramienta pedagógica para el diseño y simulación de circuitos eléctricos.",
-      "form_externo": ""
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Innovación y entornos digitales",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/CIUDADAN%C3%8DA%20%282%29.jpg?forcedownload=1",
+      "titulo": "Ciudadanía digital: de las redes al aula, del aula a las redes",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "No requiere",
+      "curso_previo": "",
+      "sintesis": "Acercamiento reflexivo a entornos digitales con propósito pedagógico para fortalecer derechos de adolescentes y ciudadanos digitales, abordando oportunidades, desafíos y responsabilidades.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
     },
     {
       "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Principios%20de%20la%20hidr%C3%A1ulica%20para%20la%20formaci%C3%B3n%20t%C3%A9cnica.jpg?forcedownload=1",
-      "titulo": "Principios de la hidráulica para la formación técnica",
-      "familia_prof": "Mecánica, electromecánica, mecatrónica",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Construcciones%20sustentables.jpeg?forcedownload=1",
+      "titulo": "Construcciones sustentables",
+      "familia_prof": "Construcciones",
+      "nivel": "Secundario – Formación profesional – Superior Técnico",
+      "destinatarios": "Docentes e instructores de la modalidad ETP",
+      "curso_previo": "",
+      "sintesis": "Desarrollo de prácticas y tecnologías para proyectos de construcción sustentables y eficientes.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Estrategias pedagógicas para la ETP",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Convivencia%20en%20las%20instituciones%20educativas%20de%20la%20ETP.jpg?forcedownload=1",
+      "titulo": "Convivencia en las instituciones educativas de la Educación Técnico Profesional",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Secundario, Formación Profesional, Superior no universitario ETP",
+      "conocimientos": "No se requieren",
+      "curso_previo": "",
+      "sintesis": "Aborda la intervención pedagógica ante conflictos y situaciones de violencia, promoviendo vínculos respetuosos, fortaleciendo el rol docente y la participación estudiantil bajo la normativa CFE vigente.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Innovación y entornos digitales",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/creaci%C3%B3n%20de%20aulas%20virtuales%20%281%29.jpg?forcedownload=1",
+      "titulo": "Creación de Aulas Virtuales y Aplicación de Software en la Enseñanza Técnica",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Autoridades y docentes de instituciones técnicas",
+      "conocimientos": "No se requieren",
+      "curso_previo": "",
+      "sintesis": "Capacitación en creación y gestión de aulas virtuales en Google Classroom integrando simuladores técnicos, abarcando diseño de entornos virtuales, organización de contenidos y planificación de actividades en disciplinas como electricidad y mecánica.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Innovación y entornos digitales",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Desaf%C3%ADos%20de%20la%20IA%20en%20el%20mundo%20actual.%20Una%20propuesta%20para%20comprender%20cr%C3%ADticamente%20la%20inteligencia%20artificial%20y%20sus%20impactos%20en%20la%20sociedad.jpg?forcedownload=1",
+      "titulo": "Desafíos de la IA en el mundo actual",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Secundario, Superior Técnico, Formación Profesional",
+      "destinatarios": "Docentes e instructores de la ETP",
+      "curso_previo": "",
+      "sintesis": "El curso propone una aproximación integral a la inteligencia artificial entendida como un fenómeno sociotécnico que atraviesa la vida cotidiana, el mundo del trabajo y los entornos educativos.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "titulo": "Diseño avanzado 3D con sólidos paramétricos (Autodesk Inventor)",
+      "categoria": "Diseño, Producción y Especializaciones Técnicas",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Dise%C3%B1o%20avanzado%203D%20con%20solidos%20parametricos%20%28autodesk%20inventor%29.jpg?forcedownload=1",
+      "familia_prof": "Metalmecánica",
       "nivel": "Todos los niveles y ámbitos de la ETP",
       "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
-      "conocimientos": "Física, mecanismos y electricidad",
-      "curso_previo": "",
-      "sintesis": "Fortalece los conocimientos en hidráulica industrial y las estrategias didácticas para su enseñanza.",
-      "form_externo": ""
+      "conocimientos": "",
+      "sintesis": "Nivel avanzado de modelado 3D para la creación y fabricación de productos con tecnologías digitales mediante Autodesk Inventor.",
+      "curso_previo": "Es necesario tener aprobado Introducción al diseño 3D con sólidos paramétricos (Autodesk Inventor).",
+      "carga_horaria": "40 horas reloj"
     },
     {
       "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Tecnolog%C3%ADa%20Neum%C3%A1tica%20%281%29.jpg?forcedownload=1",
-      "titulo": "Tecnología neumática",
-      "familia_prof": "Mecánica – Electromecánica – Mecatrónica",
-      "nivel": "Secundario – Formación profesional – Técnica Superior",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Dise%C3%B1o%20y%20modelado%203D%20SolidEdge%20%282%29.jpg?forcedownload=1",
+      "titulo": "Diseño y modelado 3D con software paramétrico (SOLIDEDGE)",
+      "familia_prof": "Metalmecánica",
+      "nivel": "Secundario Técnico – Técnico Superior",
       "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
+      "conocimientos": "Lectura de planos metalmecánicos",
       "curso_previo": "",
-      "sintesis": "Introducción a la técnica del mando neumático y ejecución de circuitos de baja y mediana complejidad.",
-      "form_externo": ""
+      "sintesis": "Capacita en diseño tridimensional, modelado, ensambles y generación de planos de fabricación, incluyendo prototipado mediante impresión 3D.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
     },
     {
-      "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Electroneum%C3%A1tica%20I.png?forcedownload=1",
-      "titulo": "Electroneumática I - Estructura y componentes de circuitos electroneumáticos",
-      "familia_prof": "Mecánica – Electromecánica – Mecatrónica",
-      "nivel": "Secundario – Formación profesional – Técnica Superior",
-      "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
+      "categoria": "Innovación y entornos digitales",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/IA.png?forcedownload=1",
+      "titulo": "Educar en tiempos de IA. Alfabetización y ciudadanía digital en la escuela",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "No requiere",
       "curso_previo": "",
-      "sintesis": "Brinda herramientas fundamentales para el reconocimiento e identificación de los componentes que constituyen circuitos eléctricos y electroneumáticos, así como para la comprensión de su funcionamiento y aplicaciones.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Electroneum%C3%A1tica%20II.jpeg?forcedownload=1",
-      "titulo": "Electroneumática II diseño, Análisis y resolución de circuitos electroneumáticos",
-      "familia_prof": "Mecánica – Electromecánica – Mecatrónica",
-      "nivel": "Secundario – Formación profesional – Técnica Superior",
-      "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
-      "conocimientos": "Tener aprobado Electroneumática I",
-      "curso_previo": "Es necesesario haber aprobado el curso Electroneumática I para poder inscribirse.",
-      "sintesis": "Profundiza en el análisis, diseño y resolución de circuitos electroneumáticos avanzados, abordando secuencias de varios actuadores y métodos de resolución de circuitos.",
-      "form_externo": ""
+      "sintesis": "Proporciona herramientas conceptuales y pedagógicas para comprender, reflexionar y actuar frente a los desafíos educativos, éticos y sociales de la inteligencia artificial, fortaleciendo la ciudadanía digital. (Asociación Chicos.Net)",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
     },
     {
       "categoria": "Diseño, Producción y Especializaciones Técnicas",
@@ -411,43 +163,70 @@
       "conocimientos": "No requiere",
       "curso_previo": "",
       "sintesis": "Introducción a los conceptos de eficiencia energética y los avances tecnológicos del área.",
-      "form_externo": ""
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Estrategias pedagógicas para la ETP",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/EL%20PROYECTO%20%281%29.jpg?forcedownload=1",
+      "titulo": "El Proyecto Tecnológico",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "No requiere",
+      "curso_previo": "",
+      "sintesis": "Propone el proyecto tecnológico como modelo didáctico para la enseñanza de tecnología en todas sus fases, desde la concepción de la idea hasta la evaluación final.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
     },
     {
       "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Dise%C3%B1o%20avanzado%203D%20con%20solidos%20parametricos%20%28autodesk%20inventor%29.jpg?forcedownload=1",
-      "titulo": "Avanzado - Diseño avanzado 3D con sólidos paramétricos (Autodesk Inventor)",
-      "familia_prof": "Metalmecánica",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Electroneum%C3%A1tica%20I.png?forcedownload=1",
+      "titulo": "Electroneumática I - Estructura y componentes de circuitos electroneumáticos",
+      "familia_prof": "Mecánica – Electromecánica – Mecatrónica",
+      "nivel": "Secundario – Formación profesional – Técnica Superior",
       "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
-      "conocimientos": "Manejo de software de dibujo bidimensional y normas IRAM e ISO",
-      "curso_previo": "Es necesario tener aprobado Introducción al diseño 3D con sólidos paramétricos (Autodesk Inventor).",
-      "sintesis": "Nivel avanzado de modelado 3D para la creación y fabricación de productos con tecnologías digitales mediante Autodesk Inventor.",
-      "form_externo": ""
+      "curso_previo": "",
+      "sintesis": "Brinda herramientas fundamentales para el reconocimiento e identificación de los componentes que constituyen circuitos eléctricos y electroneumáticos, así como para la comprensión de su funcionamiento y aplicaciones.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
     },
     {
+      "titulo": "Electroneumática II - Diseño, Análisis y resolución de circuitos electroneumáticos",
       "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Programaci%C3%B3n%20de%20tornos.png?forcedownload=1",
-      "titulo": "Introducción a la programación CNC para torno en 2 ejes",
-      "familia_prof": "Eléctrica / Electrónica / Mecánica / Electromecánica / Mecatrónica",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "Lectura de planos de fabricación, familia metalmecánica y diseño tecnológico",
-      "curso_previo": "",
-      "sintesis": "Nivel avanzado de programación de tornos CNC, combinando teoría con ejercicios prácticos y simulaciones para su aplicación en entorno real.",
-      "form_externo": ""
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Electroneum%C3%A1tica%20II.jpeg?forcedownload=1",
+      "familia_prof": "Mecánica – Electromecánica – Mecatrónica",
+      "nivel": "Secundario – Formación profesional – Técnica Superior",
+      "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
+      "conocimientos": "",
+      "sintesis": "Profundiza en el análisis, diseño y resolución de circuitos electroneumáticos avanzados, abordando secuencias de varios actuadores y métodos de resolución de circuitos.",
+      "curso_previo": "Es necesesario haber aprobado el curso Electroneumática I para poder inscribirse.",
+      "carga_horaria": "40 horas reloj"
     },
     {
-      "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/paneles%20solares.png?forcedownload=1",
-      "titulo": "Instalaciones de Paneles Solares",
-      "familia_prof": "Eléctrica / Electrónica / Mecánica / Electromecánica / Mecatrónica",
+      "titulo": "Estrategias pedagógicas transversales para la lengua y comunicación en la ETP",
+      "categoria": "Estrategias pedagógicas para la ETP",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Estrategias%20pedag%C3%B3gicas%20transversales%20para%20la%20lengua%20y%20comunicaci%C3%B3n%20en%20la%20ETP.jpg?",
+      "familia_prof": "Todas las familias profesionales",
       "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "Conocimientos básicos en electricidad e interpretación de esquemas eléctricos",
+      "destinatarios": "Docentes de la Educación Técnico Profesional",
+      "conocimientos": "No requiere",
+      "sintesis": "El objetivo principal de este curso es abordar la enseñanza con un enfoque específico: posibilidades educativas que nos brinda enseñar lengua y la literatura en una escuela técnica (ET). Se analizarán oportunidades y desafíos que presenta la enseñanza de la lengua y la literatura en el marco de los debates actuales sobre transversalidad educativa, así como las ventajas de aplicaciones concretas al mundo de los talleres.",
       "curso_previo": "",
-      "sintesis": "Introducción a la producción de electricidad mediante paneles solares, adquiriendo conocimientos teóricos y desarrollando los principios de funcionamiento y dimensionamiento de instalaciones.",
-      "form_externo": ""
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Innovación y entornos digitales",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Formaci%C3%B3n%20emprendedora%20en%20la%20ETP%20%284%29.jpg?forcedownload=1",
+      "titulo": "Formación emprendedora en la ETP",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Autoridades y docentes de instituciones técnicas",
+      "conocimientos": "No se requieren",
+      "curso_previo": "",
+      "sintesis": "Proporciona herramientas pedagógicas para complementar la enseñanza técnica con competencias emprendedoras, potenciando la capacidad estudiantil para identificar oportunidades, diseñar proyectos innovadores y generar impacto socioeconómico.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
     },
     {
       "categoria": "Diseño, Producción y Especializaciones Técnicas",
@@ -459,7 +238,197 @@
       "conocimientos": "No se requiere",
       "curso_previo": "",
       "sintesis": "Introduce el análisis conceptual y procedimental de sistemas embebidos, permitiendo a los docentes comprender la tecnología, sus funcionalidades hardware-software e implementar soluciones típicas básicas con enfoque ecológico.",
-      "form_externo": ""
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Seguridad institucional",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Gesti%C3%B3n%20de%20riesgos%20y%20su%20prevenci%C3%B3n%20en%20las%20instituciones%20de%20ETP%20%282%29.png?forcedownload=1",
+      "titulo": "Gestión de riesgos y su prevención en las instituciones de ETP",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "curso_previo": "Es necesesario haber aprobado el curso \"Prevención, higiene y salud laboral en instituciones de ETP\" para poder inscribirse.",
+      "sintesis": "Curso avanzado orientado al diseño e implementación de estrategias de gestión de riesgos físicos y psicosociales, fortaleciendo las capacidades de liderazgo institucional.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "titulo": "Herramientas digitales aplicadas al dibujo técnico (CAD-2D)",
+      "categoria": "Diseño, Producción y Especializaciones Técnicas",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Herramientas%20digitales%20aplicadas%20al%20dibujo%20t%C3%A9cnico%20%28CAD%20-%202D%29.jpg?forcedownload=1",
+      "familia_prof": "Fabricación digital",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Autoridades y docentes de instituciones técnicas",
+      "conocimientos": "No requiere",
+      "sintesis": "Introduce herramientas CAD para optimizar los procesos de diseño y dibujo técnico, aumentando la productividad en las etapas de diseño e impresión.",
+      "curso_previo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "titulo": "Herramientas digitales aplicadas al dibujo técnico II (CAD-3D)",
+      "categoria": "Diseño, Producción y Especializaciones Técnicas",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Herramientas%20digitales%20aplicadas%20al%20dibujo%20t%C3%A9cnico%20II%20%28CAD-3D%29.jpg?",
+      "familia_prof": "Fabricación digital",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Escuela Técnica Secundaria. Docentes de Educación Técnico Profesional de Nivel Superior. Instructores de Formación Profesional.",
+      "conocimientos": "",
+      "sintesis": "El curso de CAD-3D tiene como propósito principal introducir al participante en la creación, modificación y presentación de modelos tridimensionales, aplicando herramientas específicas del entorno 3D de AutoCAD. Se trabajará con sólidos primitivos y operaciones complejas como extrusión, revolución, barrido y solevado, además de técnicas avanzadas de edición de aristas y caras. Progresión gradual desde la comprensión del espacio tridimensional y el SCU hasta la generación de presentaciones técnicas mediante vistas proyectadas, secciones y representaciones en papel.",
+      "curso_previo": "Es necesesario haber aprobado el curso \"Herramientas digitales aplicadas al dibujo técnico (CAD-2D)\" para poder inscribirse.",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Innovación y entornos digitales",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Herramientas%20metodol%C3%B3gicas%20para%20la%20formaci%C3%B3n%20emprendedora%20en%20la%20ETP%20%282%29.jpg?forcedownload=1",
+      "titulo": "Herramientas metodológicas para la formación emprendedora en la ETP",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Secundario Técnico – Técnico Superior",
+      "destinatarios": "Autoridades y docentes de instituciones ETP",
+      "conocimientos": "No se requiere",
+      "curso_previo": "",
+      "sintesis": "Proporciona herramientas metodológicas (Lean Startup, Design Thinking, Prototipado, Canvas de Modelos de Negocio) para su integración en la formación técnica, transformando el aprendizaje en experiencias significativas conectadas con las demandas socioeconómicas regionales.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Estrategias pedagógicas para la ETP",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/inclusi%C3%B3n%202026.png?forcedownload=1",
+      "titulo": "Inclusión educativa de estudiantes con discapacidad en la ETP",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "No requiere",
+      "curso_previo": "",
+      "sintesis": "Desarrolla capacidades críticas para aceptar las diferencias como diversidad y colaborar en la construcción de prácticas inclusivas desde un enfoque de derechos humanos en discapacidad.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Diseño, Producción y Especializaciones Técnicas",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/paneles%20solares.png?forcedownload=1",
+      "titulo": "Instalaciones de Paneles Solares",
+      "familia_prof": "Eléctrica / Electrónica / Mecánica / Electromecánica / Mecatrónica",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "Conocimientos básicos en electricidad e interpretación de esquemas eléctricos",
+      "curso_previo": "",
+      "sintesis": "Introducción a la producción de electricidad mediante paneles solares, adquiriendo conocimientos teóricos y desarrollando los principios de funcionamiento y dimensionamiento de instalaciones.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "titulo": "Inteligencia artificial generativa como apoyo a la tarea docente",
+      "categoria": "Innovación y entornos digitales",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Inteligencia%20artificial%20generativa%20como%20apoyo%20a%20la%20tarea%20docente.%20Estrategias%20para%20usar%20la%20IAG%20en%20la%20planificaci%C3%B3n%2C%20ense%C3%B1anza%20y%20evaluaci%C3%B3n%20400x257.png?",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Secundario - Formación Superior no universitario de Educación Técnico Profesional",
+      "destinatarios": "Profesores del área de informática, computación, tecnología y TIC o NTIC",
+      "conocimientos": "",
+      "sintesis": "Este curso propone una aproximación integral al uso de la inteligencia artificial generativa (IAG) en la tarea docente, articulando dos dimensiones clave: la planificación y producción de propuestas de enseñanza, y la evaluación de los aprendizajes.",
+      "curso_previo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "titulo": "Inteligencia artificial generativa y educación",
+      "categoria": "Innovación y entornos digitales",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Inteligencia%20Artificial%20Generativa%20y%20educaci%C3%B3n%20%281%29.png?forcedownload=1",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Secundario - Formación Superior no universitario de Educación Técnico Profesional",
+      "destinatarios": "Profesores del área de informática, computación, tecnología y TIC o NTIC",
+      "conocimientos": "",
+      "sintesis": "Este curso propone una aproximación integral al uso de la inteligencia artificial generativa (IAG) en la tarea docente, articulando dos dimensiones clave: la planificación y producción de propuestas de enseñanza, y la evaluación de los aprendizajes en contextos atravesados por estas tecnologías. A lo largo del recorrido, se invita a los y las docentes a explorar la IA como una aliada pedagógica, no desde una lógica de automatización de tareas, sino como una herramienta para pensar, enriquecer y revisar las propias prácticas. Se abordarán tanto los usos concretos de la IA para planificar, crear materiales y gestionar la enseñanza, como los desafíos que introduce en relación con la evaluación, la autoría y el sentido de las consignas. El curso combina instancias conceptuales, actividades prácticas y espacios de reflexión, promoviendo un enfoque crítico, ético y situado que ponga en el centro las decisiones pedagógicas y el aprendizaje de los estudiantes.",
+      "curso_previo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Diseño, Producción y Especializaciones Técnicas",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/INTRO%20A%20LA%20AUTOMATIZACION%20%282%29.jpg?forcedownload=1",
+      "titulo": "Introducción a la automatización industrial",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "No requiere",
+      "curso_previo": "",
+      "sintesis": "Introducción a la automatización industrial, tipos de señales y control mediante lógica cableada y programada.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Diseño, Producción y Especializaciones Técnicas",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Programaci%C3%B3n%20de%20tornos.png?forcedownload=1",
+      "titulo": "Introducción a la programación CNC para torno en 2 ejes",
+      "familia_prof": "Eléctrica / Electrónica / Mecánica / Electromecánica / Mecatrónica",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "Lectura de planos de fabricación, familia metalmecánica y diseño tecnológico",
+      "curso_previo": "",
+      "sintesis": "Nivel avanzado de programación de tornos CNC, combinando teoría con ejercicios prácticos y simulaciones para su aplicación en entorno real.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Innovación y entornos digitales",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Introducci%C3%B3n%20a%20la%20programaci%C3%B3n%20con%20Python.jpg?forcedownload=1",
+      "titulo": "Introducción a la programación con Python",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "No requiere",
+      "curso_previo": "",
+      "sintesis": "Capacitación en el lenguaje de programación Python para su integración en prácticas educativas, abordando fundamentos de programación, estrategias didácticas y actividades prácticas de aula.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Innovación y entornos digitales",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/An%C3%A1lisis%20de%20datos%20en%20la%20educaci%C3%B3n%20t%C3%A9cnica%C2%A0%20profesional%20Herramientas%20y%20actividades.jpg?forcedownload=1",
+      "titulo": "Introducción al análisis y la visualización de datos en la Educación Técnico Profesional",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "Conocimientos básicos de informática: manejo de hojas de cálculo y familiaridad con conceptos técnicos.",
+      "curso_previo": "",
+      "sintesis": "Integración del análisis de datos como herramienta pedagógica, abarcando desde el manejo básico hasta la creación de actividades didácticas con datasets reales, incluyendo identificación, organización, exploración y visualización de información.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Diseño, Producción y Especializaciones Técnicas",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/INTRO%20A%20BIM%20%282%29.jpg?forcedownload=1",
+      "titulo": "Introducción al modelado con metodología BIM de Archicad",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "No requiere",
+      "curso_previo": "",
+      "sintesis": "Introducción a la metodología BIM y al uso de Archicad para el modelado de información de construcción, optimizando tiempos y documentación.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Estrategias pedagógicas para la ETP",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/La%20comunicaci%C3%B3n%20de%20proyectos%20en%20las%20Escuelas%20T%C3%A9cnicas.jpg?forcedownload=1",
+      "titulo": "La comunicación de proyectos en las Escuelas Técnicas",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Secundarios de la ETP",
+      "destinatarios": "Autoridades y docentes de instituciones técnicas",
+      "conocimientos": "No se requieren",
+      "curso_previo": "",
+      "sintesis": "Invita a planificar y desarrollar estrategias de comunicación para proyectos escolares, fortaleciendo el vínculo escuela-comunidad y potenciando la difusión de producciones estudiantiles.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Seguridad institucional",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/5S%20%281%29.jpg?forcedownload=1",
+      "titulo": "Modelo 5S para la gestión de prevención, higiene y salud en la ETP",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "curso_previo": "",
+      "sintesis": "Aporta herramientas para implementar el Modelo 5S en escuelas técnicas, fortaleciendo la cultura de la prevención y el orden en aulas-taller e instituciones.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
     },
     {
       "categoria": "Diseño, Producción y Especializaciones Técnicas",
@@ -470,9 +439,241 @@
       "destinatarios": "Docentes de nivel secundario de escuelas técnicas agropecuarias, ciclo básico",
       "curso_previo": "",
       "sintesis": "Aborda la introducción al monitoreo ambiental en agroecosistemas desde un enfoque sistémico, brindando herramientas para el desarrollo de un plan de monitoreo ambiental, incluyendo beneficios de la biodiversidad e indicadores ambientales.",
-      "form_externo": "https://formacion.inta.gob.ar/cenet2026-monitoreo/"
+      "form_externo": "https://formacion.inta.gob.ar/cenet2026-monitoreo/",
+      "carga_horaria": "60 horas reloj"
+    },
+    {
+      "categoria": "Seguridad institucional",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Prevenci%C3%B3n%2C%20higiene%20y%20salud%20laboral%20en%20instituciones%20de%20ETP.jpg?forcedownload=1",
+      "titulo": "Prevención, higiene y salud laboral en instituciones de ETP",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "No requiere",
+      "curso_previo": "",
+      "sintesis": "Brinda herramientas para identificar riesgos laborales y promover acciones preventivas considerando el impacto en la salud física y mental.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Diseño, Producción y Especializaciones Técnicas",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Principios%20de%20la%20hidr%C3%A1ulica%20para%20la%20formaci%C3%B3n%20t%C3%A9cnica.jpg?forcedownload=1",
+      "titulo": "Principios de la hidráulica para la formación técnica",
+      "familia_prof": "Mecánica, electromecánica, mecatrónica",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
+      "conocimientos": "Física, mecanismos y electricidad",
+      "curso_previo": "",
+      "sintesis": "Fortalece los conocimientos en hidráulica industrial y las estrategias didácticas para su enseñanza.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Estrategias pedagógicas para la ETP",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/STEM%20y%20rob%C3%B3tica.jpeg?forcedownload=1",
+      "titulo": "STEM y Robótica en la ETP",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Secundario Técnico – Técnico Superior",
+      "destinatarios": "Autoridades y docentes de instituciones ETP",
+      "conocimientos": "No se requiere",
+      "curso_previo": "",
+      "sintesis": "Introduce el enfoque STEM y su aplicación mediante la robótica como herramienta pedagógica, explorando estrategias didácticas interdisciplinarias que integran pensamiento computacional, diseño y programación.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Diseño, Producción y Especializaciones Técnicas",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Tecnolog%C3%ADa%20Neum%C3%A1tica%20%281%29.jpg?forcedownload=1",
+      "titulo": "Tecnología neumática",
+      "familia_prof": "Mecánica – Electromecánica – Mecatrónica",
+      "nivel": "Secundario – Formación profesional – Técnica Superior",
+      "destinatarios": "Docentes de ETP e instructores de Formación Profesional",
+      "curso_previo": "",
+      "sintesis": "Introducción a la técnica del mando neumático y ejecución de circuitos de baja y mediana complejidad.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
+    },
+    {
+      "categoria": "Diseño, Producción y Especializaciones Técnicas",
+      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/3D%20a%20%281%29.jpeg?forcedownload=1",
+      "titulo": "Técnicas sustentables en impresión 3D",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "Todos los niveles y ámbitos de la ETP",
+      "destinatarios": "Docentes de Educación Técnico Profesional",
+      "conocimientos": "No requiere",
+      "curso_previo": "",
+      "sintesis": "Formación en diseño e impresión 3D con enfoque en sustentabilidad y reciclaje de materiales.",
+      "form_externo": "",
+      "carga_horaria": "40 horas reloj"
     }
   ],
-  "cohorte": {},
+  "cohorte": {
+    "nombre": "3ra cohorte",
+    "link": "https://forms.cloud.microsoft/r/rUh04Ht9vW",
+    "estado": "Inscripción ABIERTA",
+    "cursos": [
+      {
+        "banco_idx": 0,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 1,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 2,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 3,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 4,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 5,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 6,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 7,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 8,
+        "etiqueta": "Nuevo"
+      },
+      {
+        "banco_idx": 9,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 10,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 11,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 12,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 13,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 14,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 15,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 16,
+        "etiqueta": "Nuevo"
+      },
+      {
+        "banco_idx": 17,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 18,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 19,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 20,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 21,
+        "etiqueta": "Nuevo"
+      },
+      {
+        "banco_idx": 22,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 23,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 24,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 25,
+        "etiqueta": "Nuevo"
+      },
+      {
+        "banco_idx": 26,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 27,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 28,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 29,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 30,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 31,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 32,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 33,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 34,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 35,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 36,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 37,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 38,
+        "etiqueta": ""
+      },
+      {
+        "banco_idx": 39,
+        "etiqueta": ""
+      }
+    ],
+    "msg_requisito": "Enviar sus datos de DNI, Nombre y Apellido a cursoscenet@educacion.gob.ar para inscribirse"
+  },
   "titulo_oferta": "Oferta Formativa CeNET 2026"
 }
