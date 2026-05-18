@@ -1881,11 +1881,11 @@ class GeneradorMoodle(ctk.CTk):
         secs_activa = ""
         for cat_idx, cat in enumerate(cats_activa_orden):
             cards = ""
-            # Destacados primero, luego orden alfabético
-            cursos_cat = sorted(
-                por_cat_activa[cat],
-                key=lambda x: (0 if x.get("etiqueta") == "Destacado" else 1, x.get("titulo", "").lower())
-            )
+            # Nuevos primero, luego Destacados, luego orden alfabético
+            def _etiq_orden(x):
+                e = x.get("etiqueta", "")
+                return (0 if e == "Nuevo" else 1 if e == "Destacado" else 2, x.get("titulo", "").lower())
+            cursos_cat = sorted(por_cat_activa[cat], key=_etiq_orden)
             msg_req = self.coh_msg_req_var.get()
             for c in cursos_cat:
                 tit           = c.get("titulo", "")
