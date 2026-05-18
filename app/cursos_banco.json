@@ -87,7 +87,7 @@
     {
       "categoria": "Innovación y entornos digitales",
       "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/MACHINE%20LEARNING.jpg?forcedownload=1",
-      "titulo": "Bases para el desarrollo de proyectos de Machine Learning en la escuela",
+      "titulo": "Bases para el desarrollo de proyectos de machine learning en entornos educativos",
       "familia_prof": "Todas las familias profesionales",
       "nivel": "Todos los niveles y ámbitos de la ETP",
       "destinatarios": "Docentes de Educación Técnico Profesional",
@@ -215,6 +215,18 @@
       "form_externo": ""
     },
     {
+      "categoria": "Estrategias pedagógicas para la ETP",
+      "img": "",
+      "titulo": "Estrategias pedagógicas transversales para la lengua y comunicación en la ETP",
+      "familia_prof": "Todas las familias profesionales",
+      "nivel": "",
+      "destinatarios": "",
+      "conocimientos": "",
+      "curso_previo": "",
+      "sintesis": "",
+      "form_externo": ""
+    },
+    {
       "categoria": "Seguridad institucional",
       "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/5S%20%281%29.jpg?forcedownload=1",
       "titulo": "Modelo 5S para la gestión de prevención, higiene y salud en la ETP",
@@ -250,18 +262,6 @@
     },
     {
       "categoria": "Diseño, Producción y Especializaciones Técnicas",
-      "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Cultivos%20bajo%20cubierta%20Diversas%20alternativas%20de%20protecci%C3%B3n.jpg?forcedownload=1",
-      "titulo": "Cultivos bajo cubierta: diversas alternativas de protección",
-      "familia_prof": "Agropecuaria",
-      "nivel": "Todos los niveles y ámbitos de la ETP",
-      "destinatarios": "Docentes de Educación Técnico Profesional",
-      "conocimientos": "No requiere",
-      "curso_previo": "",
-      "sintesis": "Brinda conceptos de protección de cultivos, integrando teoría actualizada y práctica real aplicada, con actividades ajustadas al nivel del grupo.",
-      "form_externo": ""
-    },
-    {
-      "categoria": "Diseño, Producción y Especializaciones Técnicas",
       "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Dise%C3%B1o%20y%20modelado%203D%20SolidEdge%20%282%29.jpg?forcedownload=1",
       "titulo": "Diseño y modelado 3D con software paramétrico (SOLIDEDGE)",
       "familia_prof": "Metalmecánica",
@@ -282,6 +282,18 @@
       "conocimientos": "No requiere",
       "curso_previo": "",
       "sintesis": "Introduce herramientas CAD para optimizar los procesos de diseño y dibujo técnico, aumentando la productividad en las etapas de diseño e impresión.",
+      "form_externo": ""
+    },
+    {
+      "categoria": "Diseño, Producción y Especializaciones Técnicas",
+      "img": "",
+      "titulo": "Herramientas digitales aplicadas al dibujo técnico II (CAD-3D)",
+      "familia_prof": "Fabricación digital",
+      "nivel": "",
+      "destinatarios": "",
+      "conocimientos": "Herramientas digitales aplicadas al dibujo técnico (CAD-2D)",
+      "curso_previo": "Herramientas digitales aplicadas al dibujo técnico (CAD-2D)",
+      "sintesis": "",
       "form_externo": ""
     },
     {
@@ -416,7 +428,7 @@
     {
       "categoria": "Diseño, Producción y Especializaciones Técnicas",
       "img": "https://cenet.inet.edu.ar/pluginfile.php/68007/mod_folder/content/0/Programaci%C3%B3n%20de%20tornos.png?forcedownload=1",
-      "titulo": "Avanzado - Programación CNC para torno en 2 ejes",
+      "titulo": "Introducción a la programación CNC para torno en 2 ejes",
       "familia_prof": "Eléctrica / Electrónica / Mecánica / Electromecánica / Mecatrónica",
       "nivel": "Todos los niveles y ámbitos de la ETP",
       "destinatarios": "Docentes de Educación Técnico Profesional",
