@@ -1881,10 +1881,10 @@ class GeneradorMoodle(ctk.CTk):
         secs_activa = ""
         for cat_idx, cat in enumerate(cats_activa_orden):
             cards = ""
-            # Destacados primero dentro de la categoría
+            # Destacados primero, luego orden alfabético
             cursos_cat = sorted(
                 por_cat_activa[cat],
-                key=lambda x: 0 if x.get("etiqueta") == "Destacado" else 1
+                key=lambda x: (0 if x.get("etiqueta") == "Destacado" else 1, x.get("titulo", "").lower())
             )
             msg_req = self.coh_msg_req_var.get()
             for c in cursos_cat:
@@ -1906,14 +1906,24 @@ class GeneradorMoodle(ctk.CTk):
                     curso_previo=curso_previo, msg_req=msg_req,
                 )
                 cc = _cat_color(cat)
+                nuevo_badge = (
+                    '<div style="position:absolute;top:8px;left:8px;background:#1e2a4a;'
+                    'color:white;font-size:0.72em;font-weight:700;padding:4px 10px;'
+                    'border-radius:4px;letter-spacing:.06em;text-transform:uppercase;'
+                    'line-height:1;">Nuevo</div>'
+                ) if etiqueta == "Nuevo" else ""
                 if img_url:
                     imagen_html = (
-                        f'<div style="width:100%;height:148px;background:#eef2f7;overflow:hidden;">'
+                        f'<div style="width:100%;height:148px;background:#eef2f7;overflow:hidden;position:relative;">'
                         f'<img src="{img_url}" alt="{tit}" loading="lazy" '
-                        f'style="width:100%;height:100%;object-fit:cover;display:block;"></div>'
+                        f'style="width:100%;height:100%;object-fit:cover;display:block;">'
+                        f'{nuevo_badge}</div>'
                     )
                 else:
-                    imagen_html = f'<div style="height:8px;background:{cc};flex-shrink:0;"></div>'
+                    imagen_html = (
+                        f'<div style="position:relative;height:8px;background:{cc};flex-shrink:0;">'
+                        f'{nuevo_badge}</div>'
+                    )
 
                 cards += (
                     f'\n<div data-search="{search}" style="'
@@ -2084,9 +2094,6 @@ class GeneradorMoodle(ctk.CTk):
             f'border-radius:12px;font-size:1rem;background:white;'
             f'box-sizing:border-box;font-family:inherit;outline:none;">'
             f'</div>\n'
-
-            # Nuevos en esta edición
-            f'{bloque_nuevos}'
 
             # Filtros por categoría
             f'<div style="text-align:center;padding:0 0 18px;">'
