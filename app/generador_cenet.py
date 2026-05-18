@@ -869,6 +869,16 @@ class GeneradorMoodle(ctk.CTk):
             background=_c("bg_card"), foreground=_c("text"),
             activebackground=_c("accent"), activeforeground="#ffffff",
             font=("Segoe UI", 11), bd=0, relief="flat")
+        etiq_menu = tk.Menu(menu, tearoff=0,
+            background=_c("bg_card"), foreground=_c("text"),
+            activebackground=_c("accent"), activeforeground="#ffffff",
+            font=("Segoe UI", 11), bd=0, relief="flat")
+        etiq_menu.add_command(label="Nuevo",     command=lambda: self._coh_set_etiqueta("Nuevo"))
+        etiq_menu.add_command(label="Destacado", command=lambda: self._coh_set_etiqueta("Destacado"))
+        etiq_menu.add_separator()
+        etiq_menu.add_command(label="Sin etiqueta", command=lambda: self._coh_set_etiqueta(""))
+        menu.add_cascade(label="🏷  Etiqueta", menu=etiq_menu)
+        menu.add_separator()
         menu.add_command(label="🗑  Quitar de cohorte", command=self._coh_quitar_curso)
         menu.tk_popup(event.x_root, event.y_root)
 
