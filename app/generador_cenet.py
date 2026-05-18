@@ -127,7 +127,7 @@ class GeneradorMoodle(ctk.CTk):
 
     def __init__(self):
         super().__init__()
-        self.title("Generador de Catálogo CeNET v3.1")
+        self.title("Generador de Catálogo CeNET v3.2")
 
         sw = self.winfo_screenwidth()
         sh = self.winfo_screenheight()
@@ -225,12 +225,12 @@ class GeneradorMoodle(ctk.CTk):
         """Marca que hay cambios sin guardar."""
         if not self._hay_cambios:
             self._hay_cambios = True
-            self.title("Generador de Catálogo CeNET v3.1 ●")
+            self.title("Generador de Catálogo CeNET v3.2 ●")
 
     def _limpiar_cambio(self):
         """Limpia el indicador de cambios."""
         self._hay_cambios = False
-        self.title("Generador de Catálogo CeNET v3.1")
+        self.title("Generador de Catálogo CeNET v3.2")
 
     def _on_close(self):
         if self._hay_cambios:
@@ -369,7 +369,7 @@ class GeneradorMoodle(ctk.CTk):
         self.btn_theme.pack(side="right", padx=(0, 16))
 
         ctk.CTkLabel(
-            hdr, text="v3.1",
+            hdr, text="v3.2",
             font=ctk.CTkFont(family="Segoe UI", size=11),
             text_color=COLORS["text_muted"]
         ).pack(side="right", padx=4)
