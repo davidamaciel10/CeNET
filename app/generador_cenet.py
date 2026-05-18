@@ -2105,7 +2105,7 @@ class GeneradorMoodle(ctk.CTk):
             # Script
             f'{script}'
             f'</div>'
-        )
+        ).replace('rem;', 'em;').replace('rem"', 'em"').replace('rem)', 'em)').replace('rem ', 'em ')
 
     # ─────────────────────────────────────────
     # TEMA
