@@ -177,6 +177,7 @@ class GeneradorMoodle(ctk.CTk):
         self.coh_msg_req_var = tk.StringVar(value=self.cohorte.get("msg_requisito", _default_msg_req))
 
         # Variables formulario banco
+        self.carga_var         = tk.StringVar()
         self.tit_var           = tk.StringVar()
         self.cat_var           = tk.StringVar()
         self.img_var           = tk.StringVar()
@@ -830,6 +831,7 @@ class GeneradorMoodle(ctk.CTk):
             "conocimientos":  self.conoc_var.get().strip(),
             "sintesis":        sintesis_txt,
             "curso_previo":    self.curso_previo_var.get().strip(),
+            "carga_horaria":   self.carga_var.get().strip(),
         }
         if ext:
             curso["form_externo"] = ext
@@ -917,6 +919,7 @@ class GeneradorMoodle(ctk.CTk):
             self.dest_var.set(c.get("destinatarios", ""))
             self.conoc_var.set(c.get("conocimientos", ""))
             self.curso_previo_var.set(c.get("curso_previo", "") or c.get("requisito_insc", ""))
+            self.carga_var.set(c.get("carga_horaria", ""))
         else:
             self._banco_limpiar_form()
         self._banco_edit_idx = edit_idx
@@ -964,6 +967,9 @@ class GeneradorMoodle(ctk.CTk):
         self._field(card, "Nivel", self.nivel_var,
             tooltip="Nivel educativo al que está dirigido.",
             placeholder="Ej: Secundario Técnico – Técnico Superior")
+        self._field(card, "Carga horaria", self.carga_var,
+            tooltip="Duración total del curso.",
+            placeholder="Ej: 40 horas")
         self._field(card, "Destinatarios", self.dest_var,
             tooltip="A quiénes está dirigido el curso.",
             placeholder="Ej: Autoridades y docentes de instituciones técnicas")
@@ -1173,7 +1179,8 @@ class GeneradorMoodle(ctk.CTk):
         """Limpia los campos del formulario del banco."""
         for v in (self.tit_var, self.cat_var, self.img_var,
                   self.ext_var, self.familia_var, self.nivel_var,
-                  self.dest_var, self.conoc_var, self.curso_previo_var):
+                  self.dest_var, self.conoc_var, self.curso_previo_var,
+                  self.carga_var):
             v.set("")
         if self.sintesis_box:
             self.sintesis_box.delete("1.0", "end")
@@ -1758,12 +1765,13 @@ class GeneradorMoodle(ctk.CTk):
 
         def _make_popup_btn(titulo, sintesis, ins_url,
                             familia="", nivel="", destinatarios="", conocimientos="",
-                            curso_previo="", msg_req=""):
+                            curso_previo="", msg_req="", carga_horaria=""):
             return (
                 f'<button type="button" onclick="cnetPop(this)" '
                 f'data-t="{_attr(titulo)}" '
                 f'data-f="{_attr(familia)}" '
                 f'data-n="{_attr(nivel)}" '
+                f'data-ch="{_attr(carga_horaria)}" '
                 f'data-d="{_attr(destinatarios)}" '
                 f'data-c="{_attr(conocimientos)}" '
                 f'data-s="{_attr(sintesis)}" '
@@ -1892,6 +1900,7 @@ class GeneradorMoodle(ctk.CTk):
                 etiqueta      = c.get("etiqueta", "")
                 familia       = c.get("familia_prof", "")
                 nivel         = c.get("nivel", "")
+                carga_horaria = c.get("carga_horaria", "")
                 destinatarios = c.get("destinatarios", "")
                 conocimientos  = c.get("conocimientos", "")
                 sintesis       = c.get("sintesis", "")
@@ -1902,6 +1911,7 @@ class GeneradorMoodle(ctk.CTk):
                     tit, sintesis, ins_url,
                     familia, nivel, destinatarios, conocimientos,
                     curso_previo=curso_previo, msg_req=msg_req,
+                    carga_horaria=carga_horaria,
                 )
                 cc = _cat_color(cat)
                 nuevo_badge = (
@@ -1989,6 +1999,7 @@ class GeneradorMoodle(ctk.CTk):
             f'  if(d.r)h+=\'<div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:10px 14px;margin-bottom:14px;">\'+\'<p style="font-size:0.8rem;font-weight:700;color:#c2410c;text-transform:uppercase;letter-spacing:.04em;margin:0 0 4px;">⚠ Requisito de curso previo</p>\'+\'<p style="font-size:0.88rem;color:#7c2d12;margin:0;">\'+cnetEsc(d.r)+\'</p></div>\';\n'
             f'  if(d.f)h+=\'<p style="\'+lbl+\'">Familia profesional</p><p style="\'+val+\'">\'+cnetEsc(d.f)+\'</p>\';\n'
             f'  if(d.n)h+=\'<p style="\'+lbl+\'">Nivel</p><p style="\'+val+\'">\'+cnetEsc(d.n)+\'</p>\';\n'
+            f'  if(d.ch)h+=\'<p style="\'+lbl+\'">Carga horaria</p><p style="\'+val+\'">\'+cnetEsc(d.ch)+\'</p>\';\n'
             f'  if(d.d)h+=\'<p style="\'+lbl+\'">Destinatarios</p><p style="\'+val+\'">\'+cnetEsc(d.d)+\'</p>\';\n'
             f'  if(!d.r&&d.c)h+=\'<p style="\'+lbl+\'">Conocimientos previos</p><p style="\'+val+\'">\'+cnetEsc(d.c)+\'</p>\';\n'
             f'  if(d.s)h+=\'<p style="font-size:0.9rem;color:#374151;line-height:1.65;margin:0;">\'+cnetEsc(d.s)+\'</p>\';\n'
