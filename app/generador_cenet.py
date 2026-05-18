@@ -1873,9 +1873,7 @@ class GeneradorMoodle(ctk.CTk):
         if cats_activa_orden:
             btns_cat += f'\n<button type="button" style="{S_FA}" id="btnVerTodos" onclick="cnetFiltro(\'\')">Ver todos</button>'
 
-        btn_nuevos = (
-            f'<button type="button" style="{S_F}" onclick="cnetFiltroNuevos()">Nuevos</button>\n'
-        ) if nuevos else ""
+        btn_nuevos = ""
 
         # Cards de la cohorte activa agrupadas por categoría
         secs_activa = ""
